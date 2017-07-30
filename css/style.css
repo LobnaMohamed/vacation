@@ -5,6 +5,11 @@ body{
 h1{
     text-align: center;  
 }
+.logo{
+    width:200px;
+    height:100px;
+    background: transparent;
+}
 /* Style inputs with type="text", select elements and textareas */
 input[type=text], select{
     width: 100%; /* Full width */

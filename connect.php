@@ -12,8 +12,8 @@
 		$con = new PDO($dsn, $user, $pass, $options);
 		$con->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION); 
 		//QUERY
-		$q = "INSERT INTO test(name,phone)VALUES('لبنى','محمد')";
-		$con->exec($q);
+		// $q = "INSERT INTO test(name,phone)VALUES('لبنى','محمد')";
+		// $con->exec($q);
 
 	}
 	catch(PDOexception $e){

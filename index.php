@@ -1,5 +1,5 @@
 <?php 
-	include 'connect.php';
+	require 'connect.php';
 ?>
 <!DOCTYPE html>
 <html dir="rtl" lang="ar">
@@ -12,52 +12,73 @@
 </head>
 <body>
 	<div class="container">
-	  <header>
-	  	<h1>نموذج الاجـــــازة</h1>
+	  <header class="row">
+	  	<h1 class="col-lg-9 pull-right">نموذج الاجـــــازة</h1>
+	  	<img class= "col-lg-2 logo pull-left" src="images/amoc.jpg">
 	  </header>
 	  
-	    <form action="/action_page.php">	    
+	    <form action="add.php" method="POST">	    
 			<div class="right">
 			    <label for="name">الاســـــم</label>
-			    <input type="text" id="name" name="name" placeholder="Your name..">
+			    <input type="text" class="name" name="name" placeholder="Your name..">
 			   
 			    <label for="code">رقم القيد</label>
-			    <input type="text" id="code" name="code" placeholder="Your Code..">
+			    <input type="text" class="code" name="code" placeholder="Your Code..">
 			    
 			    <label for="address">العنوان</label>
-			    <input type="text" id="address" name="address" placeholder="Your address..">
+			    <input type="text" class="address" name="address" placeholder="Your address..">
 
 				<label for="date" >التاريخ</label>
 				<br>
-				<input type="date" id="date" name="date" placeholder="date.."><br><br>
+				<input type="date" class="date" name="vacDate" placeholder="date.."><br><br>
 
 				<label for="duration" >مدة الاجازة:</label>
-				<input type="text" id="duration" name="duration" placeholder="duration..">
+				<input type="text" class="duration" name="duration" placeholder="duration..">
 				<input type="submit" value="ارسال">
 			</div>
 			<div class="left">
 				
 				<label for="Management" >الادارة:</label>
-				<input type="text" id="Management" name="Management" placeholder="Management..">
+				<input type="text" class="Management" name="Management" placeholder="Management..">
 				<label for="manager">المدير المباشر</label>
-			    <select id="manager" name="manager">
-				    <option value="australia">Australia</option>
-				    <option value="canada">Canada</option> 
-				    <option value="usa">USA</option>
+			    <select class="manager" name="manager">
+			    <option selected disabled hidden style='display: none' value=''></option>
+		   		    <?php
+		   		    	$sql= "SELECT ID,emp_code,emp_name FROM t_data" ;
+		   		    	$stmt = $con->prepare($sql);
+						$stmt->execute();
+						$result = $stmt->fetchAll();
+		   		    	    foreach($result as $row){
+							    echo "<option value=" .$row['ID'].">" . $row['emp_code'] ."   ".$row['emp_name']. "</option>";
+							}
+		   		    ?>
 				</select>
 			    <label for="topManager">الرئيس الاعلى</label>
-			    <select id="topManager" name="topManager">
-				    <option value="australia">Australia</option>
-				    <option value="canada">Canada</option>
-				    <option value="usa">USA</option>
-			    </select>
+			    <select class="topManager" name="topManager" required>
+			    <option selected disabled hidden style='display: none' value=''></option>
+		   		    <?php
+		   		    	$sql= "SELECT ID,emp_code,emp_name FROM t_data" ;
+		   		    	$stmt = $con->prepare($sql);
+						$stmt->execute();
+						$result = $stmt->fetchAll();
+		   		    	    foreach($result as $row){
+							    echo "<option value=" .$row['ID'].">" . $row['emp_code'] ."   ".$row['emp_name']. "</option>";
+							}
+		   		    ?>			    
+		   		</select>
 
 			    <label for="vacation">نوع الاجازة</label>
-			    <select id="vacType" name="vacType">
-				    <option value="annual">سنوى</option>
-				    <option value="sick">عارضة</option>
-			        <option value="badl">بدل</option>
-			        <option value="hours">ساعات</option>
+	   		    <select class="vacType" name="case">
+	   		    <option selected disabled hidden style='display: none' value=''></option>
+		   		    <?php
+		   		    	$sql= "SELECT ID,case_desc FROM t_case" ;
+		   		    	$stmt = $con->prepare($sql);
+						$stmt->execute();
+						$result = $stmt->fetchAll();
+		   		    	    foreach($result as $row){
+							    echo "<option value=" .$row['ID'].">" . $row['case_desc'] . "</option>";
+							}
+		   		    ?>
 			    </select>
 			</div>
 	    </form>
