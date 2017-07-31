@@ -37,10 +37,10 @@ $(function(){
 	 	checkErrors();
 	});
 
-	$('.dateTo').blur(function(){
+	$('.dateTo').focusout(function(){
 
-		var startDate = $('.date').val();
-		var endDate = $('.dateTo').val();
+		var startDate = $(this).val();
+		var endDate = $(this).val();
 		console.log(startDate);
 		// end - start returns difference in milliseconds 
 		var diff = new Date(endDate - startDate);
