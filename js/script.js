@@ -6,6 +6,7 @@ $(function(){
 		codeError = true,
 		daterror = true;
 
+
 	function checkErrors() {
 
 		if(nameError === true || codeError === true || daterror === true){
@@ -35,4 +36,18 @@ $(function(){
 	 	}
 	 	checkErrors();
 	});
+
+	$('.dateTo').blur(function(){
+
+		var startDate = $('.date').val();
+		var endDate = $('.dateTo').val();
+		console.log(startDate);
+		// end - start returns difference in milliseconds 
+		var diff = new Date(endDate - startDate);
+		// get days
+		var days = diff/1000/60/60/24;
+		$('.duration').val() = diff;
+		console.log(diff);
+		console.log($('.duration').val() );
+	});	
 });
