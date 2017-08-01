@@ -62,9 +62,9 @@
 				<div class="col-lg-4">
 					<div class="form-group">
 						<label for="name" >الاســـــم</label>
-			    		<input type="text" class="name form-control" name="name" placeholder="Your name..">
+			    		<input type="text" class="name form-control" name="name" placeholder="Your name.." required>
 			    		<label for="Management" >الادارة:</label>
-						<input type="text" class="Management form-control" name="Management" placeholder="Management..">
+						<input type="text" class="Management form-control" name="Management" placeholder="Management.." required>
 						
 					</div>	
 				</div>
@@ -80,12 +80,12 @@
 					</div>
 					<div class="col-lg-3">
 						<label for="date" >التاريخ من</label>
-						<input type="date" class="date form-control" name="vacDate" placeholder="date..">
+						<input type="date" class="date form-control" name="vacDate" placeholder="date.." required>
 					</div>
 					<div class="col-lg-3">
 						<label for="vacation">نوع الاجازة</label>
-			   		    <select class="vacType form-control" name="case">
-			   		    	<option selected disabled hidden style='display: none' value=''></option>
+			   		    <select class="vacType form-control" name="case" required>
+			   		    	<option selected disabled hidden style='display: none' value='' ></option>
 				   		    <?php
 				   		    	$sql= "SELECT ID,case_desc FROM t_case" ;
 				   		    	$stmt = $con->prepare($sql);

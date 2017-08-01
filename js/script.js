@@ -21,7 +21,6 @@ $(function(){
 	$('.name').blur(function(){
 
 	 	if($(this).val().length <= 3){ //show error
-
 	 		$(this).css('border', '1px solid #F00').parent().find('.custom-alert').fadeIn(300)
 	 		.end().find('.asterisx').fadeIn(50);
 	 		
@@ -37,17 +36,16 @@ $(function(){
 	 	checkErrors();
 	});
 
-	$('.dateTo').focusout(function(){
+	$('.dateTo').blur(function(){
 
-		var startDate = $(this).val();
+		var startDate = $('.date').val();
 		var endDate = $(this).val();
-		console.log(startDate);
 		// end - start returns difference in milliseconds 
-		var diff = new Date(endDate - startDate);
+		var diff = new Date(endDate) - new Date(startDate);
+		console.log( diff);
 		// get days
 		var days = diff/1000/60/60/24;
-		$('.duration').val() = diff;
-		console.log(diff);
-		console.log($('.duration').val() );
+		console.log(days);
+		$('.duration').val(days);
 	});	
 });

@@ -11,6 +11,7 @@
 		$management= filter_var($_POST['Management'],FILTER_SANITIZE_STRING);
 		$duration= filter_var($_POST['duration'],FILTER_SANITIZE_NUMBER_FLOAT);
 		$date= $_POST['vacDate'];
+		$dateTo = $_POST['vacDateTo'];
 		$topManager= $_POST['topManager'];
 		$manager= $_POST['manager'];
 		$vacType=$_POST['case'];
@@ -22,8 +23,8 @@
 			echo "name and code cant be empty";
 			// print_r($formErrors) ;
 		} else {
-			$sql= "INSERT INTO t_transe(emp_name,emp_code,id_case,start_date,manager_id,top_manager_id) 
-				   VALUES ('".$empName."','".$empCode."','".$vacType."','".$date."','".$manager."','".$topManager."')" ;
+			$sql= "INSERT INTO t_transe(emp_name,emp_code,id_case,start_date,end_date,manager_id,top_manager_id) 
+				   VALUES ('".$empName."','".$empCode."','".$vacType."','".$date."','".$dateTo."','".$manager."','".$topManager."')" ;
 	        $stmt = $con->prepare($sql);
 			$stmt->execute();		
 		}
