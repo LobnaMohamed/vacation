@@ -47,5 +47,25 @@ $(function(){
 		var days = diff/1000/60/60/24;
 		console.log(days);
 		$('.duration').val(days);
+	});
+
+	// edit employees info modal
+	$('a.edit').on('click', function() {
+	    var myModal = $('#editEmp');
+
+	    // now get the values from the table
+	    var firstName = $(this).closest('tr').find('td.firstName').html();
+	    var lastName = $(this).closest('tr').find('td.lastName').html();
+	    ....
+
+	    // and set them in the modal:
+	    $('.firstName', myModal).val(firstName);
+	    $('.lastNameName', myModal).val(lastName);
+	    ....
+
+	    // and finally show the modal
+	    myModal.modal({ show: true });
+
+	    return false;
 	});	
 });

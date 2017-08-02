@@ -47,4 +47,7 @@ label{
     width: 45%;
     float: right;
 }
+.table td,th {
+   text-align: center !important;   
+}
 
