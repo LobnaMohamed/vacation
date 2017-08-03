@@ -1,14 +1,7 @@
 <?php 
 	include 'header.html';
-	require 'connect.php';
-	
-	$sql = "SELECT d.*, a.active as activeStatus, dn.day_n as shift 
-		    FROM t_data d left JOIN t_active a on d.active = a.ID 
-		    			  left Join t_day_n  dn  on d.day_night = dn.ID
-		    ORDER BY id ASC";
-	$stmt = $con->prepare($sql);
-	$stmt->execute();
-	$result = $stmt->fetchAll();	        
+	// require 'connect.php';
+	require 'functions.php';        
 ?>
 <!DOCTYPE html>
 <html dir="rtl" lang="ar">
@@ -37,34 +30,40 @@
 			      <th>المستوى</th>
 			      <th>نهارى/ورادى</th>
 			      <th>بالخدمة/خارج الخدمة</th>
+			      <th><button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#addEmp">إضافة</button></th>
 			    </tr>
 		  	</thead>
 			<tbody>
-				<?php
-				   foreach($result as $row){
-				?>
-				<tr>
-					<td><?php echo $row['emp_code']; ?></td>
-					<td><?php echo $row['emp_name']; ?></td>
-					<td><?php echo $row['contract_type']; ?></td>
-					<td><?php echo $row['id_job']; ?></td>
-					<td><?php echo $row['g_management']; ?></td>
-					<td><?php echo $row['level']; ?></td>
-					<td><?php echo $row['shift']; ?></td>
-					<td><?php echo $row['activeStatus']; ?></td>
-					<td><button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#editEmp">تعديل</button></td>
-				</tr>
-				<?php } ?>
+				<?php getAllEmp(); ?>
+
 			</tbody>
 		</table>
-		<!-- Modal -->
+		<!-- add Modal -->
+		<div id="addEmp" class="modal fade" role="dialog">
+			<div class="modal-dialog">
+				<!-- Modal content-->
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal">&times;</button>
+						<h4 class="modal-title"> إضافة عامل جديد </h4>
+					</div>
+					<div class="modal-body">
+						<p>Some text in the modal.</p>
+					</div>
+					<div class="modal-footer">
+						<a href="#" type="button" class="btn btn-default add" data-dismiss="modal">Close</a>
+					</div>
+				</div>
+			</div>
+		</div>
+		<!-- Edit Modal -->
 		<div id="editEmp" class="modal fade" role="dialog">
 			<div class="modal-dialog">
 				<!-- Modal content-->
 				<div class="modal-content">
 					<div class="modal-header">
 						<button type="button" class="close" data-dismiss="modal">&times;</button>
-						<h4 class="modal-title">تعديل البيانات</h4>
+						<h4 class="modal-title"> تعديل البيانات </h4>
 					</div>
 					<div class="modal-body">
 						<p>Some text in the modal.</p>

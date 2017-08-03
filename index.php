@@ -1,5 +1,5 @@
-<?php 
-	require 'connect.php';
+<?php
+	require 'functions.php';
 	include 'header.html';
 ?>
 <!DOCTYPE html>
@@ -18,7 +18,7 @@
 	    	<img class= "col-lg-2 logo" src="images/amoc2.png">
 	  	    <h1 class="col-lg-4 col-lg-offset-1 ">نموذج الاجـــــازة</h1>	    
 	    </header>	  
-	    <form action="add.php" method="POST">
+	    <form  method="POST" action="add.php">
 	    	<div class="row">	    
 			    <div class="col-lg-4">
 			    	<div class= "form-group">
@@ -27,15 +27,7 @@
 				    	<label for="topManager">الرئيس الاعلى</label>
 					    <select class="topManager form-control" name="topManager" required>
 					    	<option selected disabled hidden style='display: none' value=''></option>
-				   		    <?php
-				   		    	$sql= "SELECT ID,emp_code,emp_name FROM t_data" ;
-				   		    	$stmt = $con->prepare($sql);
-								$stmt->execute();
-								$result = $stmt->fetchAll();
-				   		    	    foreach($result as $row){
-									    echo "<option value=" .$row['ID'].">" . $row['emp_code'] ."   ".$row['emp_name']. "</option>";
-									}
-				   		    ?>			    
+				   		    <?php 	getManagers();   ?>			    
 				   		</select>
 						
 			    	</div>			    	
@@ -47,15 +39,7 @@
 						<label for="manager">المدير المباشر</label>
 					    <select class="manager form-control" name="manager">
 					    	<option selected disabled hidden style='display: none' value=''></option>
-				   		    <?php
-				   		    	$sql= "SELECT ID,emp_code,emp_name FROM t_data" ;
-				   		    	$stmt = $con->prepare($sql);
-								$stmt->execute();
-								$result = $stmt->fetchAll();
-				   		    	    foreach($result as $row){
-									    echo "<option value=" .$row['ID'].">" . $row['emp_code'] ."   ".$row['emp_name']. "</option>";
-									}
-				   		    ?>
+				   		    <?php  	getManagers();   ?>
 						</select>
 					</div>		
 			    </div>					
@@ -86,28 +70,17 @@
 						<label for="vacation">نوع الاجازة</label>
 			   		    <select class="vacType form-control" name="case" required>
 			   		    	<option selected disabled hidden style='display: none' value='' ></option>
-				   		    <?php
-				   		    	$sql= "SELECT ID,case_desc FROM t_case" ;
-				   		    	$stmt = $con->prepare($sql);
-								$stmt->execute();
-								$result = $stmt->fetchAll();
-				   		    	    foreach($result as $row){
-									    echo "<option value=" .$row['ID'].">" . $row['case_desc'] . "</option>";
-									}
-				   		    ?>
+				   		    <?php getCase();   ?>
 					    </select>
 					</div>						
 			</div>
 			<div class = "row form-group">
 				<div class="col-lg-6 col-lg-offset-3">
-					<input class ="btn btn-info form-control" type="Submit" value="ارسال">
+					<input class ="btn btn-info form-control" type="Submit" value="ارسال" name="submitVac">
 					<!-- <i class="fa fa-send fa-fw send-icon"></i>			 -->
 				</div>	
 			</div>
 	    </form>
-	    <footer>
-	    	
-	    </footer>
 	</div>
 	<script src="js/jquery-3.2.1.min.js"></script>
 	<script src="js/bootstrap.min.js"></script>
