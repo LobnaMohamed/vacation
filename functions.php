@@ -20,7 +20,7 @@
 			//QUERY
 			// $q = "INSERT INTO test(name,phone)VALUES('لبنى','محمد')";
 			// $con->exec($q);
-			echo "success";
+			//echo "success";
 			//print_r($con) ;
 
 		}
@@ -75,8 +75,8 @@
 				echo "name and code cant be empty";
 				// print_r($formErrors) ;
 			} else {
-				$sql= "INSERT INTO t_transe(id_case,start_date,end_date,manager_id,top_manager_id,duration) 
-					   VALUES ('".$vacType."','".$date."','".$dateTo."','".$manager."','".$topManager."','".$duration."')" ;
+				$sql= "INSERT INTO t_transe(id_case,start_date,end_date,manager_id,top_manager_id,duration,mang_id) 
+					   VALUES ('".$vacType."','".$date."','".$dateTo."','".$manager."','".$topManager."','".$duration."' ,'".$management."')" ;
 		        $stmt = $con->prepare($sql);
 				$stmt->execute();		
 			}
@@ -91,10 +91,13 @@
 	// --------------get Employee function-----------------------
 	function getAllEmp(){
 		$con = connect();
-		$sql = "SELECT d.*, a.active as activeStatus, dn.day_n as shift 
+		$sql= '';
+		$sql .= "SELECT d.*, a.active as activeStatus, dn.day_n as shift 
 		    FROM t_data d left JOIN t_active a on d.active = a.ID 
-		    			  left Join t_day_n  dn  on d.day_night = dn.ID
-		    ORDER BY id ASC";
+		    			  left Join t_day_n  dn  on d.day_night = dn.ID";
+		if(isset($_POST['search'])){
+			$sql .='WHERE emp_name LIKE "%'. $_POST['search'].'%"' ;
+		}
 		$stmt = $con->prepare($sql);
 		$stmt->execute();
 		$result = $stmt->fetchAll();
@@ -112,6 +115,7 @@
 			echo '</tr>';
 		 } 
 	}
+
 	// --------------Add Employee function-----------------------
 	function addEmp(){
 
@@ -119,5 +123,50 @@
 	
 	// --------------Edit Employee function-----------------------
 	function editEmp(){
-
+		$con = connect();
+		$sql= '';
+		$sql .= "SELECT d.*, a.active as activeStatus, dn.day_n as shift 
+		    FROM t_data d left JOIN t_active a on d.active = a.ID 
+		    			  left Join t_day_n  dn  on d.day_night = dn.ID";
+		if(isset($_POST['search'])){
+			$sql .='WHERE emp_name LIKE "%'. $_POST['search'].'%"' ;
+		}
+		$stmt = $con->prepare($sql);
+		$stmt->execute();
+		$result = $stmt->fetchAll();
+		foreach($result as $row){
+			echo"<tr>";
+			echo"<td>".  $row['emp_code']. "</td>";
+			echo"<td>".  $row['emp_name']. "</td>";
+			echo"<td>".  $row['contract_type']. "</td>";
+			echo"<td>".  $row['id_job']. "</td>";
+			echo"<td>".  $row['g_management']. "</td>";
+			echo"<td>".  $row['level']. "</td>";
+			echo"<td>".  $row['shift']. "</td>";
+			echo"<td>".  $row['activeStatus']. "</td>";
+			echo'<td><button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#editEmp">تعديل</button></td>';
+			echo '</tr>';
+		 } 
+	}	
+	//---------------get managments function-----------------------
+	function getManagement(){
+		$con = connect();
+		$sql= "SELECT ID,Management FROM managements" ;
+    	$stmt = $con->prepare($sql);
+		$stmt->execute();
+		$result = $stmt->fetchAll();
+	    	foreach($result as $row){
+			    echo "<option value=" .$row['ID'].">" . $row['Management'] . "</option>";
+			}		
+	}
+	//---------------get pending vacations
+	function getPendingVac(){
+		$con = connect();
+		$sql= '';
+		$sql .= "SELECT * 
+				 FROM  t_transe 
+				 WHERE manager_id=2 and Manager_agree=3";
+		$stmt = $con->prepare($sql);
+		$stmt->execute();
+		$result = $stmt->fetchAll();
 	}	

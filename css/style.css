@@ -50,4 +50,7 @@ label{
 .table td,th {
    text-align: center !important;   
 }
+.btn{
+    margin-bottom: -5px !important;
+}
 

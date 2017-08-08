@@ -17,5 +17,13 @@
 			</ul>
 		</div>
 	</nav>
+	<table class="table table-striped table-bordered">	
+		<thead>
+			
+		</thead>
+		<tbody>
+			<?php getPendingVac(); ?>
+		</tbody>
+	</table>
 </body>
 </html>

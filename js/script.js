@@ -1,5 +1,5 @@
 /*global $, alert, console*/
-$(function(){
+$(document).ready(function(){
 
 	'use strict';
 	var nameError = true ,
@@ -18,7 +18,7 @@ $(function(){
 		}
 	}
 
-	$('.name').blur(function(){
+	$('#name').blur(function(){
 
 	 	if($(this).val().length <= 3){ //show error
 	 		$(this).css('border', '1px solid #F00').parent().find('.custom-alert').fadeIn(300)
@@ -36,9 +36,9 @@ $(function(){
 	 	checkErrors();
 	});
 
-	$('.dateTo').blur(function(){
+	$('#dateTo').blur(function(){
 
-		var startDate = $('.date').val();
+		var startDate = $('#date').val();
 		var endDate = $(this).val();
 		// end - start returns difference in milliseconds 
 		var diff = new Date(endDate) - new Date(startDate);
@@ -46,7 +46,7 @@ $(function(){
 		// get days
 		var days = diff/1000/60/60/24;
 		console.log(days);
-		$('.duration').val(days);
+		$('#duration').val(days);
 	});
 
 	// edit employees info modal
@@ -65,4 +65,36 @@ $(function(){
 
 	    return false;
 	});	
+
+	// //trial for ajax
+	// $(".code").change(function()
+ //            {
+ //                $.ajax(
+ //                {
+ //                    url:"/index.php",
+ //                    type:"post",
+ //                    data:{code:$(this).val()},
+ //                    success:function(response)
+ //                    {
+ //                        $("#zip").html(response);
+ //                    }
+ //                });
+ //    });
+ 	$("input#code").bind("change", function(){
+ 		var empCode=$("#code").val();
+ 		if($.trim(empCode) != ''){
+ 			$.post('ajax.php',{code:empCode}, function(data){
+ 				if(data==="notfound"){
+ 					alert("رقم القيد غير مسجل \n من فضلك ادخل رقم صحيح!");
+ 				}else{
+ 					$('#name').val(data); 					
+ 				}
+
+ 			});
+ 		} 		
+	});
+	$( '#vacForm' ).each(function(){
+		this.reset();
+	});
+
 });
