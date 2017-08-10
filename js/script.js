@@ -84,13 +84,16 @@ $(document).ready(function(){
  		var empCode=$("#code").val();
  		if($.trim(empCode) != ''){
  			$.post('ajax.php',{code:empCode}, function(data){
+ 				alert(data.empID);
+ 				alert(data.empName);
  				if(data==="notfound"){
  					alert("رقم القيد غير مسجل \n من فضلك ادخل رقم صحيح!");
  				}else{
- 					$('#name').val(data); 					
- 				}
 
- 			});
+ 					$('#name').val(data.empName);
+ 					$('#emp').val(data.empID); 					
+ 				}
+ 			},"json");
  		} 		
 	});
 	$( '#vacForm' ).each(function(){

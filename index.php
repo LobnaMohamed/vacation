@@ -46,6 +46,7 @@
 					<div class="form-group">
 						<label for="code">رقم القيد</label>
 				    	<input type="text" class="form-control" id="code" name="code" placeholder="Your Code..">
+				    	<input hidden type="text" id="emp" name="empID"/>
 			    		<label for="Management" >الادارة:</label>
 						<select class="form-control" id="Management" name="Management">
 					    	<option selected disabled hidden style='display: none' value=''></option>

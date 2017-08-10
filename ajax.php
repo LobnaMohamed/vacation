@@ -2,7 +2,7 @@
 	include 'functions.php';
 	if(isset($_POST['code']) === true && empty($_POST['code'] ===false)){
 		$con = connect();
-		$sql= "SELECT emp_name 
+		$sql= "SELECT ID,emp_name 
 			   FROM t_data 
 			   WHERE emp_code = '" . trim($_POST['code']) . "' "  ;
 		$stmt = $con->prepare($sql);
@@ -10,7 +10,9 @@
 		$result = $stmt->fetchAll();
 		if($result){
 			foreach($result as $row){
-		    	echo($row['emp_name']);
+		    	// echo($row['emp_name']);
+		    	// echo($row['ID']);
+		    	echo json_encode(array("empID"=>$row['ID'],"empName"=>$row['emp_name']));
 			}
 		}else{
 			echo "notfound";

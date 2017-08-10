@@ -53,11 +53,12 @@
 	}
 	// --------------Add vacation function-----------------------
 	function addVacation(){
-		$con = connect();
+		
 		//check if user comming from a request
 		 // $_SERVER['REQUEST_METHOD'] == 'POST'
 		if(isset($_POST['submitVac'])){
 			//assign variables
+			$empID=isset($_POST['empID'])? filter_var($_POST['empID'],FILTER_SANITIZE_NUMBER_INT):'';
 			$empName= isset($_POST['name'])? filter_var($_POST['name'],FILTER_SANITIZE_STRING) : '';
 			$empCode= isset($_POST['code'])? filter_var($_POST['code'],FILTER_SANITIZE_NUMBER_INT):'';
 			$management= isset($_POST['Management'])? filter_var($_POST['Management'],FILTER_SANITIZE_STRING):'';
@@ -75,8 +76,9 @@
 				echo "name and code cant be empty";
 				// print_r($formErrors) ;
 			} else {
-				$sql= "INSERT INTO t_transe(id_case,start_date,end_date,manager_id,top_manager_id,duration,mang_id) 
-					   VALUES ('".$vacType."','".$date."','".$dateTo."','".$manager."','".$topManager."','".$duration."' ,'".$management."')" ;
+				$con = connect();
+				$sql= "INSERT INTO t_transe(emp_id,id_case,start_date,end_date,manager_id,top_manager_id,duration,mang_id) 
+					   VALUES ('".$empID."','".$vacType."','".$date."','".$dateTo."','".$manager."','".$topManager."','".$duration."' ,'".$management."')" ;
 		        $stmt = $con->prepare($sql);
 				$stmt->execute();		
 			}
@@ -163,10 +165,21 @@
 	function getPendingVac(){
 		$con = connect();
 		$sql= '';
-		$sql .= "SELECT * 
-				 FROM  t_transe 
-				 WHERE manager_id=2 and Manager_agree=3";
+		$sql .= "SELECT t.start_date,t.end_date,t.duration,d.emp_code,d.emp_name,c.case_desc,t.manager_id,t.Manager_agree,t.top_manager_id,m.Management,t.Manager_agree,vs.status 
+				FROM t_data d ,t_transe t ,t_case c ,managements m , vac_status vs 
+				WHERE t.emp_id=d.ID and t.id_case=c.ID and ((t.manager_id=2 or t.top_manager_id=2) and (t.Manager_agree=3 or t.topManager_agree=3)) and t.Mang_id=m.ID and t.Manager_agree=vs.ID";
 		$stmt = $con->prepare($sql);
 		$stmt->execute();
 		$result = $stmt->fetchAll();
+		foreach($result as $row){
+			echo"<tr>";
+			echo"<td>".  $row['emp_code']. "</td>";
+			echo"<td>".  $row['emp_name']. "</td>";
+			echo"<td>".  $row['Management']. "</td>";
+			echo"<td>".  $row['case_desc']. "</td>";
+			echo"<td>".  $row['start_date']. "</td>";
+			echo"<td>".  $row['end_date']. "</td>";
+			echo"<td>".  $row['duration']. "</td>";
+			echo '</tr>';
+		} 
 	}	
