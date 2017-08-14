@@ -96,6 +96,7 @@ $(document).ready(function(){
  			},"json");
  		} 		
 	});
+
 	$( '#vacForm' ).each(function(){
 		this.reset();
 	});
