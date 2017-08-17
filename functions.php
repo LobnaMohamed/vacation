@@ -29,6 +29,26 @@
 		}
 		return $con;
 	}	
+	//---------------login function------------------------------
+	function login(){
+		$username = $_POST['username'];
+		$password = $_POST['password'];
+		$hashedPass = sha1($password);
+
+		//check if user exist
+
+		$con = connect();
+		$stmt = $con->prepare("SELECT emp_code,password From t_data WHERE emp_code=? and password=?");
+		$stmt->execute(array($username,$hashedPass));
+		$count = $stmt->rowCount();
+		//if count >0 then the user exists
+		if($count>0){
+			echo "welcome!!!";
+			$_SESSION['Username'] = $username;//register session
+			header('Location: index.php');//redirect
+			exit();
+		}
+	}
 	//---------------get Managers function-----------------------
 	function getManagers(){
 		$con = connect();
@@ -162,12 +182,12 @@
 			}		
 	}
 	//---------------get pending vacations
-	function getPendingVac(){
+	function getPendingVacAsManager(){
 		$con = connect();
 		$sql= '';
 		$sql .= "SELECT t.start_date,t.end_date,t.duration,d.emp_code,d.emp_name,c.case_desc,t.manager_id,t.Manager_agree,t.top_manager_id,m.Management,vs.status,t.topManager_agree 
 				FROM t_data d ,t_transe t ,t_case c ,managements m , vac_status vs 
-				WHERE t.emp_id=d.ID and t.id_case=c.ID and ((t.manager_id=2 or t.top_manager_id=2) and (t.Manager_agree=3 or t.topManager_agree=3)) and t.Mang_id=m.ID and t.Manager_agree=vs.ID";
+				WHERE t.emp_id=d.ID and t.id_case=c.ID and ((t.manager_id=4) and (t.Manager_agree=3 or t.topManager_agree=3)) and t.Mang_id=m.ID and t.Manager_agree=vs.ID";
 		$stmt = $con->prepare($sql);
 		$stmt->execute();
 		$result = $stmt->fetchAll();
@@ -184,21 +204,55 @@
 				echo"<td>".  $row['start_date']. "</td>";
 				echo"<td>".  $row['end_date']. "</td>";
 				echo"<td>".  $row['duration']. "</td>";
-				echo'<td><form class="form-horizontal">'; 
+				echo'<td>'; 
 					foreach($agreement as $row2){
 						echo '<label >'.$row2['status'].'
-					            <input type="radio" class="radio-inline" name="MangrAgree" value="'.$row['Manager_agree'].'">
-					          </label>';
+					            <input type="radio" class="radio-inline" name="MangrAgree" class="MangrAgreeRadio" value="'.$row['Manager_agree'].'"';if($row['Manager_agree'] == $row2['ID']){ echo "checked=\"yes\""; }
+					    echo'></label>';	  
 					};
-				echo'</form></td>';
-				echo'<td><form class="form-horizontal">'; 
-					foreach($agreement as $row2){
-						echo '<label >'.$row2['status'].'
-					            <input type="radio" class="radio-inline" name="TopMangrAgree"  value="'.$row['topManager_agree'].'">
-					          </label>';	  
-					};
-					// echo'<input class="btn btn-primary" type=submit value="اعتماد"></input>';
-				echo'</form></td>';
+				echo'</td>';
+				echo"<td>".  $row['status']. "</td>";
+				// echo'<td>'; 
+				// 	foreach($agreement as $row2){
+				// 		echo '<label >'.$row2['status'].'
+				// 	            <input type="radio" class="radio-inline" name="TopMangrAgree" id="TopMangrAgreeRadio" value="'.$row['topManager_agree'].'"';if($row['topManager_agree'] == $row2['ID']){ echo "checked=\"yes\""; }
+				// 	    echo'></label>';	  
+				// 	};
+				// echo'</td>';
 			echo "</tr>";
 		} 
 	}	
+	function getPendingVacAsTopManager(){
+		$con = connect();
+		$sql= '';
+		$sql .= "SELECT t.start_date,t.end_date,t.duration,d.emp_code,d.emp_name,c.case_desc,t.manager_id,t.Manager_agree,t.top_manager_id,m.Management,vs.status,t.topManager_agree 
+				FROM t_data d ,t_transe t ,t_case c ,managements m , vac_status vs 
+				WHERE t.emp_id=d.ID and t.id_case=c.ID and (( t.top_manager_id=2) and (t.topManager_agree=3)) and t.Mang_id=m.ID and t.Manager_agree=vs.ID";
+		$stmt = $con->prepare($sql);
+		$stmt->execute();
+		$result = $stmt->fetchAll();
+		$vacStatus= "SELECT ID,status FROM vac_status ";
+		$stmt2 = $con->prepare($vacStatus);
+		$stmt2->execute();
+		$agreement = $stmt2->fetchAll();
+		foreach($result as $row){
+			echo"<tr>";
+				echo"<td>".  $row['emp_code']. "</td>";
+				echo"<td>".  $row['emp_name']. "</td>";
+				echo"<td>".  $row['Management']. "</td>";
+				echo"<td>".  $row['case_desc']. "</td>";
+				echo"<td>".  $row['start_date']. "</td>";
+				echo"<td>".  $row['end_date']. "</td>";
+				echo"<td>".  $row['duration']. "</td>";
+				echo"<td>".  $row['status']. "</td>";
+				echo'<td>'; 
+					foreach($agreement as $row2){
+						echo '<label >'.$row2['status'].'
+					            <input type="radio" class="radio-inline" name="TopMangrAgree" id="TopMangrAgreeRadio" value="'.$row['topManager_agree'].'"';if($row['topManager_agree'] == $row2['ID']){ echo "checked=\"yes\""; }
+					    echo'></label>';	  
+					};
+				echo'</td>';
+			echo "</tr>";
+		} 
+	}	
+

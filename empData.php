@@ -2,17 +2,6 @@
 	include 'header.html';
 	require 'functions.php';        
 ?>
-<!DOCTYPE html>
-<html dir="rtl" lang="ar">
-<head>
-	<title>emp data</title>
-	<meta charset="utf-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<link rel="stylesheet" href="css/bootstrap.min.css">
-	<link rel="stylesheet" href="css/font-awesome.min.css">
-	<link rel="stylesheet" href="css/style.css">
-</head>
-<body>
 	<div class="container">
 	    <header class="row text-center">
 	    	<!-- <img class= "col-lg-2 logo" src="images/amoc2.png"> -->
@@ -82,9 +71,4 @@
 				</div>
 			</div>
 		</div>		
-	</div>
-	<script src="js/jquery-3.2.1.min.js"></script>
-	<script src="js/bootstrap.min.js"></script>
-	<script type="text/javascript" src="js/script.js"></script>
-</body>
-</html>
+	<?php include 'footer.php'; ?>
