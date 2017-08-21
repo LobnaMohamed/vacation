@@ -1,14 +1,21 @@
 <?php
-	// session_start();
-	// if(isset($_SESSION['Username'])){
-	// 	header('Location: index.php');//redirect
-	// }
+	session_start();
+	if(isset($_SESSION['Username'])){
+		//echo "Welcome" . $_SESSION['Username'];
+		header('Location: vacationmodel.php');//redirect
+		exit();
+	}
+	//else{
+		//header('Location: index.php');//redirect
+		//exit();
+	//}
 	require 'functions.php';
-	include 'header.html';
+	include 'header.php';
 
 	if($_SERVER['REQUEST_METHOD'] == 'POST'){
 		login();
 	}
+
 ?>
 	<div class="container">
 	<h3 class="text-center">تسجيل الدخول لبرنامج الاجازات</h3>

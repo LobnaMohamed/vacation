@@ -38,21 +38,42 @@
 		//check if user exist
 
 		$con = connect();
-		$stmt = $con->prepare("SELECT emp_code,password From t_data WHERE emp_code=? and password=?");
+		$stmt = $con->prepare("SELECT emp_code,password,id_userGroup,ID From t_data WHERE emp_code=? and password=?");
 		$stmt->execute(array($username,$hashedPass));
 		$count = $stmt->rowCount();
+		$row = $stmt->fetch(PDO::FETCH_ASSOC);
+		$userGroup= $row["id_userGroup"];
+		$userID= $row["ID"];
 		//if count >0 then the user exists
 		if($count>0){
-			echo "welcome!!!";
 			$_SESSION['Username'] = $username;//register session
-			header('Location: index.php');//redirect
-			exit();
+			$_SESSION['UserGroup'] = $userGroup;
+			$_SESSION['UserID'] = $userID;
+		
+			//redirect according to privillage
+			if($userGroup==3){
+				header('Location: empdata.php');//redirect
+			}else{
+				header('Location: vacationmodel.php');//redirect
+				
+			}	
 		}
 	}
-	//---------------get Managers function-----------------------
+	//---------------get All Managers who can approve vacations as both manager and top manager in manager combobox function-----------------------
 	function getManagers(){
 		$con = connect();
-		$sql= "SELECT ID,emp_code,emp_name FROM t_data" ;
+		$sql= "SELECT ID,emp_code,emp_name FROM t_data where id_userGroup in(1,2)" ;
+    	$stmt = $con->prepare($sql);
+		$stmt->execute();
+		$result = $stmt->fetchAll();
+	    	foreach($result as $row){
+			    echo "<option value=" .$row['ID'].">" . $row['emp_code'] ."   ".$row['emp_name']. "</option>";
+			}
+	}
+	//------get Top Managers function-----------
+	function getTopManagers(){
+		$con = connect();
+		$sql= "SELECT ID,emp_code,emp_name FROM t_data where id_userGroup=1" ;
     	$stmt = $con->prepare($sql);
 		$stmt->execute();
 		$result = $stmt->fetchAll();
@@ -227,7 +248,7 @@
 		$sql= '';
 		$sql .= "SELECT t.start_date,t.end_date,t.duration,d.emp_code,d.emp_name,c.case_desc,t.manager_id,t.Manager_agree,t.top_manager_id,m.Management,vs.status,t.topManager_agree 
 				FROM t_data d ,t_transe t ,t_case c ,managements m , vac_status vs 
-				WHERE t.emp_id=d.ID and t.id_case=c.ID and (( t.top_manager_id=2) and (t.topManager_agree=3)) and t.Mang_id=m.ID and t.Manager_agree=vs.ID";
+				WHERE t.emp_id=d.ID and t.id_case=c.ID and  t.top_manager_id='".$_SESSION['UserID']."' and t.topManager_agree=3 and t.Mang_id=m.ID and t.Manager_agree=vs.ID";
 		$stmt = $con->prepare($sql);
 		$stmt->execute();
 		$result = $stmt->fetchAll();
@@ -248,11 +269,32 @@
 				echo'<td>'; 
 					foreach($agreement as $row2){
 						echo '<label >'.$row2['status'].'
-					            <input type="radio" class="radio-inline" name="TopMangrAgree" id="TopMangrAgreeRadio" value="'.$row['topManager_agree'].'"';if($row['topManager_agree'] == $row2['ID']){ echo "checked=\"yes\""; }
+					            <input type="radio" class="radio-inline" name="TopMangrAgree" class="TopMangrAgreeRadio" value="'.$row2['ID'].'"';
+					            if($row['topManager_agree'] == $row2['ID']){ echo "checked=\"yes\""; }
 					    echo'></label>';	  
 					};
 				echo'</td>';
 			echo "</tr>";
+
 		} 
 	}	
 
+	//------------reply to vacations function------------
+	function saveVacationAgree(){
+		$con = connect();
+		$sql= '';
+		$topMgrAgree = $_POST['TopMangrAgree'];
+		//$topMgrAgree = 2;
+		echo $topMgrAgree;
+		//$sql .= "INSERT INTO t_transe (topManager_agree) VALUES(".'$TOPMGRAGREE'.")";
+		$sql .= "INSERT INTO t_transe (topManager_agree) VALUES(:topAgree)";
+		$stmt = $con->prepare($sql);
+		$stmt->bindParam(':topAgree', $topMgrAgree);
+		$stmt->execute();
+		if($stmt){
+		    echo 'Row inserted!<br>';
+		}
+		else{
+			echo 'error!<br>';
+		}
+	}

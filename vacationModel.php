@@ -1,13 +1,11 @@
 <?php
-	// session_start();
-	// if(isset($_SESSION['Username'])){
-	// 	echo "Welcome" . $_SESSION['Username'];
-	// }else{
-	// 	header('Location: index.php');//redirect
-	// 	exit();
-	// }
+	session_start();
+	if(!isset($_SESSION['Username'])){
+		header('Location: index.php');//redirect
+		exit();
+	}
 	require 'functions.php';
-	include 'header.html';
+	include 'header.php';
 
 	?>
 	<div class="container">
@@ -24,7 +22,7 @@
 				    	<label for="topManager">الرئيس الاعلى</label>
 					    <select class="form-control" id="topManager" name="topManager" required>
 					    	<option selected disabled hidden style='display: none' value=''></option>
-				   		    <?php 	getManagers();   ?>			    
+				   		    <?php 	getTopManagers();   ?>			    
 				   		</select>	
 			    	</div>			    	
 			   	</div> 	

@@ -18,9 +18,23 @@
 			  <span class="navbar-brand">شركة الأسكندرية للزيوت المعدنية ( أموك )</span>
 			</div>
 			<ul class="nav navbar-nav pull-right">
-			  <li><a href="index.php">عمل اجازة</a></li>
-			  <li><a href="#">Page 1</a></li>
-			  <li><a href="#">Page 2</a></li>
+			<?php
+				if (isset($_SESSION['Username']))
+				{
+			?>
+			  <li><a href="logout.php">خروج</a></li>
+			  <li><a href="vacationmodel.php">عمل اجازة</a></li>
+			<?php if($_SESSION['UserGroup']==3){ ?>
+					<li><a href="empdata.php">بيانات العاملين</a></li>
+			<?php 
+				   }elseif($_SESSION['UserGroup']==1 || $_SESSION['UserGroup']==2){ ?>
+				   <li><a href="#">الاجازات المعتمدة</a></li>
+				   	<li><a href="pending.php">الاجازات المطلوب اعتمادها</a></li>
+			<?php 	   
+
+				   		}
+				}
+			 ?>
 			</ul>
 		</div>
 	</nav>

@@ -1,5 +1,12 @@
 <?php 
-	include 'header.html';
+	session_start();
+	if(isset($_SESSION['Username'])){
+		//echo "Welcome" . $_SESSION['Username'];
+	}else{
+		header('Location: index.php');//redirect
+		exit();
+	}
+	include 'header.php';
 	require 'functions.php';        
 ?>
 	<div class="container">
