@@ -8,13 +8,16 @@
 	}
 	include 'header.php';
 	include 'functions.php';
+
+
 ?>
 	<div class="container">
 	    <header class="row text-center">
 	    	<!-- <img class= "col-lg-2 logo" src="images/amoc2.png"> -->
 	  	    <h1 class="col-lg-12">الاجازات المطلوب اعتمادها</h1>  
 	    </header>
-	    <form class="form-horizontal" method="POST" action="<?php echo $_SERVER['PHP_SELF'] ?>">
+	    <form class="form-horizontal" method="POST" action="done.php"> 
+	    <!-- action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']) ?>" -->
 			<table id="pendingVac" class="table table-striped table-bordered">	
 				<thead>
 					<tr>
@@ -38,13 +41,11 @@
 							
 						}elseif($_SESSION['UserGroup']==2){
 							getPendingVacAsManager(); 
-							
 						} 
 					?>
 				</tbody>
 			</table>
-			<input type="submit" name="vacationAgree" id="vacationAgree" class="btn btn-success" onclick="saveVacationAgree()">
-		</form>		
+			<input type="submit" name="lobna" id="vacationAgree" class="btn btn-success">
+		 </form>		
 	</div> 
-	
-	<?php include 'footer.php'; ?>
+	<?php	include 'footer.php'; ?>

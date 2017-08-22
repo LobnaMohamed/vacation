@@ -6,6 +6,7 @@
 		$pass='';
 		$options = array (
 				PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8',
+				PDO::ATTR_PERSISTENT => true
 			);
 
 		try{
@@ -206,9 +207,9 @@
 	function getPendingVacAsManager(){
 		$con = connect();
 		$sql= '';
-		$sql .= "SELECT t.start_date,t.end_date,t.duration,d.emp_code,d.emp_name,c.case_desc,t.manager_id,t.Manager_agree,t.top_manager_id,m.Management,vs.status,t.topManager_agree 
+		$sql .= "SELECT t.id, t.start_date,t.end_date,t.duration,d.emp_code,d.emp_name,c.case_desc,t.manager_id,t.Manager_agree,t.top_manager_id,m.Management,vs.status,t.topManager_agree 
 				FROM t_data d ,t_transe t ,t_case c ,managements m , vac_status vs 
-				WHERE t.emp_id=d.ID and t.id_case=c.ID and ((t.manager_id=4) and (t.Manager_agree=3 or t.topManager_agree=3)) and t.Mang_id=m.ID and t.Manager_agree=vs.ID";
+				WHERE t.emp_id=d.ID and t.id_case=c.ID and t.manager_id='".$_SESSION['UserID']."' and t.Manager_agree and t.Mang_id=m.ID and t.Manager_agree=vs.ID";
 		$stmt = $con->prepare($sql);
 		$stmt->execute();
 		$result = $stmt->fetchAll();
@@ -217,6 +218,7 @@
 		$stmt2->execute();
 		$agreement = $stmt2->fetchAll();
 		foreach($result as $row){
+			$index= $row['id'];
 			echo"<tr>";
 				echo"<td>".  $row['emp_code']. "</td>";
 				echo"<td>".  $row['emp_name']. "</td>";
@@ -228,35 +230,33 @@
 				echo'<td>'; 
 					foreach($agreement as $row2){
 						echo '<label >'.$row2['status'].'
-					            <input type="radio" class="radio-inline" name="MangrAgree" class="MangrAgreeRadio" value="'.$row['Manager_agree'].'"';if($row['Manager_agree'] == $row2['ID']){ echo "checked=\"yes\""; }
+					            <input type="radio" class="radio-inline" name="MangrAgree['.$index.']" class="MangrAgreeRadio" value="'.$row['Manager_agree'].'"';
+					            if($row['Manager_agree'] == $row2['ID']){ echo "checked"; }
 					    echo'></label>';	  
 					};
+					//name="MangrAgree'.$row['id'].'"
 				echo'</td>';
 				echo"<td>".  $row['status']. "</td>";
-				// echo'<td>'; 
-				// 	foreach($agreement as $row2){
-				// 		echo '<label >'.$row2['status'].'
-				// 	            <input type="radio" class="radio-inline" name="TopMangrAgree" id="TopMangrAgreeRadio" value="'.$row['topManager_agree'].'"';if($row['topManager_agree'] == $row2['ID']){ echo "checked=\"yes\""; }
-				// 	    echo'></label>';	  
-				// 	};
-				// echo'</td>';
 			echo "</tr>";
 		} 
 	}	
 	function getPendingVacAsTopManager(){
 		$con = connect();
 		$sql= '';
-		$sql .= "SELECT t.start_date,t.end_date,t.duration,d.emp_code,d.emp_name,c.case_desc,t.manager_id,t.Manager_agree,t.top_manager_id,m.Management,vs.status,t.topManager_agree 
+		$sql .= "SELECT t.id,t.start_date,t.end_date,t.duration,d.emp_code,d.emp_name,c.case_desc,t.manager_id,t.Manager_agree,t.top_manager_id,m.Management,vs.status,t.topManager_agree 
 				FROM t_data d ,t_transe t ,t_case c ,managements m , vac_status vs 
-				WHERE t.emp_id=d.ID and t.id_case=c.ID and  t.top_manager_id='".$_SESSION['UserID']."' and t.topManager_agree=3 and t.Mang_id=m.ID and t.Manager_agree=vs.ID";
+				WHERE t.emp_id=d.ID and t.id_case=c.ID and  (t.top_manager_id='".$_SESSION['UserID']."' or t.manager_id='".$_SESSION['UserID']."')and t.topManager_agree=3 and t.Mang_id=m.ID and t.Manager_agree=vs.ID";
 		$stmt = $con->prepare($sql);
 		$stmt->execute();
 		$result = $stmt->fetchAll();
+		$count= $stmt->rowCount();
 		$vacStatus= "SELECT ID,status FROM vac_status ";
 		$stmt2 = $con->prepare($vacStatus);
 		$stmt2->execute();
 		$agreement = $stmt2->fetchAll();
+		
 		foreach($result as $row){
+			$index= $row['id'];
 			echo"<tr>";
 				echo"<td>".  $row['emp_code']. "</td>";
 				echo"<td>".  $row['emp_name']. "</td>";
@@ -265,36 +265,57 @@
 				echo"<td>".  $row['start_date']. "</td>";
 				echo"<td>".  $row['end_date']. "</td>";
 				echo"<td>".  $row['duration']. "</td>";
-				echo"<td>".  $row['status']. "</td>";
-				echo'<td>'; 
+				if($row['manager_id']==$_SESSION['UserID']){
+					echo'<td>'; 
 					foreach($agreement as $row2){
-						echo '<label >'.$row2['status'].'
-					            <input type="radio" class="radio-inline" name="TopMangrAgree" class="TopMangrAgreeRadio" value="'.$row2['ID'].'"';
-					            if($row['topManager_agree'] == $row2['ID']){ echo "checked=\"yes\""; }
+						echo '<label >'.$row2['status']. '
+					            <input type="radio" class="radio-inline" name="MangrAgree['.$index.']" class="MangrAgreeRadio" value="'.$row2['ID'].'"';
+					            if($row['Manager_agree'] == $row2['ID']){ echo "checked"; }
 					    echo'></label>';	  
 					};
+				}else{
+					echo"<td>".  $row['status']. "</td>";
+				}
+				echo'<td>'; 
+				foreach($agreement as $row2){
+					echo '<label >'.$row2['status']. '
+				            <input type="radio" class="radio-inline" name="TopMangrAgree['.$index.']" class="TopMangrAgreeRadio" value="'.$row2['ID'].'"';
+				            if($row['topManager_agree'] == $row2['ID']){ echo "checked"; }
+				    echo'></label>';	  
+				};
 				echo'</td>';
 			echo "</tr>";
-
 		} 
 	}	
 
 	//------------reply to vacations function------------
 	function saveVacationAgree(){
+		var_dump($_POST) ;
+		$answers = isset($_POST['MangrAgree']) ? $_POST['MangrAgree'] : array();
+		//$answers = $_POST['MangrAgree'];
+		echo "<pre>";
+		print_r($answers);
+		echo "</pre>";
+		
 		$con = connect();
 		$sql= '';
-		$topMgrAgree = $_POST['TopMangrAgree'];
-		//$topMgrAgree = 2;
-		echo $topMgrAgree;
-		//$sql .= "INSERT INTO t_transe (topManager_agree) VALUES(".'$TOPMGRAGREE'.")";
-		$sql .= "INSERT INTO t_transe (topManager_agree) VALUES(:topAgree)";
-		$stmt = $con->prepare($sql);
-		$stmt->bindParam(':topAgree', $topMgrAgree);
-		$stmt->execute();
-		if($stmt){
-		    echo 'Row inserted!<br>';
+		
+		//Iterate through each answer
+		foreach($answers as $answer) {
+			echo $answer;
+			$sql = "UPDATE t_transe SET Manager_agree = ?";
+			$stmt = $con->prepare($sql);
+		    //$stmt->bindParam(':Agree', $answer, PDO::PARAM_INT);
+			$stmt->execute(array($answer));
+			//echo $sql;
+			if($stmt){
+			    echo 'Row inserted!<br>';
+			    ECHO $answer;
+			}
+			elseif(!$stmt){
+				echo 'error!<br>';
+			}
 		}
-		else{
-			echo 'error!<br>';
-		}
+		//header("Location:pending.php");
+	
 	}
