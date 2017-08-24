@@ -45,7 +45,7 @@
 					?>
 				</tbody>
 			</table>
-			<input type="submit" name="lobna" id="vacationAgree" class="btn btn-success">
+			<input type="submit" name="update" id="vacationAgree" class="btn btn-success">
 		 </form>		
 	</div> 
 	<?php	include 'footer.php'; ?>

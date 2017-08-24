@@ -207,9 +207,15 @@
 	function getPendingVacAsManager(){
 		$con = connect();
 		$sql= '';
-		$sql .= "SELECT t.id, t.start_date,t.end_date,t.duration,d.emp_code,d.emp_name,c.case_desc,t.manager_id,t.Manager_agree,t.top_manager_id,m.Management,vs.status,t.topManager_agree 
-				FROM t_data d ,t_transe t ,t_case c ,managements m , vac_status vs 
-				WHERE t.emp_id=d.ID and t.id_case=c.ID and t.manager_id='".$_SESSION['UserID']."' and t.Manager_agree and t.Mang_id=m.ID and t.Manager_agree=vs.ID";
+		$sql .= "SELECT t.id, t.start_date,t.end_date,t.duration,d.emp_code,d.emp_name,c.case_desc,t.manager_id,t.Manager_agree,t.top_manager_id,m.Management,vs.status as mgrAgreeStatus,t.topManager_agree ,vs2.status as topAgreeStatus
+				FROM 	t_data d ,t_transe t ,t_case c ,managements m , vac_status vs, vac_status vs2 
+				WHERE 	t.emp_id=d.ID 
+						and t.id_case=c.ID 
+						and t.manager_id={$_SESSION['UserID']}
+						and t.Manager_agree=3 
+						and t.Mang_id=m.ID 
+						and t.Manager_agree=vs.ID
+						and t.topManager_agree=vs2.ID";
 		$stmt = $con->prepare($sql);
 		$stmt->execute();
 		$result = $stmt->fetchAll();
@@ -230,22 +236,28 @@
 				echo'<td>'; 
 					foreach($agreement as $row2){
 						echo '<label >'.$row2['status'].'
-					            <input type="radio" class="radio-inline" name="MangrAgree['.$index.']" class="MangrAgreeRadio" value="'.$row['Manager_agree'].'"';
+					            <input type="radio" class="radio-inline" name="MangrAgree['.$index.']" class="MangrAgreeRadio" value="'.$row2['ID'].'"';
 					            if($row['Manager_agree'] == $row2['ID']){ echo "checked"; }
 					    echo'></label>';	  
 					};
 					//name="MangrAgree'.$row['id'].'"
 				echo'</td>';
-				echo"<td>".  $row['status']. "</td>";
+				echo"<td>".  $row['topAgreeStatus']. "</td>";
 			echo "</tr>";
 		} 
+		//$_POST = array();
 	}	
 	function getPendingVacAsTopManager(){
 		$con = connect();
 		$sql= '';
 		$sql .= "SELECT t.id,t.start_date,t.end_date,t.duration,d.emp_code,d.emp_name,c.case_desc,t.manager_id,t.Manager_agree,t.top_manager_id,m.Management,vs.status,t.topManager_agree 
 				FROM t_data d ,t_transe t ,t_case c ,managements m , vac_status vs 
-				WHERE t.emp_id=d.ID and t.id_case=c.ID and  (t.top_manager_id='".$_SESSION['UserID']."' or t.manager_id='".$_SESSION['UserID']."')and t.topManager_agree=3 and t.Mang_id=m.ID and t.Manager_agree=vs.ID";
+				WHERE t.emp_id=d.ID 
+				and t.id_case=c.ID 
+				and  (t.top_manager_id={$_SESSION['UserID']} or t.manager_id={$_SESSION['UserID']})
+				and t.topManager_agree=3 
+				and t.Mang_id=m.ID 
+				and t.Manager_agree=vs.ID";
 		$stmt = $con->prepare($sql);
 		$stmt->execute();
 		$result = $stmt->fetchAll();
@@ -290,32 +302,110 @@
 
 	//------------reply to vacations function------------
 	function saveVacationAgree(){
-		var_dump($_POST) ;
-		$answers = isset($_POST['MangrAgree']) ? $_POST['MangrAgree'] : array();
-		//$answers = $_POST['MangrAgree'];
-		echo "<pre>";
-		print_r($answers);
-		echo "</pre>";
-		
-		$con = connect();
-		$sql= '';
-		
-		//Iterate through each answer
-		foreach($answers as $answer) {
-			echo $answer;
-			$sql = "UPDATE t_transe SET Manager_agree = ?";
-			$stmt = $con->prepare($sql);
-		    //$stmt->bindParam(':Agree', $answer, PDO::PARAM_INT);
-			$stmt->execute(array($answer));
-			//echo $sql;
-			if($stmt){
-			    echo 'Row inserted!<br>';
-			    ECHO $answer;
+		if(isset($_POST['TopMangrAgree']) && isset($_POST['MangrAgree'])){
+			echo "in TOP manager agree";
+			$Topanswers = isset($_POST['TopMangrAgree']) ? $_POST['TopMangrAgree'] : array();
+			$answers = isset($_POST['MangrAgree']) ? $_POST['MangrAgree'] : array();
+			//$answers = $_POST['TopMangrAgree'];
+			print_r($Topanswers);
+			$con = connect();
+			$sql= '';
+			
+			//Iterate through each answer
+			foreach($Topanswers as $key => $answer) {
+				echo"1st foreach";
+				print_r($answer) ;
+				echo $key;
+				$sql = "UPDATE t_transe SET topManager_agree =:Agree where ID= :key";
+				$stmt = $con->prepare($sql);
+			    $stmt->bindParam(':Agree', $answer, PDO::PARAM_INT);
+			    $stmt->bindParam(':key', $key, PDO::PARAM_INT);
+				//$stmt->execute(array($answer));
+				$stmt->execute();
+				//echo $sql;
+				if($stmt){
+				    echo 'Row inserted!<br>';
+				    //echo $answer;
+				}
+				elseif(!$stmt){
+					echo 'error!<br>';
+				}
 			}
-			elseif(!$stmt){
-				echo 'error!<br>';
+			foreach($answers as $key => $answer) {
+				echo"2nd foreach";
+				print_r($answer) ;
+				echo $key;
+				$sql = "UPDATE t_transe SET Manager_agree =:Agree where ID= :key";
+				$stmt = $con->prepare($sql);
+			    $stmt->bindParam(':Agree', $answer, PDO::PARAM_INT);
+			    $stmt->bindParam(':key', $key, PDO::PARAM_INT);
+				//$stmt->execute(array($answer));
+				$stmt->execute();
+				//echo $sql;
+				if($stmt){
+				    echo 'Row inserted!<br>';
+				    //echo $answer;
+				}
+				elseif(!$stmt){
+					echo 'error!<br>';
+				}
+			}
+		}elseif(isset($_POST['TopMangrAgree'])){
+			echo "in TOP manager agree only";
+			$Topanswers = isset($_POST['TopMangrAgree']) ? $_POST['TopMangrAgree'] : array();
+			$answers = isset($_POST['MangrAgree']) ? $_POST['MangrAgree'] : array();
+			//$answers = $_POST['TopMangrAgree'];
+			print_r($Topanswers);
+			$con = connect();
+			$sql= '';
+			
+			//Iterate through each answer
+			foreach($Topanswers as $key => $answer) {
+				echo"1st foreach";
+				print_r($answer) ;
+				echo $key;
+				$sql = "UPDATE t_transe SET topManager_agree =:Agree where ID= :key";
+				$stmt = $con->prepare($sql);
+			    $stmt->bindParam(':Agree', $answer, PDO::PARAM_INT);
+			    $stmt->bindParam(':key', $key, PDO::PARAM_INT);
+				//$stmt->execute(array($answer));
+				$stmt->execute();
+				//echo $sql;
+				if($stmt){
+				    echo 'Row inserted!<br>';
+				    //echo $answer;
+				}
+				elseif(!$stmt){
+					echo 'error!<br>';
+				}
+			}
+		}
+		elseif(isset($_POST['MangrAgree'])){
+			echo "in manager agree";
+			$answers = isset($_POST['MangrAgree']) ? $_POST['MangrAgree'] : array();
+			//$answers = $_POST['MangrAgree'];
+			$con = connect();
+			$sql= '';
+			
+			//Iterate through each answer
+			foreach($answers as $key => $answer) {
+				print_r($answer) ;
+				echo $key;
+				$sql = "UPDATE t_transe SET Manager_agree =:Agree where ID= :key";
+				$stmt = $con->prepare($sql);
+			    $stmt->bindParam(':Agree', $answer, PDO::PARAM_INT);
+			    $stmt->bindParam(':key', $key, PDO::PARAM_INT);
+				//$stmt->execute(array($answer));
+				$stmt->execute();
+				//echo $sql;
+				if($stmt){
+				    echo 'Row inserted!<br>';
+				    //echo $answer;
+				}
+				elseif(!$stmt){
+					echo 'error!<br>';
+				}
 			}
 		}
 		//header("Location:pending.php");
-	
 	}
