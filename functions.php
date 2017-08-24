@@ -302,6 +302,50 @@
 		} 
 	}	
 
+	//-----get pending vacations as admin--------------
+	function getPendingVacAsAdmin(){
+		$con = connect();
+		$sql= '';
+		$sql .= "SELECT t.id, t.start_date,t.end_date,t.duration,d.emp_code,d.emp_name,c.case_desc,t.manager_id,t.Manager_agree,t.top_manager_id,m.Management,vs.status as mgrAgreeStatus,t.topManager_agree ,vs2.status as topAgreeStatus,t.AdminConfirm
+				FROM 	t_data d ,t_transe t ,t_case c ,managements m , vac_status vs, vac_status vs2 
+				WHERE 	t.emp_id=d.ID 
+						and t.id_case=c.ID 
+						and t.topManager_agree in (1,2) 
+						and t.AdminConfirm=3
+						and t.Mang_id=m.ID 
+						and t.Manager_agree=vs.ID
+						and t.topManager_agree=vs2.ID";
+		$stmt = $con->prepare($sql);
+		$stmt->execute();
+		$result = $stmt->fetchAll();
+		$vacStatus= "SELECT ID,status FROM vac_status ";
+		$stmt2 = $con->prepare($vacStatus);
+		$stmt2->execute();
+		$agreement = $stmt2->fetchAll();
+		foreach($result as $row){
+			$index= $row['id'];
+			echo"<tr>";
+				echo"<td>".  $row['emp_code']. "</td>";
+				echo"<td>".  $row['emp_name']. "</td>";
+				echo"<td>".  $row['Management']. "</td>";
+				echo"<td>".  $row['case_desc']. "</td>";
+				echo"<td>".  $row['start_date']. "</td>";
+				echo"<td>".  $row['end_date']. "</td>";
+				echo"<td>".  $row['duration']. "</td>";
+				echo"<td>".  $row['mgrAgreeStatus']. "</td>";
+				echo"<td>".  $row['topAgreeStatus']. "</td>";
+				echo'<td>'; 
+					foreach($agreement as $row2){
+						echo '<label >'.$row2['status'].'
+					            <input type="radio" class="radio-inline" name="AdminAgree['.$index.']" class="AdminAgreeRadio" value="'.$row2['ID'].'"';
+					            if($row['AdminConfirm'] == $row2['ID']){ echo "checked"; }
+					    echo'></label>';	  
+					};
+				echo'</td>';
+			echo "</tr>";
+		} 
+	}
+
 	//------------reply to vacations function------------
 	function saveVacationAgree(){
 		if(isset($_POST['TopMangrAgree']) && isset($_POST['MangrAgree'])){
@@ -485,4 +529,3 @@
 			echo "</tr>";
 		} 
 	}
-	
