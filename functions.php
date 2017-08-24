@@ -39,18 +39,19 @@
 		//check if user exist
 
 		$con = connect();
-		$stmt = $con->prepare("SELECT emp_code,password,id_userGroup,ID From t_data WHERE emp_code=? and password=?");
+		$stmt = $con->prepare("SELECT emp_code,password,id_userGroup,ID,emp_name From t_data WHERE emp_code=? and password=?");
 		$stmt->execute(array($username,$hashedPass));
 		$count = $stmt->rowCount();
 		$row = $stmt->fetch(PDO::FETCH_ASSOC);
 		$userGroup= $row["id_userGroup"];
 		$userID= $row["ID"];
+		$user_fullName=$row["emp_name"];
 		//if count >0 then the user exists
 		if($count>0){
 			$_SESSION['Username'] = $username;//register session
 			$_SESSION['UserGroup'] = $userGroup;
 			$_SESSION['UserID'] = $userID;
-		
+			$_SESSION['UserFullName'] = $user_fullName;
 			//redirect according to privillage
 			if($userGroup==3){
 				header('Location: empdata.php');//redirect
@@ -247,6 +248,7 @@
 		} 
 		//$_POST = array();
 	}	
+	//--------------get pending as top manager----------------------- 
 	function getPendingVacAsTopManager(){
 		$con = connect();
 		$sql= '';
@@ -409,3 +411,78 @@
 		}
 		//header("Location:pending.php");
 	}
+
+	//------------get confirmed vacations as manager------------ 
+
+	function getConfirmedVacAsManager(){
+		$con = connect();
+		$sql= '';
+		$sql .= "SELECT t.id, t.start_date,t.end_date,t.duration,d.emp_code,d.emp_name,c.case_desc,t.manager_id,t.Manager_agree,t.top_manager_id,m.Management,vs.status as mgrAgreeStatus,t.topManager_agree ,vs2.status as topAgreeStatus
+				FROM 	t_data d ,t_transe t ,t_case c ,managements m , vac_status vs, vac_status vs2 
+				WHERE 	t.emp_id=d.ID 
+						and t.id_case=c.ID 
+						and t.manager_id={$_SESSION['UserID']}
+						and t.Manager_agree in(1,2) 
+						and t.Mang_id=m.ID 
+						and t.Manager_agree=vs.ID
+						and t.topManager_agree=vs2.ID";
+		$stmt = $con->prepare($sql);
+		$stmt->execute();
+		$result = $stmt->fetchAll();
+		$vacStatus= "SELECT ID,status FROM vac_status ";
+		$stmt2 = $con->prepare($vacStatus);
+		$stmt2->execute();
+		$agreement = $stmt2->fetchAll();
+		foreach($result as $row){
+			$index= $row['id'];
+			echo"<tr>";
+				echo"<td>".  $row['emp_code']. "</td>";
+				echo"<td>".  $row['emp_name']. "</td>";
+				echo"<td>".  $row['Management']. "</td>";
+				echo"<td>".  $row['case_desc']. "</td>";
+				echo"<td>".  $row['start_date']. "</td>";
+				echo"<td>".  $row['end_date']. "</td>";
+				echo"<td>".  $row['duration']. "</td>";
+				echo"<td>".  $row['mgrAgreeStatus']. "</td>";
+				echo"<td>".  $row['topAgreeStatus']. "</td>";
+			echo "</tr>";
+		} 
+	}	
+	//------------get confirmed vacations as Top manager------------ 
+	function getConfirmedVacAsTopManager(){
+		$con = connect();
+		$sql= '';
+		$sql .= "SELECT t.id,t.start_date,t.end_date,t.duration,d.emp_code,d.emp_name,c.case_desc,t.manager_id,t.Manager_agree,t.top_manager_id,m.Management,vs.status as mgrAgreeStatus,t.topManager_agree,vs2.status as topAgreeStatus 
+				FROM t_data d ,t_transe t ,t_case c ,managements m , vac_status vs ,vac_status vs2
+				WHERE t.emp_id=d.ID 
+				and t.id_case=c.ID 
+				and  (t.top_manager_id={$_SESSION['UserID']} or t.manager_id={$_SESSION['UserID']})
+				and (t.topManager_agree in (1,2) or  t.topManager_agree in (1,2))
+				and t.Mang_id=m.ID 
+				and t.Manager_agree=vs.ID
+				and t.topManager_agree=vs2.ID";
+		$stmt = $con->prepare($sql);
+		$stmt->execute();
+		$result = $stmt->fetchAll();
+		$count= $stmt->rowCount();
+		$vacStatus= "SELECT ID,status FROM vac_status ";
+		$stmt2 = $con->prepare($vacStatus);
+		$stmt2->execute();
+		$agreement = $stmt2->fetchAll();
+		
+		foreach($result as $row){
+			$index= $row['id'];
+			echo"<tr>";
+				echo"<td>".  $row['emp_code']. "</td>";
+				echo"<td>".  $row['emp_name']. "</td>";
+				echo"<td>".  $row['Management']. "</td>";
+				echo"<td>".  $row['case_desc']. "</td>";
+				echo"<td>".  $row['start_date']. "</td>";
+				echo"<td>".  $row['end_date']. "</td>";
+				echo"<td>".  $row['duration']. "</td>";
+				echo"<td>".  $row['mgrAgreeStatus']. "</td>"; 
+				echo"<td>".  $row['topAgreeStatus']. "</td>";
+			echo "</tr>";
+		} 
+	}
+	
