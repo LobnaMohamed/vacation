@@ -64,7 +64,7 @@
 						<input type="date" class="form-control" id="date" name="vacDate" placeholder="date.." required>
 					</div>
 					<div class="col-sm-3">
-						<label for="vacation">نوع الاجازة</label>
+						<label for="vacType">نوع الاجازة</label>
 			   		    <select class="form-control" id="vacType" name="case" required>
 			   		    	<option selected disabled hidden style='display: none' value='' ></option>
 				   		    <?php getCase();   ?>

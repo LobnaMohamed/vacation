@@ -1,4 +1,5 @@
 <?php
+	//include 'connect.php';
 	// --------------connection to database function-------------
 	function connect(){
 		$dsn = 'mysql:host=localhost;dbname=vacation';//data source name
@@ -94,6 +95,72 @@
 			    echo "<option value=" .$row['ID'].">" . $row['case_desc'] . "</option>";
 			}
 	}
+	//---------------get active status function-----------------------
+	function getActive(){
+		$con = connect();
+		$sql= "SELECT ID,active FROM t_active" ;
+    	$stmt = $con->prepare($sql);
+		$stmt->execute();
+		$result = $stmt->fetchAll();
+	    	foreach($result as $row){
+			    echo "<option value=" .$row['ID'].">" . $row['active'] . "</option>";
+			}
+	}
+	//---------------get day/night status function-----------------------
+	function getDayN(){
+		$con = connect();
+		$sql= "SELECT ID,day_n FROM t_day_n" ;
+    	$stmt = $con->prepare($sql);
+		$stmt->execute();
+		$result = $stmt->fetchAll();
+	    	foreach($result as $row){
+			    echo "<option value=" .$row['ID'].">" . $row['day_n'] . "</option>";
+			}
+	}
+	//---------------get emp level function-----------------------
+	function getLevel(){
+		$con = connect();
+		$sql= "SELECT ID,level FROM t_level" ;
+    	$stmt = $con->prepare($sql);
+		$stmt->execute();
+		$result = $stmt->fetchAll();
+	    	foreach($result as $row){
+			    echo "<option value=" .$row['ID'].">" . $row['level'] . "</option>";
+			}
+	}
+	//---------------get contract type function-----------------------
+	function getContract(){
+		$con = connect();
+		$sql= "SELECT ID,contractType FROM contract" ;
+    	$stmt = $con->prepare($sql);
+		$stmt->execute();
+		$result = $stmt->fetchAll();
+	    	foreach($result as $row){
+			    echo "<option value=" .$row['ID'].">" . $row['contractType'] . "</option>";
+			}
+	}
+	//---------------get user group function-----------------------
+	function getUserGroup(){
+		$con = connect();
+		$sql= "SELECT ID,userGroup FROM user_group" ;
+    	$stmt = $con->prepare($sql);
+		$stmt->execute();
+		$result = $stmt->fetchAll();
+	    	foreach($result as $row){
+			    echo "<option value=" .$row['ID'].">" . $row['userGroup'] . "</option>";
+			}
+	}
+	//---------------get econtract type function-----------------------
+	function getJob(){
+		$con = connect();
+		$sql= "SELECT ID,job FROM t_job" ;
+    	$stmt = $con->prepare($sql);
+		$stmt->execute();
+		$result = $stmt->fetchAll();
+	    	foreach($result as $row){
+			    echo "<option value=" .$row['ID'].">" . $row['job'] . "</option>";
+			}
+	}
 	// --------------Add vacation function-----------------------
 	function addVacation(){
 		
@@ -137,9 +204,14 @@
 	function getAllEmp(){
 		$con = connect();
 		$sql= '';
-		$sql .= "SELECT d.*, a.active as activeStatus, dn.day_n as shift 
-		    FROM t_data d left JOIN t_active a on d.active = a.ID 
-		    			  left Join t_day_n  dn  on d.day_night = dn.ID";
+		// $sql .= "SELECT d.ID,d.emp_code,d.emp_name,d.desc_job,d.management, a.active as activeStatus, dn.day_n as shift,m.management as g_management,j.job as job,l.level as level, c.contractType as contract
+		//     FROM t_data d left JOIN t_active a on d.active = a.ID 
+		//     			  left Join t_day_n  dn  on d.day_night = dn.ID
+		//     			  left Join managements m  on d.g_management_id = m.ID
+		//     			  left Join t_job j on d.id_job = j.ID
+		//     			  left Join t_level l on d.level_id = l.ID
+		//     			  left Join contract c on d.contract_type = c.ID";
+		$sql .= "SELECT * FROM empdata"; //view
 		if(isset($_POST['search'])){
 			$sql .='WHERE emp_name LIKE "%'. $_POST['search'].'%"' ;
 		}
@@ -150,8 +222,8 @@
 			echo"<tr>";
 			echo"<td>".  $row['emp_code']. "</td>";
 			echo"<td>".  $row['emp_name']. "</td>";
-			echo"<td>".  $row['contract_type']. "</td>";
-			echo"<td>".  $row['id_job']. "</td>";
+			echo"<td>".  $row['contract']. "</td>";
+			echo"<td>".  $row['job']. "</td>";
 			echo"<td>".  $row['g_management']. "</td>";
 			echo"<td>".  $row['level']. "</td>";
 			echo"<td>".  $row['shift']. "</td>";
@@ -163,7 +235,41 @@
 
 	// --------------Add Employee function-----------------------
 	function addEmp(){
+		//check if user comming from a request
+		 // $_SERVER['REQUEST_METHOD'] == 'POST'
+		if(isset($_POST['insertEmp'])){
+			//assign variables
 
+			$empName= isset($_POST['empName'])? filter_var($_POST['empName'],FILTER_SANITIZE_STRING) : '';
+			$empCode= isset($_POST['empCode'])? filter_var($_POST['empCode'],FILTER_SANITIZE_NUMBER_INT):'';
+			$contractType= isset($_POST['contractType'])? filter_var($_POST['contractType'],FILTER_SANITIZE_NUMBER_INT):'';
+			$job= isset($_POST['job'])? filter_var($_POST['job'],FILTER_SANITIZE_NUMBER_INT):'';
+			$job= $_POST['job'];
+			echo $job;
+			$GManagement= isset($_POST['GManagement'])? filter_var($_POST['GManagement'],FILTER_SANITIZE_NUMBER_INT) :'';
+			$level = isset($_POST['level'])? filter_var($_POST['level'],FILTER_SANITIZE_NUMBER_INT):'';
+			$day_n= isset($_POST['day_n'])? filter_var($_POST['day_n'],FILTER_SANITIZE_NUMBER_INT) :'';
+			$active= isset($_POST['active'])? filter_var($_POST['active'],FILTER_SANITIZE_NUMBER_INT) :'';
+			$management= isset($_POST['management'])? filter_var($_POST['management'],FILTER_SANITIZE_STRING) :'';
+			$jobDesc= isset($_POST['desc_job'])? filter_var($_POST['desc_job'],FILTER_SANITIZE_STRING) : '';
+			$userGroup=isset($_POST['userGrp'])? filter_var($_POST['userGrp'],FILTER_SANITIZE_NUMBER_INT):'';
+			$defaultPass=sha1(1234567);
+			// creating array of errors
+			$formErrors = array();
+
+			if (empty($empName) || empty($empCode) ){
+				//$formErrors[] = 'username must be larger than  chars';
+				echo "name and code cant be empty";
+				// print_r($formErrors) ;
+			} else {
+				$con = connect();
+				$sql= "INSERT INTO t_data(emp_code,emp_name,contract_type,id_job,desc_job,level_id,management,g_management_id,day_night,active,password,id_userGroup) 
+					   VALUES ('".$empCode."','".$empName."','".$contractType."','".$job."','".$jobDesc."','".$level."','".$management."','".$GManagement."' ,'".$day_n."','".$active."','".$defaultPass."','".$userGroup."')" ;
+		        $stmt = $con->prepare($sql);
+				$stmt->execute();
+				echo "done";
+			}
+		}
 	}	
 	
 	// --------------Edit Employee function-----------------------

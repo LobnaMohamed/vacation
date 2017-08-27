@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 27, 2017 at 08:25 AM
+-- Generation Time: Aug 27, 2017 at 02:57 PM
 -- Server version: 10.1.21-MariaDB
 -- PHP Version: 5.6.30
 
@@ -29,6 +29,45 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `GetActiveType` ()  BEGIN
    END$$
 
 DELIMITER ;
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `contract`
+--
+
+CREATE TABLE `contract` (
+  `ID` int(11) NOT NULL,
+  `contractType` varchar(150) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `contract`
+--
+
+INSERT INTO `contract` (`ID`, `contractType`) VALUES
+(1, 'دائم'),
+(2, 'مؤقت');
+
+-- --------------------------------------------------------
+
+--
+-- Stand-in structure for view `empdata`
+-- (See below for the actual view)
+--
+CREATE TABLE `empdata` (
+`ID` int(11) unsigned
+,`emp_code` int(10)
+,`emp_name` varchar(150)
+,`desc_job` varchar(200)
+,`management` varchar(200)
+,`activeStatus` varchar(15)
+,`shift` varchar(20)
+,`g_management` varchar(200)
+,`job` varchar(250)
+,`level` varchar(100)
+,`contract` varchar(150)
+);
 
 -- --------------------------------------------------------
 
@@ -98,17 +137,14 @@ CREATE TABLE `t_data` (
   `ID` int(11) UNSIGNED NOT NULL,
   `emp_code` int(10) NOT NULL,
   `emp_name` varchar(150) NOT NULL,
-  `contract_type` varchar(25) NOT NULL,
-  `id_job` varchar(200) NOT NULL COMMENT 'job name',
+  `contract_type` int(11) NOT NULL,
+  `id_job` int(11) NOT NULL COMMENT 'job name',
   `desc_job` varchar(200) NOT NULL COMMENT 'current job',
-  `level` varchar(15) NOT NULL,
+  `level_id` int(11) NOT NULL,
   `management` varchar(200) NOT NULL,
-  `g_management` varchar(200) NOT NULL,
+  `g_management_id` int(11) NOT NULL,
   `day_night` int(11) NOT NULL,
   `active` int(11) NOT NULL,
-  `manager` tinyint(1) DEFAULT NULL COMMENT 'مدير مباشر',
-  `top_Manager` tinyint(1) DEFAULT NULL COMMENT 'مدير أعلى',
-  `Admin` tinyint(1) DEFAULT NULL COMMENT 'موظف استحقاقت ',
   `Password` varchar(255) NOT NULL DEFAULT '1234567',
   `id_userGroup` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
@@ -117,12 +153,13 @@ CREATE TABLE `t_data` (
 -- Dumping data for table `t_data`
 --
 
-INSERT INTO `t_data` (`ID`, `emp_code`, `emp_name`, `contract_type`, `id_job`, `desc_job`, `level`, `management`, `g_management`, `day_night`, `active`, `manager`, `top_Manager`, `Admin`, `Password`, `id_userGroup`) VALUES
-(2, 1455, ' لبنى  محمد  محمود  متولى سالم', 'دائم', 'مهندسة', 'مهندسة', 'الاول', 'اقطاع الحاسب الالى', 'IT', 1, 1, 0, 0, NULL, '20eabe5d64b0e216796e834f52d61fd0b70332fc', 4),
-(3, 1152, 'walid', '', 'IT coder', '', 'first', 'IT', 'IT', 1, 1, 1, 1, NULL, '20eabe5d64b0e216796e834f52d61fd0b70332fc', 2),
-(4, 167, 'moh abdelftah', 'دائم', 'eng', 'eng', 'first', 'IT', 'IT', 1, 1, 1, 1, NULL, '20eabe5d64b0e216796e834f52d61fd0b70332fc', 1),
-(5, 1111, 'استحقاقات', 'اقفاقفا', 'اا', 'قفاقفا', 'الاول', 'استحقاقات', 'استحقاقات', 1, 1, 0, 0, 1, '20eabe5d64b0e216796e834f52d61fd0b70332fc', 3),
-(8, 248, 'wael nabil', 'trial', 'trial', 'trial', 'first', 'IT', 'It', 1, 1, 1, 1, 0, '20eabe5d64b0e216796e834f52d61fd0b70332fc', 1);
+INSERT INTO `t_data` (`ID`, `emp_code`, `emp_name`, `contract_type`, `id_job`, `desc_job`, `level_id`, `management`, `g_management_id`, `day_night`, `active`, `Password`, `id_userGroup`) VALUES
+(2, 1455, ' لبنى  محمد  محمود  متولى سالم', 1, 1, 'مهندسة', 1, 'اقطاع الحاسب الالى', 1, 1, 1, '20eabe5d64b0e216796e834f52d61fd0b70332fc', 4),
+(3, 1152, 'walid', 1, 1, '', 1, 'IT', 1, 1, 1, '20eabe5d64b0e216796e834f52d61fd0b70332fc', 2),
+(4, 167, 'moh abdelftah', 1, 1, 'eng', 1, 'IT', 1, 1, 1, '20eabe5d64b0e216796e834f52d61fd0b70332fc', 1),
+(5, 1111, 'استحقاقات', 1, 1, 'قفاقفا', 1, 'استحقاقات', 2, 1, 1, '20eabe5d64b0e216796e834f52d61fd0b70332fc', 3),
+(8, 248, 'wael nabil', 1, 1, 'trial', 1, 'IT', 2, 1, 1, '20eabe5d64b0e216796e834f52d61fd0b70332fc', 1),
+(13, 8888, 'test', 1, 1, 'eng', 2, 'IT', 1, 2, 2, '20eabe5d64b0e216796e834f52d61fd0b70332fc', 4);
 
 -- --------------------------------------------------------
 
@@ -142,6 +179,43 @@ CREATE TABLE `t_day_n` (
 INSERT INTO `t_day_n` (`ID`, `day_n`) VALUES
 (1, 'نهارى'),
 (2, 'ورادى');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `t_job`
+--
+
+CREATE TABLE `t_job` (
+  `ID` int(11) NOT NULL,
+  `Job` varchar(250) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `t_job`
+--
+
+INSERT INTO `t_job` (`ID`, `Job`) VALUES
+(1, 'engineer');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `t_level`
+--
+
+CREATE TABLE `t_level` (
+  `ID` int(11) NOT NULL,
+  `level` varchar(100) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+--
+-- Dumping data for table `t_level`
+--
+
+INSERT INTO `t_level` (`ID`, `level`) VALUES
+(1, 'ادارة عليا'),
+(2, 'الاول');
 
 -- --------------------------------------------------------
 
@@ -171,8 +245,8 @@ CREATE TABLE `t_transe` (
 --
 
 INSERT INTO `t_transe` (`ID`, `emp_id`, `Mang_id`, `trans_date`, `id_case`, `start_date`, `end_date`, `duration`, `address`, `Manager_agree`, `topManager_agree`, `AdminConfirm`, `manager_id`, `top_manager_id`) VALUES
-(23, 2, 1, '2017-08-09 11:19:35', 1, '2017-08-01', '2017-08-02', 1, 'بالملف', 3, 2, 3, 4, 4),
-(24, 2, 2, '2017-08-17 11:32:44', 2, '2017-08-03', '2017-08-12', 9, 'بالملف', 1, 1, 3, 3, 4);
+(23, 2, 1, '2017-08-09 11:19:35', 1, '2017-08-01', '2017-08-02', 1, 'بالملف', 1, 1, 1, 4, 4),
+(24, 2, 2, '2017-08-17 11:32:44', 2, '2017-08-03', '2017-08-12', 9, 'بالملف', 1, 2, 2, 3, 4);
 
 -- --------------------------------------------------------
 
@@ -215,9 +289,24 @@ INSERT INTO `vac_status` (`ID`, `status`) VALUES
 (2, 'رفض'),
 (3, 'معلق');
 
+-- --------------------------------------------------------
+
+--
+-- Structure for view `empdata`
+--
+DROP TABLE IF EXISTS `empdata`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `empdata`  AS  select `d`.`ID` AS `ID`,`d`.`emp_code` AS `emp_code`,`d`.`emp_name` AS `emp_name`,`d`.`desc_job` AS `desc_job`,`d`.`management` AS `management`,`a`.`active` AS `activeStatus`,`dn`.`day_n` AS `shift`,`m`.`Management` AS `g_management`,`j`.`Job` AS `job`,`l`.`level` AS `level`,`c`.`contractType` AS `contract` from ((((((`t_data` `d` left join `t_active` `a` on((`d`.`active` = `a`.`ID`))) left join `t_day_n` `dn` on((`d`.`day_night` = `dn`.`ID`))) left join `managements` `m` on((`d`.`g_management_id` = `m`.`ID`))) left join `t_job` `j` on((`d`.`id_job` = `j`.`ID`))) left join `t_level` `l` on((`d`.`level_id` = `l`.`ID`))) left join `contract` `c` on((`d`.`contract_type` = `c`.`ID`))) ;
+
 --
 -- Indexes for dumped tables
 --
+
+--
+-- Indexes for table `contract`
+--
+ALTER TABLE `contract`
+  ADD PRIMARY KEY (`ID`);
 
 --
 -- Indexes for table `managements`
@@ -245,12 +334,27 @@ ALTER TABLE `t_data`
   ADD UNIQUE KEY `emp_code` (`emp_code`),
   ADD KEY `FK_shift` (`day_night`),
   ADD KEY `FK_active` (`active`),
-  ADD KEY `FK_UserGroup` (`id_userGroup`);
+  ADD KEY `FK_UserGroup` (`id_userGroup`),
+  ADD KEY `FK_GManagement` (`g_management_id`),
+  ADD KEY `FK_job` (`id_job`),
+  ADD KEY `FK_Level` (`level_id`);
 
 --
 -- Indexes for table `t_day_n`
 --
 ALTER TABLE `t_day_n`
+  ADD PRIMARY KEY (`ID`);
+
+--
+-- Indexes for table `t_job`
+--
+ALTER TABLE `t_job`
+  ADD PRIMARY KEY (`ID`);
+
+--
+-- Indexes for table `t_level`
+--
+ALTER TABLE `t_level`
   ADD PRIMARY KEY (`ID`);
 
 --
@@ -284,6 +388,11 @@ ALTER TABLE `vac_status`
 --
 
 --
+-- AUTO_INCREMENT for table `contract`
+--
+ALTER TABLE `contract`
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+--
 -- AUTO_INCREMENT for table `managements`
 --
 ALTER TABLE `managements`
@@ -302,11 +411,21 @@ ALTER TABLE `t_case`
 -- AUTO_INCREMENT for table `t_data`
 --
 ALTER TABLE `t_data`
-  MODIFY `ID` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `ID` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 --
 -- AUTO_INCREMENT for table `t_day_n`
 --
 ALTER TABLE `t_day_n`
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+--
+-- AUTO_INCREMENT for table `t_job`
+--
+ALTER TABLE `t_job`
+  MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+--
+-- AUTO_INCREMENT for table `t_level`
+--
+ALTER TABLE `t_level`
   MODIFY `ID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 --
 -- AUTO_INCREMENT for table `t_transe`
@@ -331,8 +450,11 @@ ALTER TABLE `vac_status`
 -- Constraints for table `t_data`
 --
 ALTER TABLE `t_data`
+  ADD CONSTRAINT `FK_GManagement` FOREIGN KEY (`g_management_id`) REFERENCES `managements` (`ID`),
+  ADD CONSTRAINT `FK_Level` FOREIGN KEY (`level_id`) REFERENCES `t_level` (`ID`),
   ADD CONSTRAINT `FK_UserGroup` FOREIGN KEY (`id_userGroup`) REFERENCES `user_group` (`ID`),
   ADD CONSTRAINT `FK_active` FOREIGN KEY (`active`) REFERENCES `t_active` (`ID`),
+  ADD CONSTRAINT `FK_job` FOREIGN KEY (`id_job`) REFERENCES `t_job` (`ID`),
   ADD CONSTRAINT `FK_shift` FOREIGN KEY (`day_night`) REFERENCES `t_day_n` (`ID`) ON UPDATE CASCADE;
 
 --

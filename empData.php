@@ -7,7 +7,7 @@
 		exit();
 	}
 	include 'header.php';
-	require 'functions.php';        
+	require 'functions.php';       
 ?>
 	<div class="container">
 	    <header class="row text-center">
@@ -34,7 +34,7 @@
 				      <th>المستوى</th>
 				      <th>نهارى/ورادى</th>
 				      <th>بالخدمة/خارج الخدمة</th>
-				      <th><button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#addEmp">إضافة</button></th>
+				      <th><button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#addEmpModal">إضافة</button></th>
 				    </tr>
 			  	</thead>
 				<tbody>
@@ -43,19 +43,76 @@
 			</table>	
 	    </div>	  
 		<!-- add Modal -->
-		<div id="addEmp" class="modal fade" role="dialog">
-			<div class="modal-dialog">
+		<div id="addEmpModal" class="modal fade" role="dialog">
+			<div class="modal-dialog modal-lg">
 				<!-- Modal content-->
-				<div class="modal-content">
+				<div class="modal-content ">
 					<div class="modal-header">
 						<button type="button" class="close" data-dismiss="modal">&times;</button>
 						<h4 class="modal-title"> إضافة عامل جديد </h4>
 					</div>
-					<div class="modal-body">
-						<p>Some text in the modal.</p>
-					</div>
-					<div class="modal-footer">
-						<a href="#" type="button" class="btn btn-default add" data-dismiss="modal">Close</a>
+					<div class="modal-body row">
+						<form method="POST" id="addEmpForm" action="insertEmp.php">
+							<div class="form-group col-md-4">
+					    		<label for= "level">المستوى الوظيفى</label>
+					    		<select class="form-control" id="level" name="level">
+							    	<option selected disabled hidden style='display: none' value=''></option>
+						   		    <?php  	getLevel();   ?>
+								</select>
+
+					    		<label for= "day_n">نهارى/ورادى</label>
+					    		<select class="form-control" id="day_n" name="day_n">
+							    	<option selected disabled hidden style='display: none' value=''></option>
+						   		    <?php  	getDayN();   ?>
+								</select>
+
+					    		<label for= "active">بالخدمة/خارج الخدمة</label>
+					    		<select class="form-control" id="active" name="active">
+							    	<option selected disabled hidden style='display: none' value=''></option>
+						   		    <?php  	getActive();   ?>
+								</select>							
+							</div>	
+							<div class="form-group col-md-4">
+								<label for= "empName">اسم الموظف</label>
+					    		<input type="text" class="form-control" id="empName" name="empName">
+
+								<label for= "contractType">نوع العقد</label>
+					    		<select class="form-control" id="contractType" name="contractType">
+							    	<option selected disabled hidden style='display: none' value=''></option>
+						   		    <?php  	getContract();   ?>
+								</select>	
+					    		<label for= "job">الوظيفة</label>
+					    		<select class="form-control" id="job" name="job">
+							    	<option selected disabled hidden style='display: none' value=''></option>
+						   		    <?php  	getJob();   ?>
+								</select>
+								
+								<label for= "userGrp">درجة المستخدم</label>
+					    		<select class="form-control" id="userGrp" name="userGrp">
+							    	<option selected disabled hidden style='display: none' value=''></option>
+						   		    <?php  	getUserGroup();   ?>
+								</select>
+							</div>
+							<div class="form-group col-md-4">
+								<label for= "empCode">رقم قيد الموظف</label>
+					    		<input type="text" class="form-control" id="empCode" name="empCode">
+
+					    		<label for= "GManagement">الادارة العامة</label>
+					    		<select class="form-control" id="GManagement" name="GManagement">
+							    	<option selected disabled hidden style='display: none' value=''></option>
+						   		    <?php  	getManagement();   ?>
+								</select>
+
+								<label for= "management">قطاع /ادارة</label>
+					    		<input type="text" class="form-control" id="management" name="management">
+
+					    		<label for= "desc_job">الوظيفة الحالية</label>
+					    		<input type="text" class="form-control" id="desc_job" name="desc_job">
+							</div>
+							<div class="form-group col-md-3 col-md-offset-4 ">
+								<input type="submit" name="insertEmp" class="btn btn-success">
+							</div>	
+						</form>
 					</div>
 				</div>
 			</div>
@@ -73,7 +130,7 @@
 						<p>Some text in the modal.</p>
 					</div>
 					<div class="modal-footer">
-						<a href="#" type="button" class="btn btn-default edit" data-dismiss="modal">Close</a>
+						<a href="#" type="button" class="btn btn-default edit" data-dismiss="modal">تعديل</a>
 					</div>
 				</div>
 			</div>
