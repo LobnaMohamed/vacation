@@ -9,16 +9,15 @@
 	include 'header.php';
 	include 'functions.php';
 
-if (isset($_POST['update']))
-{
-    // Form has been submitted
+	if (isset($_POST['update']))
+	{
+	    // Form has been submitted
 
-	saveVacationAgree();
-}
-else
-{
-    // Form has not been submitted
-    echo"nothing";
-}
-
-echo "done";
+		saveVacationAgree();
+		header("Location:pending.php");
+	}
+	else
+	{
+	    // Form has not been submitted
+	    echo"nothing";
+	}

@@ -36,6 +36,7 @@
 			<?php if($_SESSION['UserGroup']==3){ ?>
 					<li><a href="empdata.php">بيانات العاملين</a></li>
 					<li><a href="pending.php">الاجازات المطلوب تسجيلها</a></li>
+					<li><a href="confirmed.php">الاجازات المسجلة</a></li>
 			<?php 
 				   }elseif($_SESSION['UserGroup']==1 || $_SESSION['UserGroup']==2){ ?>
 				   <li><a href="confirmed.php">الاجازات المعتمدة</a></li>

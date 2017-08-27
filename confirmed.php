@@ -24,8 +24,31 @@
 						<th>من تاريخ</th>
 						<th>الى تاريخ</th>
 						<th>المدة</th>
-						<th>موافقة الرئيس المباشر</th>
-						<th>موافقة الرئيس الاعلى</th>
+						<?php
+							if($_SESSION['UserGroup']==1){
+								echo"
+									<th>الرئيس المباشر</th>
+									<th>موافقة الرئيس المباشر</th>
+									<th>موافقة الرئيس الاعلى</th>
+									<th>اعتماد الاستحقاقت</th>";
+							}
+							elseif($_SESSION['UserGroup']==2){
+								echo"
+									<th>موافقة الرئيس المباشر</th>
+									<th>الرئيس الاعلى</th>
+									<th>موافقة الرئيس الاعلى</th>
+									<th>اعتماد الاستحقاقت</th>";
+							} 
+							elseif($_SESSION['UserGroup']==3){
+								echo"
+									<th>الرئيس المباشر</th>
+									<th>موافقة الرئيس المباشر</th>
+									<th>الرئيس الاعلى</th>
+									<th>موافقة الرئيس الاعلى</th>
+									<th>اعتماد الاستحقاقت</th>";
+							}
+						?>
+
 				    </tr>		
 				</thead>
 				<tbody>
@@ -33,10 +56,11 @@
 					//check if the logged in manager or top manager or admin then 
 					//run the corresponding function 
 						if($_SESSION['UserGroup']==1) {
-							
 							getConfirmedVacAsTopManager(); 
 						}elseif($_SESSION['UserGroup']==2){
 							getConfirmedVacAsManager(); 
+						}elseif($_SESSION['UserGroup']==3){
+							getConfirmedVacAsAdmin(); 
 						} 
 					?>
 				</tbody>

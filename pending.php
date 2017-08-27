@@ -28,12 +28,23 @@
 						<th>من تاريخ</th>
 						<th>الى تاريخ</th>
 						<th>المدة</th>
-						<th>موافقة الرئيس المباشر</th>
-						<th>موافقة الرئيس الاعلى</th>
-						<?php  
-							if($_SESSION['UserGroup']==3){ //est72a2at
-								echo"<th>اعتماد الاستحقاقات</th>";
+						<?php
+							if($_SESSION['UserGroup']==1) { //top manager
+								 echo"<th>الرئيس المباشر</th>";
+								 echo"<th>موافقة الرئيس المباشر</th>";
+								 echo"<th>موافقة الرئيس الاعلى</th>";
 							
+							}elseif($_SESSION['UserGroup']==2){//direct manager
+								 echo"<th>موافقة الرئيس المباشر</th>";
+								 echo"<th>الرئيس الاعلى</th>";
+								 echo"<th>موافقة الرئيس الاعلى</th>";
+							}  
+							if($_SESSION['UserGroup']==3){ //est72a2at
+								echo"<th>الرئيس المباشر</th>";
+								echo"<th>موافقة الرئيس المباشر</th>";
+								echo"<th>الرئيس الاعلى</th>";
+							    echo"<th>موافقة الرئيس الاعلى</th>";
+								echo"<th>اعتماد الاستحقاقات</th>";
 							}
 						?>
 				    </tr>		

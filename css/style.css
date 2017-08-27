@@ -65,3 +65,11 @@ label{
 .navbar-nav>li>a {
     font-size: 1em;
 }
+
+/*pending and confirmed tables*/
+#pendingVac,#confirmedVac{
+    font-size: 13px;
+    font-weight: bold;
+}#pendingVac th ,#confirmedVac th{
+    font-size: 15px;
+}
