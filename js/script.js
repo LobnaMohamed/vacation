@@ -82,59 +82,61 @@ $(document).ready(function(){
  //    });
  	$("input#code").bind("change", function(){
  		var empCode=$("#code").val();
+ 		alert(empCode);
  		if($.trim(empCode) != ''){
+ 			alert("hi");
  			$.post('ajax.php',{code:empCode}, function(data){
- 				alert(data.empID);
- 				alert(data.empName);
  				if(data==="notfound"){
  					alert("رقم القيد غير مسجل \n من فضلك ادخل رقم صحيح!");
  				}else{
-
  					$('#name').val(data.empName);
  					$('#emp').val(data.empID); 					
  				}
  			},"json");
- 		} 		
+ 		}else{
+ 			alert("noo ajax");
+ 		} 
+
 	});
 
 	$( '#vacForm' ).each(function(){
 		this.reset();
 	});
 
-	$("#addEmpForm").on('submit',function(e){
-		e.preventDefault();
-		alert("hi");
-		if($('#empName').val()==''){
-			alert ("Name is empty");
-		}else if($('#empCode').val()==''){
-			alert ("code is empty");
-		}else if($('#contractType').val()==''){
-			alert ("contract is empty");
-		}else if($('#job').val()==''){
-			alert ("job is empty");
-		}else if($('#GManagement').val()==''){
-			alert ("GManagement is empty");
-		}else if($('#level').val()==''){
-			alert ("level is empty");
-		}else if($('#day_n').val()==''){
-			alert ("day_n is empty");
-		}else if($('#active').val()==''){
-			alert ("active is empty");
-		}else{
-			$.ajax({
-				url:"insertEmp.php",
-				method:"POST",
-				data:$('#addEmpForm').serialize(),
-				success:function(data){
-					$('#addEmpForm')[0].reset();
-					$('#addEmpModal').modal('hide');
-					$('#empData').html(data);
-				} 
-				error: function(){
-		            alert("Something went wrong!");
-		        }
-			});
-		}
-	});
+	// $("#addEmpForm").on('submit',function(e){
+	// 	e.preventDefault();
+	// 	//alert("hi");
+	// 	if($('#empName').val()==''){
+	// 		alert ("Name is empty");
+	// 	}else if($('#empCode').val()==''){
+	// 		alert ("code is empty");
+	// 	}else if($('#contractType').val()==''){
+	// 		alert ("contract is empty");
+	// 	}else if($('#job').val()==''){
+	// 		alert ("job is empty");
+	// 	}else if($('#GManagement').val()==''){
+	// 		alert ("GManagement is empty");
+	// 	}else if($('#level').val()==''){
+	// 		alert ("level is empty");
+	// 	}else if($('#day_n').val()==''){
+	// 		alert ("day_n is empty");
+	// 	}else if($('#active').val()==''){
+	// 		alert ("active is empty");
+	// 	}else{
+	// 		$.ajax({
+	// 			url:"insertEmp.php",
+	// 			method:"POST",
+	// 			data:$('#addEmpForm').serialize(),
+	// 			success:function(data){
+	// 				$('#addEmpForm')[0].reset();
+	// 				$('#addEmpModal').modal('hide');
+	// 				$('#empData').html(data);
+	// 			} 
+	// 			// error: function(){ //makes error when uncommented
+	// 	  //           alert("Something went wrong!");
+	// 	  //       }
+	// 		});
+	// 	}
+	// });
 
 });

@@ -10,8 +10,6 @@
 		$result = $stmt->fetchAll();
 		if($result){
 			foreach($result as $row){
-		    	// echo($row['emp_name']);
-		    	// echo($row['ID']);
 		    	echo json_encode(array("empID"=>$row['ID'],"empName"=>$row['emp_name']));
 			}
 		}else{
