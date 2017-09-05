@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Aug 27, 2017 at 02:57 PM
+-- Generation Time: Sep 05, 2017 at 10:51 AM
 -- Server version: 10.1.21-MariaDB
 -- PHP Version: 5.6.30
 
@@ -159,7 +159,8 @@ INSERT INTO `t_data` (`ID`, `emp_code`, `emp_name`, `contract_type`, `id_job`, `
 (4, 167, 'moh abdelftah', 1, 1, 'eng', 1, 'IT', 1, 1, 1, '20eabe5d64b0e216796e834f52d61fd0b70332fc', 1),
 (5, 1111, 'استحقاقات', 1, 1, 'قفاقفا', 1, 'استحقاقات', 2, 1, 1, '20eabe5d64b0e216796e834f52d61fd0b70332fc', 3),
 (8, 248, 'wael nabil', 1, 1, 'trial', 1, 'IT', 2, 1, 1, '20eabe5d64b0e216796e834f52d61fd0b70332fc', 1),
-(13, 8888, 'test', 1, 1, 'eng', 2, 'IT', 1, 2, 2, '20eabe5d64b0e216796e834f52d61fd0b70332fc', 4);
+(13, 8888, 'test', 1, 1, 'eng', 2, 'IT', 1, 2, 2, '20eabe5d64b0e216796e834f52d61fd0b70332fc', 4),
+(14, 9999, 'ahmed', 2, 1, 'eng', 2, 'it', 1, 2, 1, '20eabe5d64b0e216796e834f52d61fd0b70332fc', 1);
 
 -- --------------------------------------------------------
 
@@ -411,7 +412,7 @@ ALTER TABLE `t_case`
 -- AUTO_INCREMENT for table `t_data`
 --
 ALTER TABLE `t_data`
-  MODIFY `ID` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `ID` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 --
 -- AUTO_INCREMENT for table `t_day_n`
 --

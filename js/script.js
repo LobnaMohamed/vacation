@@ -93,9 +93,7 @@ $(document).ready(function(){
  					$('#emp').val(data.empID); 					
  				}
  			},"json");
- 		}else{
- 			alert("noo ajax");
- 		} 
+ 		}
 
 	});
 
