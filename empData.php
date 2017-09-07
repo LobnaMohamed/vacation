@@ -110,7 +110,7 @@
 					    		<input type="text" class="form-control" id="desc_job" name="desc_job">
 							</div>
 							<div class="form-group col-md-3 col-md-offset-4 ">
-								<input type="submit" name="insertEmp" class="btn btn-success">
+								<input type="submit" name="insertEmp" class="btn btn-success" value="حفظ">
 							</div>	
 						</form>
 					</div>
@@ -127,7 +127,67 @@
 						<h4 class="modal-title"> تعديل البيانات </h4>
 					</div>
 					<div class="modal-body">
-						<p>Some text in the modal.</p>
+						<form method="POST" id="editEmpForm" action="editEmp.php">
+							<div class="form-group col-md-4">
+					    		<label for= "level">المستوى الوظيفى</label>
+					    		<select class="form-control" id="level" name="level" value="<?php echo $row['level']; ?>">
+							    	<option selected disabled hidden style='display: none' value=''></option>
+						   		    <?php  	getLevel();   ?>
+								</select>
+
+					    		<label for= "day_n">نهارى/ورادى</label>
+					    		<select class="form-control" id="day_n" name="day_n">
+							    	<option selected disabled hidden style='display: none' value=''></option>
+						   		    <?php  	getDayN();   ?>
+								</select>
+
+					    		<label for= "active">بالخدمة/خارج الخدمة</label>
+					    		<select class="form-control" id="active" name="active">
+							    	<option selected disabled hidden style='display: none' value=''></option>
+						   		    <?php  	getActive();   ?>
+								</select>							
+							</div>	
+							<div class="form-group col-md-4">
+								<label for= "empName">اسم الموظف</label>
+					    		<input type="text" class="form-control" id="empName" name="empName" value="">
+
+								<label for= "contractType">نوع العقد</label>
+					    		<select class="form-control" id="contractType" name="contractType">
+							    	<option selected disabled hidden style='display: none' value=''></option>
+						   		    <?php  	getContract();   ?>
+								</select>	
+					    		<label for= "job">الوظيفة</label>
+					    		<select class="form-control" id="job" name="job">
+							    	<option selected disabled hidden style='display: none' value=''></option>
+						   		    <?php  	getJob();   ?>
+								</select>
+								
+								<label for= "userGrp">درجة المستخدم</label>
+					    		<select class="form-control" id="userGrp" name="userGrp">
+							    	<option selected disabled hidden style='display: none' value=''></option>
+						   		    <?php  	getUserGroup();   ?>
+								</select>
+							</div>
+							<div class="form-group col-md-4">
+								<label for= "empCode">رقم قيد الموظف</label>
+					    		<input type="text" class="form-control" id="empCode" name="empCode">
+
+					    		<label for= "GManagement">الادارة العامة</label>
+					    		<select class="form-control" id="GManagement" name="GManagement">
+							    	<option selected disabled hidden style='display: none' value=''></option>
+						   		    <?php  	getManagement();   ?>
+								</select>
+
+								<label for= "management">قطاع /ادارة</label>
+					    		<input type="text" class="form-control" id="management" name="management">
+
+					    		<label for= "desc_job">الوظيفة الحالية</label>
+					    		<input type="text" class="form-control" id="desc_job" name="desc_job">
+							</div>
+							<div class="form-group col-md-3 col-md-offset-4 ">
+								<input type="submit" name="editEmp" class="btn btn-success" value="حفظ" id="<?php echo "1" ?>">
+							</div>	
+						</form>
 					</div>
 					<div class="modal-footer">
 						<a href="#" type="button" class="btn btn-default edit" data-dismiss="modal">تعديل</a>
