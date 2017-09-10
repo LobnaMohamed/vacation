@@ -228,7 +228,7 @@
 			echo"<td>".  $row['level']. "</td>";
 			echo"<td>".  $row['shift']. "</td>";
 			echo"<td>".  $row['activeStatus']. "</td>";
-			echo'<td><button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#editEmp" value="'.$row['ID'].'">تعديل</button></td>';
+			echo'<td><button type="button" class="btn btn-info btn-sm editEmpData" data-toggle="modal" data-target="#editEmp" id="'.$row['ID'].'">تعديل</button></td>';
 			echo '</tr>';
 		 } 
 	}
@@ -244,8 +244,8 @@
 			$empCode= isset($_POST['empCode'])? filter_var($_POST['empCode'],FILTER_SANITIZE_NUMBER_INT):'';
 			$contractType= isset($_POST['contractType'])? filter_var($_POST['contractType'],FILTER_SANITIZE_NUMBER_INT):'';
 			$job= isset($_POST['job'])? filter_var($_POST['job'],FILTER_SANITIZE_NUMBER_INT):'';
-			$job= $_POST['job'];
-			echo $job;
+			// $job= $_POST['job'];
+			// echo $job;
 			$GManagement= isset($_POST['GManagement'])? filter_var($_POST['GManagement'],FILTER_SANITIZE_NUMBER_INT) :'';
 			$level = isset($_POST['level'])? filter_var($_POST['level'],FILTER_SANITIZE_NUMBER_INT):'';
 			$day_n= isset($_POST['day_n'])? filter_var($_POST['day_n'],FILTER_SANITIZE_NUMBER_INT) :'';
@@ -274,30 +274,35 @@
 	
 	// --------------Edit Employee function-----------------------
 	function editEmp(){
+		$empID=isset($_POST['employee_id'])? filter_var($_POST['employee_id'],FILTER_SANITIZE_NUMBER_INT):'';
+		$empName= isset($_POST['empNameEdit'])? filter_var($_POST['empNameEdit'],FILTER_SANITIZE_STRING) : '';
+		$empCode= isset($_POST['empCodeEdit'])? filter_var($_POST['empCodeEdit'],FILTER_SANITIZE_NUMBER_INT):'';
+		$contractType= isset($_POST['contractTypeEdit'])? filter_var($_POST['contractTypeEdit'],FILTER_SANITIZE_NUMBER_INT):'';
+		$job= isset($_POST['jobEdit'])? filter_var($_POST['jobEdit'],FILTER_SANITIZE_NUMBER_INT):'';
+		$GManagement= isset($_POST['GManagementEdit'])? filter_var($_POST['GManagementEdit'],FILTER_SANITIZE_NUMBER_INT) :'';
+		$level = isset($_POST['levelEdit'])? filter_var($_POST['levelEdit'],FILTER_SANITIZE_NUMBER_INT):'';
+		$day_n= isset($_POST['day_nEdit'])? filter_var($_POST['day_nEdit'],FILTER_SANITIZE_NUMBER_INT) :'';
+		$active= isset($_POST['activeEdit'])? filter_var($_POST['activeEdit'],FILTER_SANITIZE_NUMBER_INT) :'';
+		$management= isset($_POST['managementEdit'])? filter_var($_POST['managementEdit'],FILTER_SANITIZE_STRING) :'';
+		$jobDesc= isset($_POST['desc_jobEdit'])? filter_var($_POST['desc_jobEdit'],FILTER_SANITIZE_STRING) : '';
+		$userGroup=isset($_POST['userGrpEdit'])? filter_var($_POST['userGrpEdit'],FILTER_SANITIZE_NUMBER_INT):'';		
 		$con = connect();
 		$sql= '';
-		$sql .= "SELECT d.*, a.active as activeStatus, dn.day_n as shift 
-		    FROM t_data d left JOIN t_active a on d.active = a.ID 
-		    			  left Join t_day_n  dn  on d.day_night = dn.ID";
-		if(isset($_POST['search'])){
-			$sql .='WHERE emp_name LIKE "%'. $_POST['search'].'%"' ;
-		}
+		$sql .= "UPDATE t_data
+				 SET emp_code = '$empCode' ,
+					 emp_name = '$empName',
+					 contract_type = '$contractType',
+					 id_job = '$job',
+					 desc_job = '$jobDesc',
+					 level_id = '$level',
+					 management = '$management',
+					 g_management_id = '$GManagement',
+					 day_night = '$day_n',
+					 active = '$active',
+					 id_userGroup= '$userGroup'
+				 WHERE ID= '$empID'";
 		$stmt = $con->prepare($sql);
 		$stmt->execute();
-		$result = $stmt->fetchAll();
-		foreach($result as $row){
-			echo"<tr>";
-			echo"<td>".  $row['emp_code']. "</td>";
-			echo"<td>".  $row['emp_name']. "</td>";
-			echo"<td>".  $row['contract_type']. "</td>";
-			echo"<td>".  $row['id_job']. "</td>";
-			echo"<td>".  $row['g_management']. "</td>";
-			echo"<td>".  $row['level']. "</td>";
-			echo"<td>".  $row['shift']. "</td>";
-			echo"<td>".  $row['activeStatus']. "</td>";
-			echo'<td><button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#editEmp">تعديل</button></td>';
-			echo '</tr>';
-		 } 
 	}	
 	//---------------get managments function-----------------------
 	function getManagement(){

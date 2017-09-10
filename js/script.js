@@ -137,4 +137,44 @@ $(document).ready(function(){
 	// 	}
 	// });
 
+
+	//get employee data in edit modal
+	$(document).on('click','.editEmpData', function(){
+		var employee_id=$(this).attr("id");
+		console.log(employee_id);
+		$.ajax({
+			url:"fetch.php",
+			method:"POST",
+			data:{empID:employee_id},
+			dataType:"json",
+			success:function(data){
+				console.log(data);
+				$('#employee_id').val(data.ID);
+				$('#empNameEdit').val(data.emp_name);
+				$('#empCodeEdit').val(data.emp_code);
+				$('#managementEdit').val(data.management);
+				$('#desc_jobEdit').val(data.desc_job);
+				$('#levelEdit').val(data.level_id);
+				$('#activeEdit').val(data.active);
+				$('#GManagementEdit').val(data.g_management_id);
+				$('#contractTypeEdit').val(data.contract_type);
+				$('#jobEdit').val(data.id_job);
+				$('#day_nEdit').val(data.day_night);
+				$('#userGrpEdit').val(data.id_userGroup);
+			}
+		});
+	});
+	//onsubmit edit form
+	$(document).on('submit','#editEmpForm', function(){
+		$.ajax({
+			url:"insertEmp.php",
+			method:"POST",
+			data:{empID:employee_id},
+			dataType:"json",
+			success:function(data){
+				console.log(data);
+
+			}
+		});		
+	});
 });
