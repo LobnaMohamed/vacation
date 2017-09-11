@@ -166,15 +166,24 @@ $(document).ready(function(){
 	});
 	//onsubmit edit form
 	$(document).on('submit','#editEmpForm', function(){
+		alert("hi");
+		//e.preventDefault();
+		var $form = $('#editEmpForm');
+
 		$.ajax({
 			url:"insertEmp.php",
 			method:"POST",
-			data:{empID:employee_id},
-			dataType:"json",
+			data: $('form#editEmpForm').serialize(),
+			//dataType:"json",
+
 			success:function(data){
 				console.log(data);
-
-			}
+				$("#editEmpModal").modal('hide');
+				
+			},
+			error: function(error) {
+            	alert(error);
+        	}
 		});		
 	});
 });

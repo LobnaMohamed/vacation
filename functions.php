@@ -228,7 +228,7 @@
 			echo"<td>".  $row['level']. "</td>";
 			echo"<td>".  $row['shift']. "</td>";
 			echo"<td>".  $row['activeStatus']. "</td>";
-			echo'<td><button type="button" class="btn btn-info btn-sm editEmpData" data-toggle="modal" data-target="#editEmp" id="'.$row['ID'].'">تعديل</button></td>';
+			echo'<td><button type="button" class="btn btn-info btn-sm editEmpData" data-toggle="modal" data-target="#editEmpModal" id="'.$row['ID'].'">تعديل</button></td>';
 			echo '</tr>';
 		 } 
 	}

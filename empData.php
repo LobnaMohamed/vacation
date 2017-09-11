@@ -118,7 +118,7 @@
 			</div>
 		</div>
 		<!-- Edit Modal -->
-		<div id="editEmp" class="modal fade " role="dialog">
+		<div id="editEmpModal" class="modal fade " role="dialog">
 			<div class="modal-dialog modal-lg">
 				<!-- Modal content-->
 				<div class="modal-content">
@@ -127,7 +127,7 @@
 						<h4 class="modal-title"> تعديل البيانات </h4>
 					</div>
 					<div class="modal-body">
-						<form method="POST" id="editEmpForm" action="#">
+						<form method="POST" id="editEmpForm" name="editEmpForm" action="insertEmp.php">
 							<div class="form-group col-md-4">
 					    		<label for= "levelEdit">المستوى الوظيفى</label>
 					    		<select class="form-control" id="levelEdit" name="levelEdit" >
