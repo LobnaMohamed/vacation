@@ -12,10 +12,10 @@
 
 		try{
 			//new connection to db
-			static $con;
-		    if ($con===NULL){ 
-		        $con =  new PDO($dsn, $user, $pass, $options);
-				$con->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION); 
+				static $con;
+			    if ($con===NULL){ 
+			        $con =  new PDO($dsn, $user, $pass, $options);
+					$con->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION); 
 		    }
 			// $con = new PDO($dsn, $user, $pass, $options);
 			// $con->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION); 
@@ -43,12 +43,13 @@
 		$stmt = $con->prepare("SELECT emp_code,password,id_userGroup,ID,emp_name From t_data WHERE emp_code=? and password=?");
 		$stmt->execute(array($username,$hashedPass));
 		$count = $stmt->rowCount();
-		$row = $stmt->fetch(PDO::FETCH_ASSOC);
-		$userGroup= $row["id_userGroup"];
-		$userID= $row["ID"];
-		$user_fullName=$row["emp_name"];
+		
 		//if count >0 then the user exists
 		if($count>0){
+			$row = $stmt->fetch(PDO::FETCH_ASSOC);
+			$userGroup= $row["id_userGroup"];
+			$userID= $row["ID"];
+			$user_fullName=$row["emp_name"];
 			$_SESSION['Username'] = $username;//register session
 			$_SESSION['UserGroup'] = $userGroup;
 			$_SESSION['UserID'] = $userID;
@@ -61,6 +62,18 @@
 				
 			}	
 		}
+	}
+	//---------------change password function----------------------
+	function changePassword(){
+		$newPassword = $_POST['newpassword'];
+		$confirmPassword = $_POST['confirmpassword'];
+
+		$hashedNewPass = sha1($newPassword);
+		$hashedConfirmPass = sha1($confirmPassword);
+
+		//check if this user exists:
+
+
 	}
 	//---------------get All Managers who can approve vacations as both manager and top manager in manager combobox function-----------------------
 	function getManagers(){
