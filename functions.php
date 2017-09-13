@@ -65,14 +65,41 @@
 	}
 	//---------------change password function----------------------
 	function changePassword(){
-		$newPassword = $_POST['newpassword'];
-		$confirmPassword = $_POST['confirmpassword'];
-
-		$hashedNewPass = sha1($newPassword);
-		$hashedConfirmPass = sha1($confirmPassword);
-
 		//check if this user exists:
+		$username = $_POST['user'];
+		$password = $_POST['oldPass'];
+		$hashedPass = sha1($password);
+		$con = connect();
+		$stmt = $con->prepare("SELECT emp_code,password,id_userGroup,ID,emp_name From t_data WHERE emp_code=? and password=?");
+		$stmt->execute(array($username,$hashedPass));
+		$count = $stmt->rowCount();
+		if($count>0){
+			echo "hi";
+			$row = $stmt->fetch(PDO::FETCH_ASSOC);
+			$userGroup= $row["id_userGroup"];
+			$userID= $row["ID"];
+			$user_fullName=$row["emp_name"];
+			$_SESSION['Username'] = $username;//register session
+			$_SESSION['UserGroup'] = $userGroup;
+			$_SESSION['UserID'] = $userID;
+			$_SESSION['UserFullName'] = $user_fullName;
 
+			//start changing password
+
+			$newPassword = $_POST['newpassword'];
+			$confirmPassword = $_POST['confirmpassword'];
+
+			if ($newPassword === $confirmPassword ){
+				$hashedNewPass = sha1($newPassword);
+				//update password in database
+				$stmt = $con->prepare("UPDATE  t_data
+									   SET password = ? 
+									   WHERE emp_code=? ");
+				$stmt->execute(array($hashedNewPass,$username));
+			}else{
+				echo "write ur password correctly";
+			}
+		}
 
 	}
 	//---------------get All Managers who can approve vacations as both manager and top manager in manager combobox function-----------------------

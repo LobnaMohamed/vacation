@@ -186,4 +186,16 @@ $(document).ready(function(){
         	}
 		});		
 	});
+
+	$('#changePassModal').on('show.bs.modal', function(e) {
+		alert ("hi");
+	    var user = $(e.relatedTarget).data('user');
+	    $(e.currentTarget).find('input[name="user"]').val(user);
+	    console.log (user);
+	    var oldPass = $(e.relatedTarget).data('oldPass');
+	    $(e.currentTarget).find('input[name="oldPass"]').val(oldPass);
+	    console.log(oldPass);
+
+
+	});
 });
