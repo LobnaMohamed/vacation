@@ -195,7 +195,5 @@ $(document).ready(function(){
 	    var oldPass = $(e.relatedTarget).data('oldPass');
 	    $(e.currentTarget).find('input[name="oldPass"]').val(oldPass);
 	    console.log(oldPass);
-
-
 	});
 });

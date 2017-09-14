@@ -70,7 +70,9 @@
 		$password = $_POST['oldPass'];
 		$hashedPass = sha1($password);
 		$con = connect();
-		$stmt = $con->prepare("SELECT emp_code,password,id_userGroup,ID,emp_name From t_data WHERE emp_code=? and password=?");
+		$stmt = $con->prepare("SELECT emp_code,password,id_userGroup,ID,emp_name 
+								From t_data 
+								WHERE emp_code=? and password=?");
 		$stmt->execute(array($username,$hashedPass));
 		$count = $stmt->rowCount();
 		if($count>0){
