@@ -66,6 +66,9 @@
 	//---------------change password function----------------------
 	function changePassword(){
 		//check if this user exists:
+		// echo "<pre>";
+		// print_r($_POST);
+		// echo "</pre>";
 		$username = $_POST['user'];
 		$password = $_POST['oldPass'];
 		$hashedPass = sha1($password);
@@ -75,6 +78,7 @@
 								WHERE emp_code=? and password=?");
 		$stmt->execute(array($username,$hashedPass));
 		$count = $stmt->rowCount();
+		//echo $count;
 		if($count>0){
 			echo "hi";
 			$row = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -101,6 +105,8 @@
 			}else{
 				echo "write ur password correctly";
 			}
+		}else{
+			echo"no user found";
 		}
 
 	}

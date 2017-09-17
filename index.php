@@ -16,6 +16,7 @@
 		login();
 	}elseif($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['savePass'])){
 		//print_r($_SESSION);
+		echo "savepass";
 		changePassword();
 	}
 
@@ -32,7 +33,7 @@
 				
 				<input class="btn btn-primary btn-block btn-lg" type="submit" name="login" value="دخول"><br>
 				
-				<input class="btn btn-danger btn-block btn-lg" type="button" name="changePass" value="تغيير كلمة السر" data-toggle="modal" data-target="#changePassModal" data-user="#username" data-oldPass="password">	
+				<input class="btn btn-danger btn-block btn-lg" type="button" name="changePass" value="تغيير كلمة السر" data-toggle="modal" data-target="#changePassModal" >	
 			</form>
 
 
@@ -48,8 +49,8 @@
 							<form method="POST" id="changePassForm" >
 								<div class="form-group col-md-10 col-md-offset-1 ">
 									
-									<input type="hidden" name="user" >
-									<input type="hidden" name="oldPass" >
+									<input type="text" name="user" >
+									<input type="text" name="oldPass" >
 
 									<label for="newpassword" >كلمة السر:</label>
 									<input class="form-control" type="password" name="newpassword" id= "newpassword" required autocomplete="new-password"><br>
