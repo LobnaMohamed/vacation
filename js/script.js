@@ -178,8 +178,7 @@ $(document).ready(function(){
 
 			success:function(data){
 				console.log(data);
-				$("#editEmpModal").modal('hide');
-				
+				$("#editEmpModal").modal('hide');	
 			},
 			error: function(error) {
             	alert(error);
@@ -195,5 +194,21 @@ $(document).ready(function(){
 	    $(e.currentTarget).find('input[name="user"]').val(username);
 	    //var oldPass = $(e.relatedTarget).data('oldPass');
 	    $(e.currentTarget).find('input[name="oldPass"]').val(password);
+
+		var newPass = $.trim($(e.currentTarget).find('input[name="newpassword"]').val());
+	    var confirmPass = $.trim($(e.currentTarget).find('input[name="confirmpassword"]').val());
+	    if(newPass === confirmPass && newPass.length >= 7 && newPass != 1234567){
+			// alert("right");
+			// alert(newPass);
+	    }else{
+	    	e.preventDefault();
+	    	$('#modalAlert').show();
+	    	//$("#modalAlert").slideDown();
+	    }
 	});
+
+	// //modal submit
+	// $('#changePassForm').on("submit", function (e){
+		
+	// });   
 });

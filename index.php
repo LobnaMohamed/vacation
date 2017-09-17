@@ -56,8 +56,12 @@
 									<input class="form-control" type="password" name="newpassword" id= "newpassword" required autocomplete="new-password"><br>
 
 									<label for="confirmpassword" >تأكيد كلمة السر:</label>
-									<input class="form-control" type="password" name="confirmpassword" id= "confirmpassword" required autocomplete="new-password"><br>	
+									<input class="form-control" type="password" name="confirmpassword" id= "confirmpassword" required autocomplete="new-password" ><br>
 
+									<div class="alert alert-danger alert-dismissable fade in hide" role="alert" id="modalAlert">
+										<a  class="close" data-dismiss="alert" aria-label="close">&times;</a>
+										<strong>Danger!</strong>error
+									</div>	
 								</div>	
 								<div class="form-group col-md-4 col-md-offset-4 ">
 									<input type="submit" name="savePass" class="btn btn-success btn-lg" value="حفظ">
