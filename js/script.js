@@ -187,28 +187,49 @@ $(document).ready(function(){
 	});
 
 	$('#changePassModal').on('show.bs.modal', function(e) {
-		alert ("hi");
+		//alert ("hi");
 		var username = $('input[name="username"]').val();
 		var password = $('input[name="password"]').val();
-	    //var user = $(e.relatedTarget).data('user');
-	    $(e.currentTarget).find('input[name="user"]').val(username);
-	    //var oldPass = $(e.relatedTarget).data('oldPass');
-	    $(e.currentTarget).find('input[name="oldPass"]').val(password);
-
-		var newPass = $.trim($(e.currentTarget).find('input[name="newpassword"]').val());
-	    var confirmPass = $.trim($(e.currentTarget).find('input[name="confirmpassword"]').val());
-	    if(newPass === confirmPass && newPass.length >= 7 && newPass != 1234567){
-			// alert("right");
-			// alert(newPass);
-	    }else{
-	    	e.preventDefault();
-	    	$('#modalAlert').show();
-	    	//$("#modalAlert").slideDown();
-	    }
+		if(username == "" || password == ""){
+			alert ("أدخل بياناتك!");
+			e.preventDefault();//stop modal from showing
+		}else{
+			//var user = $(e.relatedTarget).data('user');
+		    $(e.currentTarget).find('input[name="user"]').val(username);
+		    //var oldPass = $(e.relatedTarget).data('oldPass');
+		    $(e.currentTarget).find('input[name="oldPass"]').val(password);
+		    // on form submit
+		    $('#changePassForm').on('submit', function(e){
+		    	//e.preventDefault();
+		    	var newPass = $.trim($(e.currentTarget).find('input[name="newpassword"]').val());
+			    var confirmPass = $.trim($(e.currentTarget).find('input[name="confirmpassword"]').val());
+			    if(newPass === confirmPass && newPass.length >= 7 && newPass != 1234567){
+					//ajax to update password:
+				    $.ajax({
+				    	url:document.location.url,
+						method:"POST",
+						data: $('form#changePassForm').serialize(),
+						success:function(data){
+							// alert("success");
+							// console.log(data.result);
+							//$("#editEmpModal").modal('hide');	
+						},
+						error: function(error) {
+			            	// alert("error");
+			            	// console.log(error);
+			        	}
+					});	
+			    }else{
+			    	e.preventDefault();
+			    	console.log("slidedown");
+			    	$('#modalAlert').removeClass("hide");
+			    	$('#changePassForm')[0].reset();
+			    }
+			    $('#changePassForm').on('keyup',function(){
+			    	$('#modalAlert').addClass("hide");
+			    });
+		    });
+		}
 	});
-
-	// //modal submit
-	// $('#changePassForm').on("submit", function (e){
-		
-	// });   
+ 
 });
