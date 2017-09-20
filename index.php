@@ -24,7 +24,7 @@
 ?>
 	<div class="container">
 		<h2 class="text-center">تسجيل الدخول لبرنامج الاجازات</h2>
-			<form class="form-signin" action ="<?php echo $_SERVER['PHP_SELF'] ?>" method="POST">
+			<form class="form-signin" id = "signin" action ="<?php echo $_SERVER['PHP_SELF'] ?>" method="POST">
 
 				<label for="username" >رقم القيد:</label>
 				<input class="form-control" type="number" name="username" required autocomplete="off"><br>
@@ -37,7 +37,7 @@
 				<input class="btn btn-danger btn-block btn-lg" type="button" name="changePass" value="تغيير كلمة المرور" data-toggle="modal" data-target="#changePassModal" >	
 			</form>
 
-
+			<!-- change password modal -->
 			<div id="changePassModal" class="modal fade" role="dialog">
 				<div class="modal-dialog modal-ةي">
 					<!-- Modal content-->

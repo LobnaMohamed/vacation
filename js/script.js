@@ -1,15 +1,12 @@
 /*global $, alert, console*/
 $(document).ready(function(){
-
 	'use strict';
 	var nameError = true ,
 		codeError = true,
 		daterror = true;
-
-
 	function checkErrors() {
 
-		if(nameError === true || codeError === true || daterror === true){
+		if(nameError == true || codeError == true || daterror == true){
 			console.log('there is  errors');
 			// alert("name cant be less than 3");
 
@@ -66,27 +63,13 @@ $(document).ready(function(){
 	    return false;
 	});	
 
-	// //trial for ajax
-	// $(".code").change(function()
- //            {
- //                $.ajax(
- //                {
- //                    url:"/index.php",
- //                    type:"post",
- //                    data:{code:$(this).val()},
- //                    success:function(response)
- //                    {
- //                        $("#zip").html(response);
- //                    }
- //                });
- //    });
  	$("input#code").bind("change", function(){
  		var empCode=$("#code").val();
  		alert(empCode);
  		if($.trim(empCode) != ''){
  			alert("hi");
  			$.post('ajax.php',{code:empCode}, function(data){
- 				if(data==="notfound"){
+ 				if(data == "notfound"){
  					alert("رقم القيد غير مسجل \n من فضلك ادخل رقم صحيح!");
  				}else{
  					$('#name').val(data.empName);
@@ -138,7 +121,7 @@ $(document).ready(function(){
 	// });
 
 
-	//get employee data in edit modal
+	//--------------get employee data in edit modal---------------
 	$(document).on('click','.editEmpData', function(){
 		var employee_id=$(this).attr("id");
 		console.log(employee_id);
@@ -164,7 +147,7 @@ $(document).ready(function(){
 			}
 		});
 	});
-	//onsubmit edit form
+	//--------------onsubmit edit form-----------------------------
 	$(document).on('submit','#editEmpForm', function(){
 		alert("hi");
 		//e.preventDefault();
@@ -185,7 +168,7 @@ $(document).ready(function(){
         	}
 		});		
 	});
-
+	//--------------check in change password modal------------------
 	$('#changePassModal').on('show.bs.modal', function(e) {
 		//alert ("hi");
 		var username = $('input[name="username"]').val();
@@ -203,7 +186,7 @@ $(document).ready(function(){
 		    	//e.preventDefault();
 		    	var newPass = $.trim($(e.currentTarget).find('input[name="newpassword"]').val());
 			    var confirmPass = $.trim($(e.currentTarget).find('input[name="confirmpassword"]').val());
-			    if(newPass === confirmPass && newPass.length >= 7 && newPass != 1234567){
+			    if(newPass == confirmPass && newPass.length >= 7 && newPass != 1234567){
 					//ajax to update password:
 				    $.ajax({
 				    	url:document.location.url,
@@ -211,12 +194,12 @@ $(document).ready(function(){
 						data: $('form#changePassForm').serialize(),
 						success:function(data){
 							// alert("success");
-							// console.log(data.result);
+							 console.log(data.result);
 							//$("#editEmpModal").modal('hide');	
 						},
 						error: function(error) {
 			            	// alert("error");
-			            	// console.log(error);
+			            	 console.log(error);
 			        	}
 					});	
 			    }else{
@@ -231,5 +214,56 @@ $(document).ready(function(){
 		    });
 		}
 	});
- 
+ 	
+ 	//---------------check if pass = 1234567 on login----------------
+
+ 	//$(document).on('submit','#signin',function(e){
+ 	// $('#signin').on('submit', function(e){
+ 	// 	//var password = $("input[name=password]");
+ 	// 	//check if pass == 1234567
+ 	// 	// e.preventDefault();
+		// $.ajax({
+		// 	url:document.location.url,
+		// 	method:"POST",
+		// 	data: $('form#signin').serialize(),
+		// 	success:function(data){
+		// 		//e.preventDefault();
+		// 		alert(data.success + "line 231");	
+		// 		console.log(data);			
+		// 		if(data == "changePass"){
+		// 			alert("You must change your password!");
+		// 			console.log(data);
+		// 			$("#changePassModal").modal('show');					
+		// 		}
+		// 		if(data == "noouser"){
+		// 			alert ("insert correct data");
+		// 		}
+		// 	},
+		// 	error: function(error) {
+		// 		alert("error");
+		// 		console.log(error);
+		// 	}
+		// });	
+ 	// });
+
+
+
+ 	//------------search through emp data-----------------
+ 	$('#search').on('keyup',function(){
+ 		var value = $(this).val();
+		$.ajax({
+			url:document.location.url,
+			method:"POST",
+			data: {search:value},
+			dataType:"text",
+
+			success:function(data){
+				console.log(data);
+				$('#empData tbody').html(data);
+			},
+			error: function(error) {
+            	alert(error);
+        	}
+		});	
+	});
 });

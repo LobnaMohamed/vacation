@@ -13,7 +13,7 @@
 		try{
 			//new connection to db
 				static $con;
-			    if ($con===NULL){ 
+			    if ($con == NULL){ 
 			        $con =  new PDO($dsn, $user, $pass, $options);
 					$con->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION); 
 		    }
@@ -36,6 +36,7 @@
 		$username = $_POST['username'];
 		$password = $_POST['password'];
 		$hashedPass = sha1($password);
+		//$response = "";
 
 		//check if user exist
 
@@ -46,21 +47,29 @@
 		
 		//if count >0 then the user exists
 		if($count>0){
-			$row = $stmt->fetch(PDO::FETCH_ASSOC);
-			$userGroup= $row["id_userGroup"];
-			$userID= $row["ID"];
-			$user_fullName=$row["emp_name"];
-			$_SESSION['Username'] = $username;//register session
-			$_SESSION['UserGroup'] = $userGroup;
-			$_SESSION['UserID'] = $userID;
-			$_SESSION['UserFullName'] = $user_fullName;
-			//redirect according to privillage
-			if($userGroup==3){
-				header('Location: empdata.php');//redirect
-			}else{
-				header('Location: vacationmodel.php');//redirect
-				
-			}	
+			//user found and pass = 1234567
+			// if($hashedPass == sha1(1234567)){
+			// 	//$response == "changePass";
+			// 	 echo "changePass";
+			// }else{
+				$row = $stmt->fetch(PDO::FETCH_ASSOC);
+				$userGroup= $row["id_userGroup"];
+				$userID= $row["ID"];
+				$user_fullName=$row["emp_name"];
+				$_SESSION['Username'] = $username;//register session
+				$_SESSION['UserGroup'] = $userGroup;
+				$_SESSION['UserID'] = $userID;
+				$_SESSION['UserFullName'] = $user_fullName;
+				//redirect according to privillage
+				if($userGroup==3){
+					header('Location: empdata.php');//redirect
+				}else{
+					header('Location: vacationmodel.php');//redirect	
+				}
+			//}
+		//no user found
+		}else{
+			echo "noouser";
 		}
 	}
 	//---------------change password function----------------------
@@ -95,7 +104,7 @@
 			$newPassword = $_POST['newpassword'];
 			$confirmPassword = $_POST['confirmpassword'];
 
-			if ($newPassword === $confirmPassword ){
+			if ($newPassword == $confirmPassword ){
 				$hashedNewPass = sha1($newPassword);
 				//update password in database
 				$stmt = $con->prepare("UPDATE  t_data
@@ -250,6 +259,7 @@
 
 	// --------------get Employee function-----------------------
 	function getAllEmp(){
+		$output="";
 		$con = connect();
 		$sql= '';
 		// $sql .= "SELECT d.ID,d.emp_code,d.emp_name,d.desc_job,d.management, a.active as activeStatus, dn.day_n as shift,m.management as g_management,j.job as job,l.level as level, c.contractType as contract
@@ -259,26 +269,43 @@
 		//     			  left Join t_job j on d.id_job = j.ID
 		//     			  left Join t_level l on d.level_id = l.ID
 		//     			  left Join contract c on d.contract_type = c.ID";
-		$sql .= "SELECT * FROM empdata"; //view
+
+		$sql .= "SELECT * FROM empdata "; //view
 		if(isset($_POST['search'])){
-			$sql .='WHERE emp_name LIKE "%'. $_POST['search'].'%"' ;
+			$sql .= "WHERE emp_code like '%". $_POST['search'] ."%'";
 		}
+		// echo $sql;
 		$stmt = $con->prepare($sql);
 		$stmt->execute();
 		$result = $stmt->fetchAll();
+		// foreach($result as $row){
+		// 	echo"<tr>";
+		// 	echo"<td>".  $row['emp_code']. "</td>";
+		// 	echo"<td>".  $row['emp_name']. "</td>";
+		// 	echo"<td>".  $row['contract']. "</td>";
+		// 	echo"<td>".  $row['job']. "</td>";
+		// 	echo"<td>".  $row['g_management']. "</td>";
+		// 	echo"<td>".  $row['level']. "</td>";
+		// 	echo"<td>".  $row['shift']. "</td>";
+		// 	echo"<td>".  $row['activeStatus']. "</td>";
+		// 	echo'<td><button type="button" class="btn btn-info btn-sm editEmpData" data-toggle="modal" data-target="#editEmpModal" id="'.$row['ID'].'">تعديل</button></td>';
+		// 	echo '</tr>';
+		//  } 
 		foreach($result as $row){
-			echo"<tr>";
-			echo"<td>".  $row['emp_code']. "</td>";
-			echo"<td>".  $row['emp_name']. "</td>";
-			echo"<td>".  $row['contract']. "</td>";
-			echo"<td>".  $row['job']. "</td>";
-			echo"<td>".  $row['g_management']. "</td>";
-			echo"<td>".  $row['level']. "</td>";
-			echo"<td>".  $row['shift']. "</td>";
-			echo"<td>".  $row['activeStatus']. "</td>";
-			echo'<td><button type="button" class="btn btn-info btn-sm editEmpData" data-toggle="modal" data-target="#editEmpModal" id="'.$row['ID'].'">تعديل</button></td>';
-			echo '</tr>';
-		 } 
+			$output .= 
+			"<tr>
+				<td>".  $row['emp_code']. "</td>
+				<td>".  $row['emp_name']. "</td>
+				<td>".  $row['contract']. "</td>
+				<td>".  $row['job']. "</td>
+				<td>".  $row['g_management']. "</td>
+				<td>".  $row['level']. "</td>
+				<td>".  $row['shift']. "</td>
+				<td>".  $row['activeStatus']. '</td>
+				<td><button type="button" class="btn btn-info btn-sm editEmpData" data-toggle="modal" data-target="#editEmpModal" id="'.$row['ID'].'">تعديل</button></td>
+			 </tr>';
+		 }
+		 echo $output; 
 	}
 
 	// --------------Add Employee function-----------------------

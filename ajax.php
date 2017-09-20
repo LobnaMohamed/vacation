@@ -1,6 +1,6 @@
 <?php
 	include 'functions.php';
-	if(isset($_POST['code']) === true && empty($_POST['code'] ===false)){
+	if(isset($_POST['code']) == true && empty($_POST['code'] ==false)){
 		$con = connect();
 		$sql= "SELECT ID,emp_name 
 			   FROM t_data 

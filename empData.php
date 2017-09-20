@@ -7,7 +7,7 @@
 		exit();
 	}
 	include 'header.php';
-	require 'functions.php';       
+	require 'functions.php';      
 ?>
 	<div class="container">
 	    <header class="row text-center">
@@ -15,12 +15,12 @@
 	  	    <h1 class="col-lg-12">بيانات العاملين</h1>  
 	    </header>
 	    <div class="table-responsive row">
-		    <form class="navbar-form" role="search">
+		    <form class="navbar-form" role="search" id="searchEmp" method="post">
 			    <div class="input-group add-on">
 					<input class="form-control" placeholder="البحث" name="search" id="search" type="text">
-					<div class="input-group-btn">
+<!-- 					<div class="input-group-btn">
 						<button class="btn btn-default" type="submit"><i class="glyphicon glyphicon-search"></i></button>
-					</div>
+					</div> -->
 			    </div>
 		    </form>
 			<table id="empData" class="table table-striped table-bordered">
