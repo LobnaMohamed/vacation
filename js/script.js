@@ -245,21 +245,17 @@ $(document).ready(function(){
 		// 	}
 		// });	
  	// });
-
-
-
  	//------------search through emp data-----------------
  	$('#search').on('keyup',function(){
  		var value = $(this).val();
 		$.ajax({
-			url:document.location.url,
-			method:"POST",
+			url:'searchAjax.php',
+			method:"GET",
 			data: {search:value},
-			dataType:"text",
-
+			// dataType:"json",
 			success:function(data){
 				console.log(data);
-				$('#empData tbody').html(data);
+				$('#empDatabody').html(data);
 			},
 			error: function(error) {
             	alert(error);

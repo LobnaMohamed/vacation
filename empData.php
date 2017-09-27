@@ -15,16 +15,17 @@
 	  	    <h1 class="col-lg-12">بيانات العاملين</h1>  
 	    </header>
 	    <div class="table-responsive row">
-		    <form class="navbar-form" role="search" id="searchEmp" method="post">
-			    <div class="input-group add-on">
-					<input class="form-control" placeholder="البحث" name="search" id="search" type="text">
+		    <form class="navbar-form" role="search" id="searchEmp" method="GET">
+			    <div class="form-group add-on">
+			    	<label for = "search">رقم القيد / الاسم :</label>
+					<input class="form-control" placeholder="ابحث.." name="search" id="search" type="text">
 <!-- 					<div class="input-group-btn">
 						<button class="btn btn-default" type="submit"><i class="glyphicon glyphicon-search"></i></button>
 					</div> -->
 			    </div>
 		    </form>
 			<table id="empData" class="table table-striped table-bordered">
-			  	<thead>
+			  	<thead >
 				    <tr>
 				      <th>رقم القيد</th>
 				      <th>الاسم</th>
@@ -37,7 +38,7 @@
 				      <th><button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#addEmpModal">إضافة</button></th>
 				    </tr>
 			  	</thead>
-				<tbody>
+				<tbody id="empDatabody">
 					<?php getAllEmp(); ?>
 				</tbody>
 			</table>	

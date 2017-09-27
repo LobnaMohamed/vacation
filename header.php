@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html dir="rtl" lang="ar">
 <head>
-	<title>vacations</title>
+	<title>الاجازات</title>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -18,10 +18,16 @@
 <body>
 	<nav class="navbar navbar-inverse fixed-top">
 		<div class="container-fluid">
-			<div class="navbar-header ">
+<!-- 			<div class="navbar-header ">
 			  <a class="navbar-brand" href="#">.Alexandria Minaral Oils Co</a>
-			</div>
+			</div> -->
+			<div class="navbar-header ">
+		  		<a class="navbar-brand" href="#">Computer Name: <?php echo getenv("username"); ?></a>
 
+		  		<?php if (isset($_SESSION['Username'])){ ?>
+			  		 	<a class="navbar-brand" href="#"><?php echo $_SESSION['UserFullName'] ;?></a>
+			  	<?php	} ?>
+			</div>
 			
 			<div class="navbar-header navbar-right">
 			  <span class="navbar-brand">شركة الأسكندرية للزيوت المعدنية ( أموك )</span>

@@ -270,11 +270,15 @@
 		//     			  left Join t_level l on d.level_id = l.ID
 		//     			  left Join contract c on d.contract_type = c.ID";
 
-		$sql .= "SELECT * FROM empdata "; //view
-		if(isset($_POST['search'])){
-			$sql .= "WHERE emp_code like '%". $_POST['search'] ."%'";
+		
+		if(isset($_GET['search'])){
+			$sql = "SELECT * 
+					FROM empdata 	
+					WHERE emp_code like '%". $_GET['search'] ."%' 
+					OR emp_name like '%". $_GET['search'] ."%' ";
+		}else{
+			$sql = "SELECT * FROM empdata "; //view
 		}
-		// echo $sql;
 		$stmt = $con->prepare($sql);
 		$stmt->execute();
 		$result = $stmt->fetchAll();
@@ -291,6 +295,9 @@
 		// 	echo'<td><button type="button" class="btn btn-info btn-sm editEmpData" data-toggle="modal" data-target="#editEmpModal" id="'.$row['ID'].'">تعديل</button></td>';
 		// 	echo '</tr>';
 		//  } 
+		// echo "<pre>";
+		// print_r($result) ;
+		// echo "</pre>";
 		foreach($result as $row){
 			$output .= 
 			"<tr>
@@ -304,8 +311,9 @@
 				<td>".  $row['activeStatus']. '</td>
 				<td><button type="button" class="btn btn-info btn-sm editEmpData" data-toggle="modal" data-target="#editEmpModal" id="'.$row['ID'].'">تعديل</button></td>
 			 </tr>';
+			
 		 }
-		 echo $output; 
+		echo $output;
 	}
 
 	// --------------Add Employee function-----------------------
