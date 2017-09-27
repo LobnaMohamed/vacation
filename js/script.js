@@ -41,7 +41,7 @@ $(document).ready(function(){
 		var diff = new Date(endDate) - new Date(startDate);
 		console.log( diff);
 		// get days
-		var days = diff/1000/60/60/24;
+		var days = (diff/1000/60/60/24)+1;
 		console.log(days);
 		$('#duration').val(days);
 	});
@@ -173,13 +173,12 @@ $(document).ready(function(){
 		//alert ("hi");
 		var username = $('input[name="username"]').val();
 		var password = $('input[name="password"]').val();
+		//check if username or password are empty
 		if(username == "" || password == ""){
 			alert ("أدخل بياناتك!");
 			e.preventDefault();//stop modal from showing
 		}else{
-			//var user = $(e.relatedTarget).data('user');
 		    $(e.currentTarget).find('input[name="user"]').val(username);
-		    //var oldPass = $(e.relatedTarget).data('oldPass');
 		    $(e.currentTarget).find('input[name="oldPass"]').val(password);
 		    // on form submit
 		    $('#changePassForm').on('submit', function(e){
@@ -195,7 +194,6 @@ $(document).ready(function(){
 						success:function(data){
 							// alert("success");
 							 console.log(data.result);
-							//$("#editEmpModal").modal('hide');	
 						},
 						error: function(error) {
 			            	// alert("error");
