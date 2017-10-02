@@ -29,12 +29,12 @@
 						<th>الى تاريخ</th>
 						<th>المدة</th>
 						<?php
-							if($_SESSION['UserGroup']==1) { //top manager
+							if($_SESSION['UserGroup']==2) { //top manager
 								 echo"<th>الرئيس المباشر</th>";
 								 echo"<th>موافقة الرئيس المباشر</th>";
 								 echo"<th>موافقة الرئيس الاعلى</th>";
 							
-							}elseif($_SESSION['UserGroup']==2){//direct manager
+							}elseif($_SESSION['UserGroup']==1){//direct manager
 								 echo"<th>موافقة الرئيس المباشر</th>";
 								 echo"<th>الرئيس الاعلى</th>";
 								 echo"<th>موافقة الرئيس الاعلى</th>";
@@ -53,10 +53,10 @@
 					<?php
 					//check if the logged in manager or top manager or admin then 
 					//run the corresponding function 
-						if($_SESSION['UserGroup']==1) { //top manager
+						if($_SESSION['UserGroup']==2) { //top manager
 							getPendingVacAsTopManager(); 
 							
-						}elseif($_SESSION['UserGroup']==2){//direct manager
+						}elseif($_SESSION['UserGroup']==1){//direct manager
 							getPendingVacAsManager(); 
 						}elseif($_SESSION['UserGroup']==3){ //est72a2at
 							getPendingVacAsAdmin(); 

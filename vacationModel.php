@@ -26,7 +26,7 @@
 		   	</div> 	
 		    <div class="col-sm-4">
 	    		<label for="name" >الاســـــم</label>
-	    		<input type="text" class="form-control" id="name" name="name" placeholder="Your name.." required>
+	    		<input type="text" class="form-control" id="name" name="name" placeholder="الاســـــم.." required>
 				<label for="manager">المدير المباشر</label>
 			    <select class="form-control" id="manager" name="manager">
 			    	<option selected disabled hidden style='display: none' value=''></option>
@@ -35,7 +35,7 @@
 		    </div>					
 			<div class="col-sm-4">
 				<label for="code">رقم القيد</label>
-		    	<input type="number" class="form-control" id="code" name="code" placeholder="Your Code..">
+		    	<input type="number" class="form-control" id="code" name="code" placeholder="رقم القيد..">
 		    	<input hidden type="text" id="emp" name="empID"/>
 	    		<label for="Management" >الادارة:</label>
 				<select class="form-control" id="Management" name="Management">

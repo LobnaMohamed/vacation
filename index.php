@@ -23,7 +23,12 @@
 
 ?>
 <div class="container">
-	<h2 class="text-center">تسجيل الدخول لبرنامج الاجازات</h2>
+	<div class="row">
+		<img class= "logo col-sm-1" src="images/amoc2.png">
+		<h2 class="text-center col-sm-8">تسجيل الدخول لبرنامج الاجازات</h2>
+	</div>
+	
+	
 		<form class="form-signin" id = "signin" action ="<?php echo $_SERVER['PHP_SELF'] ?>" method="POST">
 
 			<label for="username" >رقم القيد:</label>

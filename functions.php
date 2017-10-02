@@ -133,7 +133,7 @@
 	//------get Top Managers function-----------
 	function getTopManagers(){
 		$con = connect();
-		$sql= "SELECT ID,emp_code,emp_name FROM t_data where id_userGroup=1" ;
+		$sql= "SELECT ID,emp_code,emp_name FROM t_data where id_userGroup=2" ;
     	$stmt = $con->prepare($sql);
 		$stmt->execute();
 		$result = $stmt->fetchAll();
@@ -275,9 +275,10 @@
 			$sql = "SELECT * 
 					FROM empdata 	
 					WHERE emp_code like '%". $_GET['search'] ."%' 
-					OR emp_name like '%". $_GET['search'] ."%' ";
+					OR emp_name like '%". $_GET['search'] ."%' 
+					ORDER BY emp_code";
 		}else{
-			$sql = "SELECT * FROM empdata "; //view
+			$sql = "SELECT * FROM empdata ORDER BY emp_code"; //view
 		}
 		$stmt = $con->prepare($sql);
 		$stmt->execute();

@@ -22,7 +22,8 @@
 			  <a class="navbar-brand" href="#">.Alexandria Minaral Oils Co</a>
 			</div> -->
 			<div class="navbar-header ">
-		  		<a class="navbar-brand" href="#">Computer Name: <?php echo getenv("username"); ?></a>
+		  		<!-- <a class="navbar-brand" href="#">Computer Name: <?php echo getenv("username"); ?></a> -->
+		  		<a class="navbar-brand" href="#">Computer Name: <?php echo gethostbyaddr($_SERVER['REMOTE_ADDR']); ?></a>
 
 		  		<?php if (isset($_SESSION['Username'])){ ?>
 			  		 	<a class="navbar-brand" href="#"><?php echo $_SESSION['UserFullName'] ;?></a>

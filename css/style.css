@@ -19,7 +19,13 @@ label{
 .form-group{
     margin-bottom: 50px;
 }
-
+.form-control{
+    font-size: 17px;
+    margin-bottom: 20px;
+}
+#search{
+    margin-bottom:3px;
+}
 /* Add a background color and some padding around the form */
 .container {
     /*width: 80%;*/
@@ -52,8 +58,20 @@ label{
 .navbar{
     margin-bottom: 0;
 }
-.navbar-nav>li>a {
-    font-size: 1em;
+.navbar-inverse {
+    background-color: #a5a1a1;
+    border-color: #940308;
+    font-size: 20px;
+}
+.navbar-inverse .navbar-brand {
+    color: #0a0707;
+    font-size:18px;
+
+}
+/*.navbar-nav>li>a {*/
+.navbar-inverse .navbar-nav>li>a{
+    /*font-size: 1em;*/
+    color: #0a0707;
 }
 
 /*pending and confirmed tables*/

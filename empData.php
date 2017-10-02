@@ -192,7 +192,7 @@
 						</form>
 					</div>
 					<div class="modal-footer">
-						<a href="#" type="button" class="btn btn-default edit" data-dismiss="modal">تعديل</a>
+						
 					</div>
 				</div>
 			</div>

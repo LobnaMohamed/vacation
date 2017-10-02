@@ -39,10 +39,10 @@ $(document).ready(function(){
 		var endDate = $(this).val();
 		// end - start returns difference in milliseconds 
 		var diff = new Date(endDate) - new Date(startDate);
-		console.log( diff);
+		// console.log( diff);
 		// get days
 		var days = (diff/1000/60/60/24)+1;
-		console.log(days);
+		// console.log(days);
 		$('#duration').val(days);
 	});
 
@@ -65,9 +65,9 @@ $(document).ready(function(){
 
  	$("input#code").bind("change", function(){
  		var empCode=$("#code").val();
- 		alert(empCode);
+ 		// alert(empCode);
  		if($.trim(empCode) != ''){
- 			alert("hi");
+ 			// alert("hi");
  			$.post('ajax.php',{code:empCode}, function(data){
  				if(data == "notfound"){
  					alert("رقم القيد غير مسجل \n من فضلك ادخل رقم صحيح!");
@@ -124,14 +124,14 @@ $(document).ready(function(){
 	//--------------get employee data in edit modal---------------
 	$(document).on('click','.editEmpData', function(){
 		var employee_id=$(this).attr("id");
-		console.log(employee_id);
+		// console.log(employee_id);
 		$.ajax({
 			url:"fetch.php",
 			method:"POST",
 			data:{empID:employee_id},
 			dataType:"json",
 			success:function(data){
-				console.log(data);
+				// console.log(data);
 				$('#employee_id').val(data.ID);
 				$('#empNameEdit').val(data.emp_name);
 				$('#empCodeEdit').val(data.emp_code);
@@ -149,7 +149,7 @@ $(document).ready(function(){
 	});
 	//--------------onsubmit edit form-----------------------------
 	$(document).on('submit','#editEmpForm', function(){
-		alert("hi");
+		//alert("hi");
 		//e.preventDefault();
 		var $form = $('#editEmpForm');
 
@@ -160,7 +160,7 @@ $(document).ready(function(){
 			//dataType:"json",
 
 			success:function(data){
-				console.log(data);
+				//console.log(data);
 				$("#editEmpModal").modal('hide');	
 			},
 			error: function(error) {
@@ -193,16 +193,16 @@ $(document).ready(function(){
 						data: $('form#changePassForm').serialize(),
 						success:function(data){
 							// alert("success");
-							 console.log(data.result);
+							// console.log(data.result);
 						},
 						error: function(error) {
 			            	// alert("error");
-			            	 console.log(error);
+			            	 // console.log(error);
 			        	}
 					});	
 			    }else{
 			    	e.preventDefault();
-			    	console.log("slidedown");
+			    	//console.log("slidedown");
 			    	$('#modalAlert').removeClass("hide");
 			    	$('#changePassForm')[0].reset();
 			    }
@@ -252,7 +252,7 @@ $(document).ready(function(){
 			data: {search:value},
 			// dataType:"json",
 			success:function(data){
-				console.log(data);
+				// console.log(data);
 				$('#empDatabody').html(data);
 			},
 			error: function(error) {
