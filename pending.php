@@ -14,7 +14,7 @@
 	<div class="container">
 	    <header class="row text-center">
 	    	<!-- <img class= "col-lg-2 logo" src="images/amoc2.png"> -->
-	  	    <h1 class="col-lg-12">الاجازات المطلوب اعتمادها</h1>  
+	  	    <h1 class="col-sm-12">الاجازات المطلوب اعتمادها</h1>  
 	    </header>
 	    <form class="form-horizontal" method="POST" action="done.php"> 
 	    <!-- action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']) ?>" -->
@@ -64,7 +64,7 @@
 					?>
 				</tbody>
 			</table>
-			<input type="submit" name="update" id="vacationAgree" class="btn btn-success">
+			<input type="submit" name="update" value="إعتماد" id="vacationAgree" class="btn btn-success">
 		 </form>		
 	</div> 
 	<?php	include 'footer.php'; ?>
