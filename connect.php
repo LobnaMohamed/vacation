@@ -1,7 +1,7 @@
 <?php
 	$dsn = 'mysql:host=localhost;dbname=vacation';//data source name
-	$user= 'vacation';
-	$pass='vacation';
+	$user= 'root';
+	$pass='';
 	$options = array (
 			PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8',
 			PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
