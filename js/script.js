@@ -192,8 +192,8 @@ $(document).ready(function(){
 						method:"POST",
 						data: $('form#changePassForm').serialize(),
 						success:function(data){
-							// alert("success");
-							// console.log(data.result);
+							 alert("تم تغيير كلمة السر بنجاح");
+							 console.log(data.result);
 						},
 						error: function(error) {
 			            	// alert("error");
@@ -216,33 +216,37 @@ $(document).ready(function(){
  	//---------------check if pass = 1234567 on login----------------
 
  	//$(document).on('submit','#signin',function(e){
- 	// $('#signin').on('submit', function(e){
- 	// 	//var password = $("input[name=password]");
- 	// 	//check if pass == 1234567
- 	// 	// e.preventDefault();
-		// $.ajax({
-		// 	url:document.location.url,
-		// 	method:"POST",
-		// 	data: $('form#signin').serialize(),
-		// 	success:function(data){
-		// 		//e.preventDefault();
-		// 		alert(data.success + "line 231");	
-		// 		console.log(data);			
-		// 		if(data == "changePass"){
-		// 			alert("You must change your password!");
-		// 			console.log(data);
-		// 			$("#changePassModal").modal('show');					
-		// 		}
-		// 		if(data == "noouser"){
-		// 			alert ("insert correct data");
-		// 		}
-		// 	},
-		// 	error: function(error) {
-		// 		alert("error");
-		// 		console.log(error);
-		// 	}
-		// });	
- 	// });
+ 	$('#signin').on('submit', function(e){
+
+ 		//var password = $("input[name=password]");
+ 		//check if pass == 1234567
+ 		// e.preventDefault();
+ 		console.log("hi");
+		$.ajax({
+			url:'checkpassAjax.php',
+			method:"POST",
+			data: $('form#signin').serialize(),
+			// dataType:"json",
+			success:function(data){
+				// e.preventDefault();
+				console.log(data);			
+				if(data == "changePass"){
+					alert("You must change your password!");
+					$("#changePassModal").modal('show');					
+				}
+				else if(data == "noouser"){
+					alert ("insert correct data");
+				}
+				else{
+					alert("no data");
+				}
+			},
+			error: function(error) {
+				//alert("error");
+				console.log(error);
+			}
+		});	
+ 	});
  	//------------search through emp data-----------------
  	$('#search').on('keyup',function(){
  		var value = $(this).val();

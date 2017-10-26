@@ -12,9 +12,10 @@
 	require 'functions.php';
 	include 'header.php';
 
-	if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['login'])){
-		login();
-	}elseif($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['savePass'])){
+	// if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['login'])){
+	// 	login();
+	// }
+	if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['savePass'])){
 		//print_r($_SESSION);
 		echo "savepass";
 		print_r($_POST);
@@ -44,7 +45,7 @@
 
 		<!-- change password modal -->
 		<div id="changePassModal" class="modal fade" role="dialog">
-			<div class="modal-dialog modal-ةي">
+			<div class="modal-dialog modal-md">
 				<!-- Modal content-->
 				<div class="modal-content ">
 					<div class="modal-header">
