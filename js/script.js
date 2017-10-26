@@ -220,7 +220,7 @@ $(document).ready(function(){
 
  		//var password = $("input[name=password]");
  		//check if pass == 1234567
- 		// e.preventDefault();
+ 		e.preventDefault();
  		console.log("hi");
 		$.ajax({
 			url:'checkpassAjax.php',
@@ -231,14 +231,13 @@ $(document).ready(function(){
 				// e.preventDefault();
 				console.log(data);			
 				if(data == "changePass"){
+					e.preventDefault();
 					alert("You must change your password!");
 					$("#changePassModal").modal('show');					
 				}
 				else if(data == "noouser"){
+					e.preventDefault();
 					alert ("insert correct data");
-				}
-				else{
-					alert("no data");
 				}
 			},
 			error: function(error) {

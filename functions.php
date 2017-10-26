@@ -65,6 +65,7 @@
 				}else{
 					header('Location: vacationmodel.php');//redirect	
 				}
+				$response = "nothing";
 			}
 		//no user found
 		}else{
