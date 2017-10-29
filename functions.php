@@ -51,6 +51,8 @@
 			if($hashedPass == sha1(1234567)){
 				$response = "changePass";
 			}else{
+				// $response = "nothing";
+				
 				$row = $stmt->fetch(PDO::FETCH_ASSOC);
 				$userGroup= $row["id_userGroup"];
 				$userID= $row["ID"];
@@ -65,10 +67,10 @@
 				}else{
 					header('Location: vacationmodel.php');//redirect	
 				}
-				$response = "nothing";
+				
 			}
-		//no user found
 		}else{
+			//no user found
 			$response = "noouser";
 		}
 		echo $response;

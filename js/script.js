@@ -215,30 +215,31 @@ $(document).ready(function(){
  	
  	//---------------check if pass = 1234567 on login----------------
 
- 	//$(document).on('submit','#signin',function(e){
  	$('#signin').on('submit', function(e){
 
  		//var password = $("input[name=password]");
  		//check if pass == 1234567
  		e.preventDefault();
- 		console.log("hi");
 		$.ajax({
 			url:'checkpassAjax.php',
 			method:"POST",
 			data: $('form#signin').serialize(),
-			// dataType:"json",
 			success:function(data){
-				// e.preventDefault();
 				console.log(data);			
 				if(data == "changePass"){
-					e.preventDefault();
 					alert("You must change your password!");
 					$("#changePassModal").modal('show');					
 				}
-				else if(data == "noouser"){
-					e.preventDefault();
+				if(data == "noouser"){
 					alert ("insert correct data");
+					$( '#signin' ).each(function(){
+						this.reset();
+					});
 				}
+				// if(data == "nothing"){
+				// 	alert("hi");
+				// 	 window.location.href = "vacationModel.php"
+				// }
 			},
 			error: function(error) {
 				//alert("error");
