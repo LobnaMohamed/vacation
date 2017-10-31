@@ -37,6 +37,7 @@
 		$password = $_POST['password'];
 		$hashedPass = sha1($password);
 		$response = "";
+		$page = "";
 
 		//check if user exist
 
@@ -63,17 +64,20 @@
 				$_SESSION['UserFullName'] = $user_fullName;
 				//redirect according to privillage
 				if($userGroup==3){
-					header('Location: empdata.php');//redirect
+					$response = "nothing3";
+					$page = "empdata.php";
+					// header('Location: empdata.php');//redirect
 				}else{
-					header('Location: vacationmodel.php');//redirect	
-				}
-				
+					$response = "nothing";
+					$page = "vacationmodel.php";
+					// header('Location: vacationmodel.php');//redirect	
+				}				
 			}
 		}else{
 			//no user found
 			$response = "noouser";
 		}
-		echo $response;
+		echo json_encode(array("response"=>$response,"redirect"=>$page)) ;
 	}
 	//---------------change password function----------------------
 	function changePassword(){

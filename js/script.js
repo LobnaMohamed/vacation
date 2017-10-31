@@ -224,22 +224,22 @@ $(document).ready(function(){
 			url:'checkpassAjax.php',
 			method:"POST",
 			data: $('form#signin').serialize(),
+			dataType:"json",
 			success:function(data){
 				console.log(data);			
-				if(data == "changePass"){
+				if(data.response == "changePass"){
 					alert("You must change your password!");
 					$("#changePassModal").modal('show');					
 				}
-				if(data == "noouser"){
-					alert ("insert correct data");
+				if(data.response == "noouser"){
+					alert ("من فضلك أدخل بيانات صحيحة");
 					$( '#signin' ).each(function(){
 						this.reset();
 					});
 				}
-				// if(data == "nothing"){
-				// 	alert("hi");
-				// 	 window.location.href = "vacationModel.php"
-				// }
+				if(data.response == "nothing3" || data.response == "nothing"){
+					 window.location.replace(data.redirect) ;
+				}
 			},
 			error: function(error) {
 				//alert("error");
