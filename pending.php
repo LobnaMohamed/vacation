@@ -8,17 +8,23 @@
 	}
 	include 'header.php';
 	include 'functions.php';
-
-
 ?>
 	<div class="container">
 	    <header class="row text-center">
 	    	<!-- <img class= "col-lg-2 logo" src="images/amoc2.png"> -->
 	  	    <h1 class="col-sm-12">الاجازات المطلوب اعتمادها</h1>  
 	    </header>
-	    <form class="form-horizontal" method="POST" action="done.php"> 
+	    <!-- search for emp code -->
+		<form class="navbar-form" role="search" id="searchEmp" method="GET">
+			<div class="form-group add-on">
+				<label for = "search">رقم القيد / الاسم :</label>
+				<input class="form-control" placeholder="ابحث.." name="search" id="search" type="text">
+			</div>
+		</form>
+		<!-- form to show pending vacations and confirm them -->
+	    <form class="form-horizontal row" method="POST" action="done.php"> 
 	    <!-- action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']) ?>" -->
-			<table id="pendingVac" class="table table-striped table-bordered">	
+	    	<table id="pendingVac" class="table table-striped table-bordered table-responsive">		
 				<thead>
 					<tr>
 						<th>رقم القيد</th>
@@ -54,8 +60,7 @@
 					//check if the logged in manager or top manager or admin then 
 					//run the corresponding function 
 						if($_SESSION['UserGroup']==2) { //top manager
-							getPendingVacAsTopManager(); 
-							
+							getPendingVacAsTopManager(); 	
 						}elseif($_SESSION['UserGroup']==1){//direct manager
 							getPendingVacAsManager(); 
 						}elseif($_SESSION['UserGroup']==3){ //est72a2at
@@ -64,7 +69,9 @@
 					?>
 				</tbody>
 			</table>
-			<input type="submit" name="update" value="إعتماد" id="vacationAgree" class="btn btn-success">
+			<div>
+				<input type="submit" name="update" value="إعتماد" id="vacationAgree" class="btn btn-success col-sm-2 col-sm-offset-5">
+			</div>			
 		 </form>		
 	</div> 
 	<?php	include 'footer.php'; ?>

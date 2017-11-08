@@ -17,8 +17,8 @@
 	// }
 	if($_SERVER['REQUEST_METHOD'] == 'POST' && isset($_POST['savePass'])){
 		//print_r($_SESSION);
-		echo "savepass";
-		print_r($_POST);
+		// echo "savepass";
+		// print_r($_POST);
 		changePassword();
 	}
 

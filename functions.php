@@ -323,6 +323,14 @@
 		 }
 		echo $output;
 	}
+	function getEmpCount(){
+		$con = connect();		
+		$sql = "SELECT count(*) FROM empdata "; //count emp from view
+		$stmt = $con->prepare($sql);
+		$stmt->execute();
+		$result = $stmt->fetchColumn();
+		echo $result;
+	}
 
 	// --------------Add Employee function-----------------------
 	function addEmp(){

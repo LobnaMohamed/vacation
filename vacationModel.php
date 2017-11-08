@@ -14,40 +14,48 @@
   	    <h1 class="col-sm-4 col-sm-offset-2 ">نموذج الاجـــــازة</h1>	    
     </header>	  
     <form  method="POST" action="add.php" id="vacForm" onsubmit="return confirm('تأكيد ارسال الاجازة');">
-    	<div class="row form-group">	    
-		    <div class="col-sm-4">
-	    		<label class="col-form-label" for="address" >العنوان</label>
+    	<div class="row form-group">
+    		<div class="col-sm-3">
+    			<label class="col-form-label" for="address" >العنوان</label>
 		    	<input type="text" class="form-control" id="address" name="address" value="بالملف">
 		    	<label for="topManager">الرئيس الاعلى</label>
 			    <select class="form-control" id="topManager" name="topManager" required>
 			    	<option selected disabled hidden style='display: none' value=''></option>
 		   		    <?php 	getTopManagers();   ?>			    
-		   		</select>				    	
-		   	</div> 	
-		    <div class="col-sm-4">
-	    		<label for="name" >الاســـــم</label>
-	    		<input type="text" class="form-control" id="name" name="name" placeholder="الاســـــم.." required>
-				<label for="manager">المدير المباشر</label>
+		   		</select>
+			</div>	    
+		    <div class="col-sm-3">
+		    	<label for="day_n" >نهارى/ورادى</label>
+	    		<input type="text" class="form-control" id="day_n" name="day_n" placeholder="نهارى/ورادى.." required>
+	    		<label for="manager">المدير المباشر</label>
 			    <select class="form-control" id="manager" name="manager">
 			    	<option selected disabled hidden style='display: none' value=''></option>
 		   		    <?php  	getManagers();   ?>
-				</select>	
+				</select>				    	
+		   	</div> 	
+		    <div class="col-sm-3">
+	    		<label for="name" >الاســـــم</label>
+	    		<input type="text" class="form-control" id="name" name="name" placeholder="الاســـــم.." required>
+	    		<label for="subManagment" >القطاع/الادارة</label>
+	    		<input type="text" class="form-control" id="subManagment" name="subManagment" placeholder="القطاع/الادارة.." required>
+	
 		    </div>					
-			<div class="col-sm-4">
+			<div class="col-sm-3">
 				<label for="code">رقم القيد</label>
 		    	<input type="number" class="form-control" id="code" name="code" placeholder="رقم القيد..">
 		    	<input hidden type="text" id="emp" name="empID"/>
-	    		<label for="Management" >الادارة:</label>
+		    	<label for="Management" >الادارة العامة:</label>
 				<select class="form-control" id="Management" name="Management">
 			    	<option selected disabled hidden style='display: none' value=''></option>
 		   		    <?php  	getManagement();   ?>
 				</select>
 			</div>
+
 		</div>
 		<div class="row form-group">					
 			<div class="col-sm-3">
 				<label for="duration " >مدة الاجازة:</label>
-				<input type="text" class="form-control" id="duration" name="duration" placeholder="duration..">	
+				<input type="text" class="form-control" id="duration" name="duration" placeholder="المدة..">	
 			</div>
 			<div class="col-sm-3">
 				<label for="dateTo" >التاريخ الى</label>

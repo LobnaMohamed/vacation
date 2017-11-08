@@ -16,7 +16,6 @@ $(document).ready(function(){
 	}
 
 	$('#name').blur(function(){
-
 	 	if($(this).val().length <= 3){ //show error
 	 		$(this).css('border', '1px solid #F00').parent().find('.custom-alert').fadeIn(300)
 	 		.end().find('.asterisx').fadeIn(50);
@@ -73,7 +72,9 @@ $(document).ready(function(){
  					alert("رقم القيد غير مسجل \n من فضلك ادخل رقم صحيح!");
  				}else{
  					$('#name').val(data.empName);
- 					$('#emp').val(data.empID); 					
+ 					$('#emp').val(data.empID); 	
+ 					$('#subManagment').val(data.subManagemnet); 
+ 					$('#day_n').val(data.day_night); 				
  				}
  			},"json");
  		}
@@ -193,7 +194,7 @@ $(document).ready(function(){
 						data: $('form#changePassForm').serialize(),
 						success:function(data){
 							 alert("تم تغيير كلمة السر بنجاح");
-							 console.log(data.result);
+							 // console.log(data.result);
 						},
 						error: function(error) {
 			            	// alert("error");
@@ -228,7 +229,7 @@ $(document).ready(function(){
 			success:function(data){
 				console.log(data);			
 				if(data.response == "changePass"){
-					alert("You must change your password!");
+					alert("يجب تغيير كلمة السر!");
 					$("#changePassModal").modal('show');					
 				}
 				if(data.response == "noouser"){

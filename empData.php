@@ -15,14 +15,18 @@
 	  	    <h1 class="col-lg-12">بيانات العاملين</h1>  
 	    </header>
 	    <div class="table-responsive row">
-		    <form class="navbar-form" role="search" id="searchEmp" method="GET">
-			    <div class="form-group add-on">
+		    <form class="navbar-form row" role="search" id="searchEmp" method="GET">
+		    	<div class="col-md-2">
+			    	عدد العاملين:
+				    <?php  getEmpCount() ?>
+			    </div>
+			    <div class="form-group add-on col-md-10">
 			    	<label for = "search">رقم القيد / الاسم :</label>
 					<input class="form-control" placeholder="ابحث.." name="search" id="search" type="text">
-<!-- 					<div class="input-group-btn">
+					<!-- <div class="input-group-btn">
 						<button class="btn btn-default" type="submit"><i class="glyphicon glyphicon-search"></i></button>
 					</div> -->
-			    </div>
+			    </div>    
 		    </form>
 			<table id="empData" class="table table-striped table-bordered">
 			  	<thead >

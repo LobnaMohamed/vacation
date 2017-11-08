@@ -24,7 +24,7 @@
 			<div class="navbar-header ">
 		  		<!-- <a class="navbar-brand" href="#">Computer Name: <?php echo getenv('REMOTE_ADDR'); ?></a> -->
 		  		<a class="navbar-brand" href="#">Computer Name: <?php echo gethostbyaddr($_SERVER['REMOTE_ADDR']); ?></a>
-
+		  		<br>
 		  		<?php if (isset($_SESSION['Username'])){ ?>
 			  		 	<a class="navbar-brand" href="#"><?php echo $_SESSION['UserFullName'] ;?></a>
 			  	<?php	} ?>
@@ -32,23 +32,23 @@
 			
 			<div class="navbar-header navbar-right">
 			  <span class="navbar-brand">شركة الأسكندرية للزيوت المعدنية ( أموك )</span>
-			</div>
+			</div><br>
 			<ul class="nav navbar-nav pull-right">
-			<?php
-				if (isset($_SESSION['Username']))
-				{
-			?>
+				<?php
+					if (isset($_SESSION['Username']))
+					{
+				?>
 			  <li><a href="logout.php">خروج</a></li>
 			  <li><a href="vacationmodel.php">عمل اجازة</a></li>
-			<?php if($_SESSION['UserGroup']==3){ ?>
-					<li><a href="empdata.php">بيانات العاملين</a></li>
-					<li><a href="pending.php">الاجازات المطلوب تسجيلها</a></li>
-					<li><a href="confirmed.php">الاجازات المسجلة</a></li>
-			<?php 
+				<?php if($_SESSION['UserGroup']==3){ ?>
+						<li><a href="empdata.php">بيانات العاملين</a></li>
+						<li><a href="pending.php">الاجازات المطلوب تسجيلها</a></li>
+						<li><a href="confirmed.php">الاجازات المسجلة</a></li>
+				<?php 
 				   }elseif($_SESSION['UserGroup']==1 || $_SESSION['UserGroup']==2){ ?>
 				   <li><a href="confirmed.php">الاجازات المعتمدة</a></li>
 				   	<li><a href="pending.php">الاجازات المطلوب اعتمادها</a></li>
-			<?php 	   
+				<?php 	   
 
 				   	}
 				}
