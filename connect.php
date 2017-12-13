@@ -11,7 +11,7 @@
 	try{
 		//new connection to db
 		static $con;
-	    if ($con===NULL){ 
+	    if ($con==NULL){ 
 	        $con =  new PDO($dsn, $user, $pass, $options);
 			$con->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION); 
 	    }

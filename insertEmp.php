@@ -13,6 +13,9 @@
 		editEmp();
 		header("Location:empData.php");
 		
+	}elseif(isset($_POST['ResetPassword'])){ //reset password
+		resetPassword();
+		header("Location:empData.php");
 	}
 	include 'footer.php';
 ?>

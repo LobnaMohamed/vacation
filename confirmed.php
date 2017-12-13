@@ -14,7 +14,18 @@
 	    	<!-- <img class= "col-lg-2 logo" src="images/amoc2.png"> -->
 	  	    <h1 class="col-lg-12">الاجازات المعتمدة</h1>  
 	    </header>
-			<table id="confirmedVac" class="table table-striped table-bordered">	
+	    <div class="table-responsive row">
+	    	<form class="navbar-form row" role="search" id="searchEmp" method="GET">
+			    <div class="form-group add-on ">
+			    	<label for = "search">رقم القيد / الاسم :</label>
+					<input class="form-control" placeholder="ابحث.." name="search" id="search" type="text">
+					<label for = "searchDateFrom">التاريخ من:</label>
+					<input class="form-control"  name="searchDateFrom" id="searchDateFrom" type="date">
+					<label for = "searchDateTo">التاريخ الى:</label>
+					<input class="form-control"  name="searchDateTo" id="searchDateTo" type="date"> 
+			    </div>   
+		    </form>
+			<table id="confirmedVac" class="table table-striped table-bordered table-responsive">	
 				<thead>
 					<tr>
 						<th>رقم القيد</th>
@@ -51,7 +62,7 @@
 
 				    </tr>		
 				</thead>
-				<tbody>
+				<tbody id="confirmedVacbody">
 					<?php
 					//check if the logged in manager or top manager or admin then 
 					//run the corresponding function 
@@ -64,6 +75,7 @@
 						} 
 					?>
 				</tbody>
-			</table>		
+			</table>	
+		</div>	
 	</div> 
 	<?php	include 'footer.php'; ?>

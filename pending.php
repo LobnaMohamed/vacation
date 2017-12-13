@@ -15,12 +15,12 @@
 	  	    <h1 class="col-sm-12">الاجازات المطلوب اعتمادها</h1>  
 	    </header>
 	    <!-- search for emp code -->
-		<form class="navbar-form" role="search" id="searchEmp" method="GET">
+<!-- 		<form class="navbar-form" role="search" id="searchEmp" method="GET">
 			<div class="form-group add-on">
 				<label for = "search">رقم القيد / الاسم :</label>
 				<input class="form-control" placeholder="ابحث.." name="search" id="search" type="text">
 			</div>
-		</form>
+		</form> -->
 		<!-- form to show pending vacations and confirm them -->
 	    <form class="form-horizontal row" method="POST" action="done.php"> 
 	    <!-- action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']) ?>" -->
@@ -55,7 +55,7 @@
 						?>
 				    </tr>		
 				</thead>
-				<tbody>
+				<tbody id="pendingVacbody">
 					<?php
 					//check if the logged in manager or top manager or admin then 
 					//run the corresponding function 

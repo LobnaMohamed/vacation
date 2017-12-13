@@ -74,7 +74,9 @@ $(document).ready(function(){
  					$('#name').val(data.empName);
  					$('#emp').val(data.empID); 	
  					$('#subManagment').val(data.subManagemnet); 
- 					$('#day_n').val(data.day_night); 				
+ 					$('#day_n').val(data.day_night);
+ 					$('#Management').val(data.g_manag);
+ 					$('#ManagementName').val(data.g_manag_name);  				
  				}
  			},"json");
  		}
@@ -248,20 +250,110 @@ $(document).ready(function(){
 			}
 		});	
  	});
- 	//------------search through emp data-----------------
- 	$('#search').on('keyup',function(){
- 		var value = $(this).val();
+ 	//------------search through emp data by code-----------------
+ // 	$('#search').on('keyup',function(){
+ // 		var value = $(this).val();
+ // 		var currentURL = document.location.href.match(/[^\/]+$/)[0];
+ // 		// alert(currentURL);
+	// 	$.ajax({
+	// 		url:'searchAjax.php',
+	// 		method:"GET",
+	// 		data: {search:value,pageurl:currentURL},
+	// 		// dataType:"json",
+	// 		success:function(data){
+	// 			// console.log(data);
+				
+	// 			if(currentURL == 'empdata.php'){
+	// 				console.log(data);
+	// 				$('#empDatabody').html(data);
+	// 			}else if(currentURL == 'confirmed.php'){
+	// 				console.log(data);
+	// 				$('#confirmedVacbody').html(data);
+
+	// 			}else if(currentURL == 'pending.php'){
+	// 				$('#pendingVacbody').html(data);
+	// 			}
+				
+	// 		},
+	// 		error: function(error) {
+ //            	console.log(error);
+ //        	}
+	// 	});	
+	// });
+
+ 	//------------search through emp vacation data by date from and to-----------------
+ // 	$('#searchDateTo').datepicker({
+ //     onSelect: function(){
+ //     	var dateTo_value = $(this).val();
+ // 		var dateFrom_value = $('#searchDateFrom').val();
+ // 		var currentURL = document.location.href.match(/[^\/]+$/)[0];
+ // 		// alert(currentURL);
+	// 	$.ajax({
+	// 		url:'datesearchAjax.php',
+	// 		method:"GET",
+	// 		data: {dateFrom:dateFrom_value,
+	// 			    dateTo:dateTo_value,
+	// 			    pageurl:currentURL},
+	// 		// dataType:"json",
+	// 		success:function(data){
+	// 			// console.log(data);
+				
+	// 			if(currentURL == 'confirmed.php'){
+	// 				console.log(data);
+	// 				$('#confirmedVacbody').html(data);
+					
+	// 			}
+	// 			//else if(currentURL == 'empdata.php'){
+	// 			// 	console.log(data);
+	// 			// 	$('#empDatabody').html(data);
+
+	// 			// }else if(currentURL == 'pending.php'){
+	// 			// 	$('#pendingVacbody').html(data);
+	// 			// }
+				
+	// 		},
+	// 		error: function(error) {
+ //            	console.log(error);
+ //        	}
+	// 	});	
+ //     }
+	// });
+	//-----------search confirmed vacs---------------------------- 
+ 	$('#searchDateTo,#searchDateFrom,#search').bind('change keyup',function(){
+ 		//get dates between 2 dates
+ 		var value = $('#search').val();
+ 		var dateTo_value = $('#searchDateTo').val();
+ 		var dateFrom_value = $('#searchDateFrom').val();
+ 		var currentURL = document.location.href.match(/[^\/]+$/)[0];
+ 		// alert(currentURL);
 		$.ajax({
 			url:'searchAjax.php',
 			method:"GET",
-			data: {search:value},
+			data: {search:value,
+					dateFrom:dateFrom_value,
+				    dateTo:dateTo_value,
+				    pageurl:currentURL},
 			// dataType:"json",
 			success:function(data){
 				// console.log(data);
-				$('#empDatabody').html(data);
+				
+				if(currentURL == 'confirmed.php'){
+					console.log(data);
+					$('#confirmedVacbody').html(data);
+					
+				}
+				else if(currentURL == 'empdata.php'){
+					console.log(data);
+					$('#empDatabody').html(data);
+
+				 }
+				 //else if(currentURL == 'pending.php'){
+				// 	$('#pendingVacbody').html(data);
+				// }
+				
 			},
 			error: function(error) {
-            	alert(error);
+            	console.log(error);
         	}
 		});	
 	});

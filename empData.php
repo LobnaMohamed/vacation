@@ -151,7 +151,9 @@
 							    	<option selected disabled hidden style='display: none' value=''></option>
 						   		    <?php  	getActive();   ?>
 								</select>
-								<input type="hidden" name="employee_id" id="employee_id">							
+								<input type="hidden" name="employee_id" id="employee_id"> 
+								<label for= "ResetPassword">اعادة ضبط كلمة المرور</label>
+								<input type="submit" name="ResetPassword" id="ResetPassword" class="btn btn-warning form-control" value="اعادة ضبط كلمة المرور" onclick ="return confirm('تأكيد اعادة ضبط كلمة المرور؟');">							
 							</div>	
 							<div class="form-group col-md-4">
 								<label for= "empNameEdit">اسم الموظف</label>

@@ -26,36 +26,39 @@
 			</div>	    
 		    <div class="col-sm-3">
 		    	<label for="day_n" >نهارى/ورادى</label>
-	    		<input type="text" class="form-control" id="day_n" name="day_n" placeholder="نهارى/ورادى.." required>
+	    		<input type="text" class="form-control" id="day_n" name="day_n" placeholder="نهارى/ورادى.." required readonly>
 	    		<label for="manager">المدير المباشر</label>
 			    <select class="form-control" id="manager" name="manager">
-			    	<option selected disabled hidden style='display: none' value=''></option>
+			    	<!-- <option selected disabled hidden style='display: none' value=''></option> -->
 		   		    <?php  	getManagers();   ?>
 				</select>				    	
 		   	</div> 	
 		    <div class="col-sm-3">
 	    		<label for="name" >الاســـــم</label>
-	    		<input type="text" class="form-control" id="name" name="name" placeholder="الاســـــم.." required>
+	    		<input type="text" class="form-control" id="name" name="name" placeholder="الاســـــم.." required readonly>
 	    		<label for="subManagment" >القطاع/الادارة</label>
-	    		<input type="text" class="form-control" id="subManagment" name="subManagment" placeholder="القطاع/الادارة.." required>
+	    		<input type="text" class="form-control" id="subManagment" name="subManagment" placeholder="القطاع/الادارة.." required readonly>
 	
 		    </div>					
 			<div class="col-sm-3">
 				<label for="code">رقم القيد</label>
 		    	<input type="number" class="form-control" id="code" name="code" placeholder="رقم القيد..">
 		    	<input hidden type="text" id="emp" name="empID"/>
-		    	<label for="Management" >الادارة العامة:</label>
+		    	<!-- <label for="Management" >الادارة العامة:</label>
 				<select class="form-control" id="Management" name="Management">
 			    	<option selected disabled hidden style='display: none' value=''></option>
 		   		    <?php  	getManagement();   ?>
-				</select>
+				</select> -->
+				<input hidden id="Management" name="Management">
+				<label for="ManagementName" >الادارة العامة:</label>
+				<input class="form-control" id="ManagementName" name="ManagementName" placeholder="الادارة العامة.." readonly>
 			</div>
 
 		</div>
 		<div class="row form-group">					
 			<div class="col-sm-3">
 				<label for="duration " >مدة الاجازة:</label>
-				<input type="text" class="form-control" id="duration" name="duration" placeholder="المدة..">	
+				<input type="text" class="form-control" id="duration" name="duration" placeholder="المدة.." readonly>	
 			</div>
 			<div class="col-sm-3">
 				<label for="dateTo" >التاريخ الى</label>
