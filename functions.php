@@ -921,12 +921,12 @@
 		$sql .= "SELECT  t.id, t.start_date,t.end_date,t.duration,d.emp_code,d.emp_name,c.case_desc,vs.status as mgrAgreeStatus ,vs2.status as topAgreeStatus,IFNULL(d2.emp_name,'لا يوجد') as MgrName ,d3.emp_name as TopMgrName,vs3.status as AdminAgreeStatus
 				FROM t_data d3 ,t_case c, vac_status vs, vac_status vs2,vac_status vs3,t_data d 
 				RIGHT OUTER JOIN t_transe t ON d.ID = t.emp_id LEFT OUTER JOIN  t_data d2 ON t.manager_id=d2.ID
-				WHERE   t.emp_id = 1288
+				WHERE   t.emp_id = {$_SESSION['UserID']}
                 		and t.id_case=c.ID 
 						and t.Manager_agree=vs.ID
 						and t.topManager_agree=vs2.ID
                         AND t.AdminConfirm= vs3.ID
-						and t.top_manager_id=d3.ID;";
+						and t.top_manager_id=d3.ID";
 		// if(!empty($_GET['search'])){
 		// 	$sql .= " and (d.emp_code like '%". $_GET['search'] ."%' OR d.emp_name like '%". $_GET['search'] ."%')";	
 		// }

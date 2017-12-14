@@ -38,7 +38,9 @@
 					if (isset($_SESSION['Username']))
 					{
 				?>
+
 			  <li><a href="logout.php">خروج</a></li>
+			  <li><a href="myvacationstatus.php">اجازاتى</a></li>
 			  <li><a href="vacationmodel.php">عمل اجازة</a></li>
 				<?php if($_SESSION['UserGroup']==3){ ?>
 						<li><a href="empdata.php">بيانات العاملين</a></li>
@@ -46,7 +48,7 @@
 						<li><a href="confirmed.php">الاجازات المسجلة</a></li>
 				<?php 
 				   }elseif($_SESSION['UserGroup']==1 || $_SESSION['UserGroup']==2){ ?>
-				   <li><a href="confirmed.php">الاجازات المعتمدة</a></li>
+				   	<li><a href="confirmed.php">الاجازات المعتمدة</a></li>
 				   	<li><a href="pending.php">الاجازات المطلوب اعتمادها</a></li>
 				<?php 	   
 
