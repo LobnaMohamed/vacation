@@ -145,7 +145,7 @@
 		$stmt->execute();
 		$result = $stmt->fetchAll();
 		// echo "<option value='0'>لا يوجد</option>";//option if no direct manager
-		echo "<option selected style='display: none' value='0'>لا يوجد</option>";//option if no direct manager
+		echo "<option selected  value='0'>لا يوجد</option>";//option if no direct manager
 	    	foreach($result as $row){
 
 			    echo "<option value=" .$row['ID'].">" . $row['emp_code'] ."   ".$row['emp_name']. "</option>";
@@ -258,20 +258,25 @@
 			$vacType= isset($_POST['case'])? $_POST['case'] :'';
 			// creating array of errors
 			$formErrors = array();
+			$manager_vacStatus = 3;
 			echo $manager;
 			if( $manager == 0){
 				echo "manager is zero";
 				$manager = 'NULL';
 				echo"new manager is ".$manager;
+				$manager_vacStatus = 4;
+				echo $manager_vacStatus;
 			}
 			if (empty($empName) || empty($empCode) ){
 				//$formErrors[] = 'username must be larger than  chars';
 				echo "name and code cant be empty";
 				// print_r($formErrors) ;
 			} else {
+				
+
 				$con = connect();
-				$sql= "INSERT INTO t_transe(emp_id,id_case,start_date,end_date,manager_id,top_manager_id,duration,mang_id) 
-					   VALUES (".$empID.",".$vacType.",'".$date."','".$dateTo."',".$manager.",".$topManager.",".$duration." ,".$management.")" ;
+				$sql= "INSERT INTO t_transe(emp_id,id_case,start_date,end_date,manager_id,top_manager_id,duration,mang_id,	Manager_agree) 
+					   VALUES (".$empID.",".$vacType.",'".$date."','".$dateTo."',".$manager.",".$topManager.",".$duration." ,".$management.",".$manager_vacStatus.")" ;
 					   echo $sql;
 		        $stmt = $con->prepare($sql);
 				$stmt->execute();		
@@ -451,7 +456,7 @@
 		$stmt = $con->prepare($sql);
 		$stmt->execute();
 		$result = $stmt->fetchAll();
-		$vacStatus= "SELECT ID,status FROM vac_status ";
+		$vacStatus= "SELECT ID,status FROM vac_status  where ID NOT IN (4,5,6)";
 		$stmt2 = $con->prepare($vacStatus);
 		$stmt2->execute();
 		$agreement = $stmt2->fetchAll();
@@ -491,6 +496,7 @@
 			and t.Mang_id=m.ID 
 			and t.topManager_agree=3
 			and t.Manager_agree=vs.ID
+			and t.Manager_agree in(1,4)
 			and (t.top_manager_id={$_SESSION['UserID']} or t.manager_id ={$_SESSION['UserID']} ) ";
           //-------------OLD SQL----------------//
 		// SELECT t.id,t.start_date,t.end_date,t.duration,d.emp_code,d.emp_name,c.case_desc,IFNULL(t.manager_id,'no manager')as directManger,t.Manager_agree,t.top_manager_id,m.Management,vs.status,t.topManager_agree,d2.emp_name as MgrName  
@@ -507,7 +513,7 @@
 		$stmt->execute();
 		$result = $stmt->fetchAll();
 		$count= $stmt->rowCount();
-		$vacStatus= "SELECT ID,status FROM vac_status ";
+		$vacStatus= "SELECT ID,status FROM vac_status where ID NOT IN (4,5,6)";
 		$stmt2 = $con->prepare($vacStatus);
 		$stmt2->execute();
 		$agreement = $stmt2->fetchAll();
@@ -572,11 +578,12 @@
 						and t.Mang_id=m.ID 
 						and t.Manager_agree=vs.ID
 						and t.topManager_agree=vs2.ID
+						and t.topManager_agree = 1
 						and t.top_manager_id=d3.ID";
 		$stmt = $con->prepare($sql);
 		$stmt->execute();
 		$result = $stmt->fetchAll();
-		$vacStatus= "SELECT ID,status FROM vac_status ";
+		$vacStatus= "SELECT ID,status FROM vac_status  where ID != 4";
 		$stmt2 = $con->prepare($vacStatus);
 		$stmt2->execute();
 		$agreement = $stmt2->fetchAll();
@@ -746,7 +753,7 @@
 	function getConfirmedVacAsManager(){
 		$con = connect();
 		$sql= '';
-		$sql .= "SELECT t.id, t.start_date,t.end_date,t.duration,d.emp_code,d.emp_name,c.case_desc,t.manager_id,t.top_manager_id,m.Management,vs.status as mgrAgreeStatus,vs2.status as topAgreeStatus,vs3.status as AdminAgreeStatus,d2.emp_name as TopMgrName
+		$sql .= "SELECT t.id, t.start_date,t.end_date,t.duration,d.emp_code,d.emp_name,c.case_desc,t.manager_id,t.top_manager_id,m.Management,t.AdminConfirm,vs.status as mgrAgreeStatus,vs2.status as topAgreeStatus,vs3.status as AdminAgreeStatus,d2.emp_name as TopMgrName
 				FROM 	t_data d,t_data d2,t_transe t ,t_case c ,managements m , vac_status vs, vac_status vs2 ,vac_status vs3
 				WHERE 	t.emp_id=d.ID 
 						and t.id_case=c.ID 
@@ -774,6 +781,9 @@
 		$agreement = $stmt2->fetchAll();
 		foreach($result as $row){
 			$index= $row['id'];
+			// if( $row['AdminConfirm'] == 5 || $row['AdminConfirm'] == 6){
+				
+			// }
 			echo"<tr>";
 				echo"<td>".  $row['emp_code']. "</td>";
 				echo"<td>".  $row['emp_name']. "</td>";
