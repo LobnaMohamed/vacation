@@ -771,7 +771,7 @@
 			$sql .= " and (t.start_date between '".$_GET['dateFrom']."' and '".$_GET['dateTo'] ."')";
 		}
 
-		$sql .= " Order By  t.start_date desc";
+		$sql .= " Order By t.start_date desc";
 		$stmt = $con->prepare($sql);
 		$stmt->execute();
 		$result = $stmt->fetchAll();
@@ -810,6 +810,7 @@
 			WHERE  t.id_case=c.ID 
 			and t.Mang_id=m.ID
 			and t.topManager_agree in (1,2)
+			and t.Manager_agree = 1
 			and t.Manager_agree=vs.ID
 			and t.topManager_agree=vs2.ID
 			and t.AdminConfirm=vs3.ID
@@ -883,7 +884,7 @@
 			FROM t_data d3, t_case c ,managements m , vac_status vs ,vac_status vs2,vac_status vs3,t_data d 			
 			RIGHT OUTER JOIN t_transe t ON d.ID = t.emp_id LEFT OUTER JOIN  t_data d2 ON t.manager_id=d2.ID
 			WHERE t.id_case=c.ID 
-			and t.AdminConfirm in(1,2)
+			and t.AdminConfirm not in(3,4)
 			and t.Mang_id=m.ID 
 			and t.Manager_agree=vs.ID
 			and t.topManager_agree=vs2.ID
@@ -923,6 +924,55 @@
 				echo"<td>".  $row['AdminAgreeStatus']. "</td>";
 			echo "</tr>";
 		} 
+	}
+	
+	//-------------- get report for admin-------------------
+
+	function getConfirmedVacAsAdminReport(){
+		$con = connect();
+		$sql= "";
+		$output1="";
+		$sql .="SELECT t.id,d.emp_code,d.emp_name,t.start_date,t.end_date,t.duration,c.case_desc,dn.day_n
+				FROM t_case c RIGHT OUTER JOIN t_transe t ON c.ID = t.id_case 
+							  LEFT OUTER JOIN t_data d ON t.emp_id = d.ID 
+							  LEFT OUTER JOIN t_day_n DN ON d.day_night = dn.ID	
+				WHERE t.AdminConfirm not in(3,4)";
+
+		if(!empty($_GET['search'])){
+			$sql .= " and (d.emp_code like '%". $_GET['search'] ."%' OR d.emp_name like '%". $_GET['search'] ."%')";	
+		}
+		if(!empty($_GET['month'])){
+			$sql .= " and MONTH(t.start_date)= ". $_GET['month'] ."";	
+		}
+		if(!empty($_GET['year'])){
+			$sql .= " and YEAR(t.start_date)= ". $_GET['year'] ."";	
+		}
+		// if(!empty($_GET['dateTo']) && !empty($_GET['dateFrom']) ){
+		// 	$sql .= " and (t.start_date between '".$_GET['dateFrom']."' and '".$_GET['dateTo'] ."')";
+		// }
+		$sql .= " GROUP BY t.start_date
+				  ORDER BY t.start_date asc , d.emp_code desc";
+				  // echo $sql;
+		$stmt = $con->prepare($sql);
+		$stmt->execute();
+		$result = $stmt->fetchAll();
+		$count= $stmt->rowCount();		
+		foreach($result as $row){
+			//$index= $row['id'];
+			$output1 .= "<tr><td class='bg-info'><div class='col-sm-12'>".$row['start_date']."</div></td></tr>".
+						 "<tr>
+						 	<td></td>
+							<td>".  $row['emp_code']. "</td>
+							<td>".  $row['emp_name']. "</td>
+							<td>".  $row['day_n']. "</td>
+							<td>".  $row['case_desc']. "</td>
+							<td>".  $row['start_date']. "</td>
+							<td>".  $row['end_date']. "</td>
+							<td>".  $row['duration']. "</td>
+						 </tr>";				
+		} 
+		echo $output1 ;
+		 // echo $sql;
 	}
 	//------------get vacations' status feedback as Employee------------ 
 	function getVacationStatusAsEmp(){

@@ -15,7 +15,8 @@
 	  	    <h1 class="col-lg-12">الاجازات المعتمدة</h1>  
 	    </header>
 	    <div class="table-responsive row">
-	    	<form class="navbar-form row" role="search" id="searchEmp" method="GET">
+	    	<form class="navbar-form row" role="search" id="searchEmp" method="GET" action="adminreport.php">
+	    		
 			    <div class="form-group add-on ">
 			    	<label for = "search">رقم القيد / الاسم :</label>
 					<input class="form-control" placeholder="ابحث.." name="search" id="search" type="text">
@@ -23,7 +24,24 @@
 					<input class="form-control"  name="searchDateFrom" id="searchDateFrom" type="date">
 					<label for = "searchDateTo">التاريخ الى:</label>
 					<input class="form-control"  name="searchDateTo" id="searchDateTo" type="date"> 
-			    </div>   
+					<?php
+					if($_SESSION['UserGroup']==3){?>
+						<label for = "month">الشهر:</label>
+						<select name="month" class="form-control" id="month">
+							<option value='0'></option>"
+							<?php 
+								for($m = 1;$m <= 12; $m++){ 
+								    $month =  date("F", mktime(0, 0, 0, $m)); 
+								    echo "<option value='$m'>$month</option>"; 
+								} 
+							?>
+						</select> 
+						<label for = "year">السنة:</label>
+						<input class="form-control"  name="year" id="year" value="<?php echo date('Y'); ?>">	
+						<input  type="submit" class= "form-control btn btn-info" value="تقرير">
+					<?php }	?>
+
+			    </div> 
 		    </form>
 			<table id="confirmedVac" class="table table-striped table-bordered table-responsive">	
 				<thead>
