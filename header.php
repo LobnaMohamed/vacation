@@ -42,7 +42,7 @@
 			  <li><a href="logout.php">خروج</a></li>
 			  <li><a href="myvacationstatus.php">اجازاتى</a></li>
 			  <li><a href="vacationmodel.php">عمل اجازة</a></li>
-				<?php if($_SESSION['UserGroup']==3){ ?>
+				<?php if($_SESSION['UserGroup']==3  || $_SESSION['UserGroup']==5){ ?>
 						<li><a href="empdata.php">بيانات العاملين</a></li>
 						<li><a href="pending.php">الاجازات المطلوب تسجيلها</a></li>
 						<li><a href="confirmed.php">الاجازات المسجلة</a></li>

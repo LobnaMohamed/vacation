@@ -140,7 +140,7 @@
 	//---------get All Managers who can approve vacations as both manager and top manager in manager combobox --------------
 	function getManagers(){
 		$con = connect();
-		$sql= "SELECT ID,emp_code,emp_name FROM t_data where id_userGroup in(1,2)" ;
+		$sql= "SELECT ID,emp_code,emp_name FROM t_data where id_userGroup in(1,2,5)" ;
     	$stmt = $con->prepare($sql);
 		$stmt->execute();
 		$result = $stmt->fetchAll();
@@ -612,6 +612,82 @@
 			echo "</tr>";
 		} 
 	}
+
+		//-----get pending vacations as admin and manager --------------
+	function getPendingVacAsAdminandManager(){
+		$con = connect();
+		$sql= '';
+		$sql .="SELECT t.id, t.start_date,t.end_date,t.duration,d.emp_code,d.emp_name,c.case_desc,t.manager_id,t.Manager_agree,t.top_manager_id,m.Management,vs.status as mgrAgreeStatus,t.topManager_agree ,vs2.status as topAgreeStatus,t.AdminConfirm,vs3.status as AdminAgreeStatus,d2.emp_name as MgrName ,d3.emp_name as TopMgrName
+				FROM t_data d3 ,t_case c ,managements m , vac_status vs, vac_status vs2,vac_status vs3,t_data d 
+				RIGHT OUTER JOIN t_transe t ON d.ID = t.emp_id LEFT OUTER JOIN  t_data d2 ON t.manager_id=d2.ID
+				WHERE t.id_case=c.ID 
+						and t.topManager_agree in (1,2,3)
+						and t.AdminConfirm =vs3.ID
+						and t.AdminConfirm =3
+						and t.manager_id={$_SESSION['UserID']}
+						and t.Mang_id=m.ID 
+						and t.Manager_agree=vs.ID
+						and t.topManager_agree=vs2.ID
+						and t.topManager_agree in(1,2,3)
+						and t.top_manager_id=d3.ID";
+		$stmt = $con->prepare($sql);
+		$stmt->execute();
+		$result = $stmt->fetchAll();
+		$vacStatus= "SELECT ID,status FROM vac_status  where ID != 4";
+		//status for manager
+		$stmt2 = $con->prepare($vacStatus);
+		$stmt2->execute();
+		$agreement = $stmt2->fetchAll();
+		//status for admin
+		$stmt3 = $con->prepare($vacStatus);
+		$stmt3->execute();
+		$agreement2 = $stmt3->fetchAll();
+		foreach($result as $row){
+			$index= $row['id'];
+			echo"<tr>";
+				echo"<td>".  $row['emp_code']. "</td>";
+				echo"<td>".  $row['emp_name']. "</td>";
+				echo"<td>".  $row['Management']. "</td>";
+				echo"<td>".  $row['case_desc']. "</td>";
+				echo"<td>".  $row['start_date']. "</td>";
+				echo"<td>".  $row['end_date']. "</td>";
+				echo"<td>".  $row['duration']. "</td>";
+				echo"<td>".  $row['MgrName']. "</td>";
+				echo'<td>'; 
+					if($row['Manager_agree'] ==3){
+						foreach($agreement as $row2){
+							if( $row2['ID']<4){
+								echo '<label >'.$row2['status'].'
+					            <input type="radio" class="radio-inline" name="MangrAgree['.$index.']" class="MangrAgreeRadio" value="'.$row2['ID'].'"';
+					            if($row['Manager_agree'] == $row2['ID']){ echo "checked"; }
+					    		echo'></label>';
+							}	  
+					    }
+					}else{
+						echo  $row['mgrAgreeStatus'] ;
+					}
+				echo'</td>';
+				echo"<td>".  $row['TopMgrName']. "</td>";
+				echo"<td>".  $row['topAgreeStatus']. "</td>";
+				echo'<td>'; 
+					if($row['topManager_agree']<3){
+						foreach($agreement2 as $row2){
+							if($row2['ID']!=4){
+								echo '<label >'.$row2['status'].'
+							        <input type="radio" class="radio-inline" name="AdminAgree['.$index.']" class="AdminAgreeRadio" value="'.$row2['ID'].'"';
+							    if($row['AdminConfirm'] == $row2['ID']){ echo "checked"; }
+							    echo'></label>';
+							}		  
+						}
+					}else{
+						echo $row['AdminAgreeStatus'];
+					}
+					
+				echo'</td>';
+			echo "</tr>";
+		} 
+	}
+
 
 	//------------reply to vacations function------------
 	function saveVacationAgree(){

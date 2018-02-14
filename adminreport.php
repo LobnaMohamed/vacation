@@ -34,7 +34,7 @@
 					<th ></th>
 					<th >رقم القيد</th>
 					<th >الاسم</th>
-					<th >الادارة</th>
+					<th >التشغيل</th>
 					<th >نوع الاجازة</th>
 					<th >من تاريخ</th>
 					<th >الى تاريخ</th>
@@ -43,7 +43,7 @@
 			</thead>
 			<tbody id="Reportbody">
 				<?php
-					if($_SESSION['UserGroup']==3){
+					if($_SESSION['UserGroup']==3 || $_SESSION['UserGroup']==5){
 							getConfirmedVacAsAdminReport();
 					} 
 				?>

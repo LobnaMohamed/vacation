@@ -45,7 +45,14 @@
 								 echo"<th>الرئيس الاعلى</th>";
 								 echo"<th>موافقة الرئيس الاعلى</th>";
 							}  
-							if($_SESSION['UserGroup']==3){ //est72a2at
+							if($_SESSION['UserGroup']==3  ){ //est72a2at
+								echo"<th>الرئيس المباشر</th>";
+								echo"<th>موافقة الرئيس المباشر</th>";
+								echo"<th>الرئيس الاعلى</th>";
+							    echo"<th>موافقة الرئيس الاعلى</th>";
+								echo"<th>اعتماد الاستحقاقات</th>";
+							}
+							if($_SESSION['UserGroup']==5  ){ //est72a2at
 								echo"<th>الرئيس المباشر</th>";
 								echo"<th>موافقة الرئيس المباشر</th>";
 								echo"<th>الرئيس الاعلى</th>";
@@ -61,11 +68,14 @@
 					//run the corresponding function 
 						if($_SESSION['UserGroup']==2) { //top manager
 							getPendingVacAsTopManager(); 	
-						}elseif($_SESSION['UserGroup']==1){//direct manager
+						}elseif($_SESSION['UserGroup']==1 ){//direct manager
 							getPendingVacAsManager(); 
-						}elseif($_SESSION['UserGroup']==3){ //est72a2at
+						}elseif($_SESSION['UserGroup']==3 ){ //est72a2at
 							getPendingVacAsAdmin(); 
 						}  
+						elseif( $_SESSION['UserGroup']==5){ //est72a2at and manager
+							getPendingVacAsAdminandManager(); 
+						} 
 					?>
 				</tbody>
 			</table>

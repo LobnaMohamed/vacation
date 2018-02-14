@@ -20,20 +20,25 @@
 			    <div class="form-group add-on ">
 			    	<label for = "search">رقم القيد / الاسم :</label>
 					<input class="form-control" placeholder="ابحث.." name="search" id="search" type="text">
+					<?php
+					if($_SESSION['UserGroup']!=3 && $_SESSION['UserGroup']!=5){?>
 					<label for = "searchDateFrom">التاريخ من:</label>
 					<input class="form-control"  name="searchDateFrom" id="searchDateFrom" type="date">
 					<label for = "searchDateTo">التاريخ الى:</label>
 					<input class="form-control"  name="searchDateTo" id="searchDateTo" type="date"> 
 					<?php
-					if($_SESSION['UserGroup']==3){?>
+					}
+					if($_SESSION['UserGroup']==3 || $_SESSION['UserGroup']==5){?>
 						<label for = "month">الشهر:</label>
 						<select name="month" class="form-control" id="month">
 							<option value='0'></option>"
 							<?php 
+
 								for($m = 1;$m <= 12; $m++){ 
-								    $month =  date("F", mktime(0, 0, 0, $m)); 
+								    $month =  date("F", mktime(0, 0, 0, $m,1)); //prob with february so we must specify the day or it will be taken as 30th which is an overflow for feb
 								    echo "<option value='$m'>$month</option>"; 
 								} 
+
 							?>
 						</select> 
 						<label for = "year">السنة:</label>
@@ -76,6 +81,14 @@
 									<th>موافقة الرئيس الاعلى</th>
 									<th>اعتماد الاستحقاقت</th>";
 							}
+							elseif($_SESSION['UserGroup']==5){
+								echo"
+									<th>الرئيس المباشر</th>
+									<th>موافقة الرئيس المباشر</th>
+									<th>الرئيس الاعلى</th>
+									<th>موافقة الرئيس الاعلى</th>
+									<th>اعتماد الاستحقاقت</th>";
+							}
 						?>
 
 				    </tr>		
@@ -88,7 +101,7 @@
 							getConfirmedVacAsTopManager(); 
 						}elseif($_SESSION['UserGroup']==1){
 							getConfirmedVacAsManager(); 
-						}elseif($_SESSION['UserGroup']==3){
+						}elseif($_SESSION['UserGroup']==3 || $_SESSION['UserGroup']==5){
 							getConfirmedVacAsAdmin(); 
 						} 
 					?>
