@@ -63,7 +63,7 @@
 				$_SESSION['UserID'] = $userID;
 				$_SESSION['UserFullName'] = $user_fullName;
 				//redirect according to privillage
-				if($userGroup==3){
+				if($userGroup==3 ||$userGroup==5){
 					$response = "nothing3";
 					$page = "empdata.php";
 					// header('Location: empdata.php');//redirect
