@@ -1074,8 +1074,13 @@
 		$stmt = $con->prepare($sql);
 		$stmt->execute();
 		$result = $stmt->fetchAll();
-		$vacStatus= "SELECT ID,status FROM vac_status ";
-		$stmt2 = $con->prepare($vacStatus);
+		$credit= "	SELECT  COUNT(t.duration) as credit,c.case_desc
+					FROM t_case c,t_data d , t_transe t 
+					WHERE  d.id = {$_SESSION['UserID']}
+	                and    t.id_case = c.id
+	                and t.AdminConfirm not in (3,4,6)
+	                GROUP BY t.id_case ";
+		$stmt2 = $con->prepare($credit);
 		$stmt2->execute();
 		$agreement = $stmt2->fetchAll();
 		foreach($result as $row){
@@ -1091,5 +1096,13 @@
 				echo"<td>".  $row['topAgreeStatus']. "</td>";
 				echo"<td>".  $row['AdminAgreeStatus']. "</td>";
 			echo "</tr>";
-		}	
+		}
+		echo "<ul class='nav nav-pills vac-credit panel'  role='tablist'>";
+		foreach ($agreement as $row) {
+			echo "
+					<li class='label label-info' >".  $row['case_desc'] ."
+						<span class='badge'>".  $row['credit']. "</span>
+					</li>";
+			}	
+			echo "</ul>";
 	}

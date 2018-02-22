@@ -1,7 +1,7 @@
 /*body style*/
 body{
     background-color: #dfe0d9;
-    font-size: 16px;
+    font-size: 17px;
 }
 h1{
     text-align: center;  
@@ -106,5 +106,10 @@ text-align: right;
 }
 #year{
     width: 10%;
+}
+.vac-credit{
+    font-size: 20px;
+    margin-bottom: 2px; 
+    
 }
 
