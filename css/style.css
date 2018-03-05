@@ -110,6 +110,12 @@ text-align: right;
 .vac-credit{
     font-size: 20px;
     margin-bottom: 2px; 
-    
+  
+}
+.vac-credit > span {
+    float: left;
+    margin-left: 2px;
+    font-weight: bold;
+    font-family: "Arial"; 
 }
 

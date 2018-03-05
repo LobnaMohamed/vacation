@@ -1,5 +1,8 @@
 /*global $, alert, console*/
 $(document).ready(function(){
+
+
+
 	'use strict';
 	var nameError = true ,
 		codeError = true,
@@ -347,9 +350,9 @@ $(document).ready(function(){
 					$('#empDatabody').html(data);
 
 				 }
-				 //else if(currentURL == 'pending.php'){
-				// 	$('#pendingVacbody').html(data);
-				// }
+				 else if(currentURL == 'myvacationstatus.php'){
+					$('#VacStatusbody').html(data);
+				}
 				
 			},
 			error: function(error) {

@@ -137,6 +137,26 @@
 		$stmt = $con->prepare($sql);
 		$stmt->execute();
 	}
+	// Function to get the client ip address
+	function get_client_ip_env() {
+	    $ipaddress = '';
+	    if (getenv('HTTP_CLIENT_IP'))
+	        $ipaddress = getenv('HTTP_CLIENT_IP');
+	    else if(getenv('HTTP_X_FORWARDED_FOR'))
+	        $ipaddress = getenv('HTTP_X_FORWARDED_FOR');
+	    else if(getenv('HTTP_X_FORWARDED'))
+	        $ipaddress = getenv('HTTP_X_FORWARDED');
+	    else if(getenv('HTTP_FORWARDED_FOR'))
+	        $ipaddress = getenv('HTTP_FORWARDED_FOR');
+	    else if(getenv('HTTP_FORWARDED'))
+	        $ipaddress = getenv('HTTP_FORWARDED');
+	    else if(getenv('REMOTE_ADDR'))
+	        $ipaddress = getenv('REMOTE_ADDR');
+	    else
+	        $ipaddress = 'UNKNOWN';
+	 
+	    return $ipaddress;
+	}
 	//---------get All Managers who can approve vacations as both manager and top manager in manager combobox --------------
 	function getManagers(){
 		$con = connect();
@@ -886,7 +906,7 @@
 			WHERE  t.id_case=c.ID 
 			and t.Mang_id=m.ID
 			and t.topManager_agree in (1,2)
-			and t.Manager_agree = 1
+			and t.Manager_agree in (1,2,4)
 			and t.Manager_agree=vs.ID
 			and t.topManager_agree=vs2.ID
 			and t.AdminConfirm=vs3.ID
@@ -1075,10 +1095,12 @@
 		$stmt->execute();
 		$result = $stmt->fetchAll();
 		$credit= "	SELECT  COUNT(t.duration) as credit,c.case_desc
-					FROM t_case c,t_data d , t_transe t 
-					WHERE  d.id = {$_SESSION['UserID']}
+					FROM t_case c RIGHT OUTER JOIN t_transe t on c.ID = t.id_case
+                    			  INNER JOIN t_data d  on t.emp_id = d.Id 
+					WHERE  t.emp_id = {$_SESSION['UserID']}
 	                and    t.id_case = c.id
 	                and t.AdminConfirm not in (3,4,6)
+	                and year(t.start_date) = year(CURDATE()) 
 	                GROUP BY t.id_case ";
 		$stmt2 = $con->prepare($credit);
 		$stmt2->execute();
@@ -1097,12 +1119,12 @@
 				echo"<td>".  $row['AdminAgreeStatus']. "</td>";
 			echo "</tr>";
 		}
-		echo "<ul class='nav nav-pills vac-credit panel'  role='tablist'>";
+		echo " <ul class='nav nav-pills vac-credit panel'  role='tablist'>";
 		foreach ($agreement as $row) {
 			echo "
 					<li class='label label-info' >".  $row['case_desc'] ."
 						<span class='badge'>".  $row['credit']. "</span>
 					</li>";
 			}	
-			echo "</ul>";
+			echo "<span>مجموع الاجازات:</span></ul>";
 	}

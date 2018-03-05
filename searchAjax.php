@@ -29,5 +29,7 @@
 		if($_SESSION['UserGroup']==3){
 			getPendingVacAsAdmin(); 
 		}
+	}else if($currentURL == 'myvacationstatus.php'){
+		getVacationStatusAsEmp();
 	}
 	?>

@@ -21,7 +21,6 @@
 		// print_r($_POST);
 		changePassword();
 	}
-
 ?>
 <div class="container">
 	<div class="row">

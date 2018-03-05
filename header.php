@@ -22,7 +22,23 @@
 			  <a class="navbar-brand" href="#">.Alexandria Minaral Oils Co</a>
 			</div> -->
 			<div class="navbar-header ">
-		  		<!-- <a class="navbar-brand" href="#">Computer Name: <?php echo getenv('REMOTE_ADDR'); ?></a> -->
+		  		<!-- <a class="navbar-brand" href="#">Computer Name: <?php  
+						if (!empty($_SERVER['HTTP_CLIENT_IP']))   //check ip from share internet
+					    {
+					      $ip=$_SERVER['HTTP_CLIENT_IP'];
+					    }
+					    elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR']))   //to check ip is pass from proxy
+					    {
+					      $ip=$_SERVER['HTTP_X_FORWARDED_FOR'];
+					    }
+					    else
+					    {
+					      $ip=$_SERVER['REMOTE_ADDR'];
+					    }
+					    echo $ip;
+					  
+					   
+		  		 ?></a> -->
 		  		<a class="navbar-brand" href="#">Computer Name: <?php echo gethostbyaddr($_SERVER['REMOTE_ADDR']); ?></a>
 		  		<br>
 		  		<?php if (isset($_SESSION['Username'])){ ?>
