@@ -32,7 +32,6 @@
 			<thead>
 				<tr class='bg-primary'>
 					<th ></th>
-					<th >رقم القيد</th>
 					<th >الاسم</th>
 					<th >التشغيل</th>
 					<th >نوع الاجازة</th>

@@ -637,18 +637,28 @@
 	function getPendingVacAsAdminandManager(){
 		$con = connect();
 		$sql= '';
+		// $sql .="SELECT t.id, t.start_date,t.end_date,t.duration,d.emp_code,d.emp_name,c.case_desc,t.manager_id,t.Manager_agree,t.top_manager_id,m.Management,vs.status as mgrAgreeStatus,t.topManager_agree ,vs2.status as topAgreeStatus,t.AdminConfirm,vs3.status as AdminAgreeStatus,d2.emp_name as MgrName ,d3.emp_name as TopMgrName
+		// 		FROM t_data d3 ,t_case c ,managements m , vac_status vs, vac_status vs2,vac_status vs3,t_data d 
+		// 		RIGHT OUTER JOIN t_transe t ON d.ID = t.emp_id LEFT OUTER JOIN  t_data d2 ON t.manager_id=d2.ID
+		// 		WHERE t.id_case=c.ID 
+		// 				and t.topManager_agree in (1,2,3)
+		// 				and t.AdminConfirm =vs3.ID
+		// 				and t.AdminConfirm =3
+		// 				and t.manager_id={$_SESSION['UserID']}
+		// 				and t.Mang_id=m.ID 
+		// 				and t.Manager_agree=vs.ID
+		// 				and t.topManager_agree=vs2.ID
+		// 				and t.top_manager_id=d3.ID";
 		$sql .="SELECT t.id, t.start_date,t.end_date,t.duration,d.emp_code,d.emp_name,c.case_desc,t.manager_id,t.Manager_agree,t.top_manager_id,m.Management,vs.status as mgrAgreeStatus,t.topManager_agree ,vs2.status as topAgreeStatus,t.AdminConfirm,vs3.status as AdminAgreeStatus,d2.emp_name as MgrName ,d3.emp_name as TopMgrName
-				FROM t_data d3 ,t_case c ,managements m , vac_status vs, vac_status vs2,vac_status vs3,t_data d 
-				RIGHT OUTER JOIN t_transe t ON d.ID = t.emp_id LEFT OUTER JOIN  t_data d2 ON t.manager_id=d2.ID
-				WHERE t.id_case=c.ID 
-						and t.topManager_agree in (1,2,3)
+		FROM t_data d3 ,t_case c ,managements m , vac_status vs, vac_status vs2,vac_status vs3,t_data d 
+		RIGHT OUTER JOIN t_transe t ON d.ID = t.emp_id LEFT OUTER JOIN  t_data d2 ON t.manager_id=d2.ID
+		WHERE t.id_case=c.ID 
+				and (t.topManager_agree in (1,2) or (t.Manager_agree =3 and t.manager_id={$_SESSION['UserID']}))
 						and t.AdminConfirm =vs3.ID
 						and t.AdminConfirm =3
-						and t.manager_id={$_SESSION['UserID']}
 						and t.Mang_id=m.ID 
 						and t.Manager_agree=vs.ID
 						and t.topManager_agree=vs2.ID
-						and t.topManager_agree in(1,2,3)
 						and t.top_manager_id=d3.ID";
 		$stmt = $con->prepare($sql);
 		$stmt->execute();
@@ -788,6 +798,58 @@
 					echo 'error!<br>';
 				}
 			}
+		}elseif(isset($_POST['AdminAgree']) || isset($_POST['MangrAgree'])){ //admin
+			echo "in admin agree";
+			$answers = isset($_POST['AdminAgree']) ? $_POST['AdminAgree'] : array();
+			//$answers = $_POST['AdminAgree'];
+			$con = connect();
+			$sql= '';
+			
+			//Iterate through each answer
+			foreach($answers as $key => $answer) {
+				print_r($answer) ;
+				echo $key;
+				$sql = "UPDATE t_transe SET AdminConfirm =:Agree where ID= :key";
+				$stmt = $con->prepare($sql);
+			    $stmt->bindParam(':Agree', $answer, PDO::PARAM_INT);
+			    $stmt->bindParam(':key', $key, PDO::PARAM_INT);
+				//$stmt->execute(array($answer));
+				$stmt->execute();
+				//echo $sql;
+				if($stmt){
+				    echo 'Row inserted!<br>';
+				    //echo $answer;
+				}
+				elseif(!$stmt){
+					echo 'error!<br>';
+				}
+			}
+			//as managerrrrrrrrrrrrrrrrrrrrrrrrr
+			echo "in manager agree";
+			$mgranswers = isset($_POST['MangrAgree']) ? $_POST['MangrAgree'] : array();
+			//$answers = $_POST['MangrAgree'];
+			$con = connect();
+			$sql= '';
+			
+			//Iterate through each answer
+			foreach($mgranswers as $key => $answer) {
+				print_r($mgranswers) ;
+				echo $key;
+				$sql = "UPDATE t_transe SET Manager_agree =:Agree where ID= :key";
+				$stmt = $con->prepare($sql);
+			    $stmt->bindParam(':Agree', $answer, PDO::PARAM_INT);
+			    $stmt->bindParam(':key', $key, PDO::PARAM_INT);
+				//$stmt->execute(array($answer));
+				$stmt->execute();
+				//echo $sql;
+				if($stmt){
+				    echo 'Row inserted!<br>';
+				    //echo $answer;
+				}
+				elseif(!$stmt){
+					echo 'error!<br>';
+				}
+			}
 		}
 		elseif(isset($_POST['MangrAgree'])){
 			echo "in manager agree";
@@ -815,35 +877,35 @@
 					echo 'error!<br>';
 				}
 			}
-		}elseif(isset($_POST['AdminAgree'])){ //admin
-			echo "in admin agree";
-			$answers = isset($_POST['AdminAgree']) ? $_POST['AdminAgree'] : array();
-			//$answers = $_POST['AdminAgree'];
-			$con = connect();
-			$sql= '';
+		// }elseif(isset($_POST['AdminAgree'])){ //admin
+		// 	echo "in admin agree";
+		// 	$answers = isset($_POST['AdminAgree']) ? $_POST['AdminAgree'] : array();
+		// 	//$answers = $_POST['AdminAgree'];
+		// 	$con = connect();
+		// 	$sql= '';
 			
-			//Iterate through each answer
-			foreach($answers as $key => $answer) {
-				print_r($answer) ;
-				echo $key;
-				$sql = "UPDATE t_transe SET AdminConfirm =:Agree where ID= :key";
-				$stmt = $con->prepare($sql);
-			    $stmt->bindParam(':Agree', $answer, PDO::PARAM_INT);
-			    $stmt->bindParam(':key', $key, PDO::PARAM_INT);
-				//$stmt->execute(array($answer));
-				$stmt->execute();
-				//echo $sql;
-				if($stmt){
-				    echo 'Row inserted!<br>';
-				    //echo $answer;
-				}
-				elseif(!$stmt){
-					echo 'error!<br>';
-				}
-			}
+		// 	//Iterate through each answer
+		// 	foreach($answers as $key => $answer) {
+		// 		print_r($answer) ;
+		// 		echo $key;
+		// 		$sql = "UPDATE t_transe SET AdminConfirm =:Agree where ID= :key";
+		// 		$stmt = $con->prepare($sql);
+		// 	    $stmt->bindParam(':Agree', $answer, PDO::PARAM_INT);
+		// 	    $stmt->bindParam(':key', $key, PDO::PARAM_INT);
+		// 		//$stmt->execute(array($answer));
+		// 		$stmt->execute();
+		// 		//echo $sql;
+		// 		if($stmt){
+		// 		    echo 'Row inserted!<br>';
+		// 		    //echo $answer;
+		// 		}
+		// 		elseif(!$stmt){
+		// 			echo 'error!<br>';
+		// 		}
+		// 	}
+		// }
 		}
 	}
-
 	//------------get confirmed vacations as manager------------ 
 
 	function getConfirmedVacAsManager(){
@@ -1046,29 +1108,39 @@
 		// if(!empty($_GET['dateTo']) && !empty($_GET['dateFrom']) ){
 		// 	$sql .= " and (t.start_date between '".$_GET['dateFrom']."' and '".$_GET['dateTo'] ."')";
 		// }
-		$sql .= " GROUP BY t.start_date
-				  ORDER BY t.start_date asc , d.emp_code desc";
-				  // echo $sql;
+		$sql .= " ORDER BY d.emp_code,t.start_date asc ";
+		// echo $sql;
 		$stmt = $con->prepare($sql);
 		$stmt->execute();
 		$result = $stmt->fetchAll();
-		$count= $stmt->rowCount();		
-		foreach($result as $row){
-			//$index= $row['id'];
-			$output1 .= "<tr><td class='bg-info'><div class='col-sm-12'>".$row['start_date']."</div></td></tr>".
-						 "<tr>
-						 	<td></td>
-							<td>".  $row['emp_code']. "</td>
-							<td>".  $row['emp_name']. "</td>
-							<td>".  $row['day_n']. "</td>
-							<td>".  $row['case_desc']. "</td>
-							<td>".  $row['start_date']. "</td>
-							<td>".  $row['end_date']. "</td>
-							<td>".  $row['duration']. "</td>
-						 </tr>";				
-		} 
+		$count= $stmt->rowCount();
+		$array=[];
+		foreach($result as $row ){
+			$emp_code = $row['emp_code'];
+				if (end($array) != $emp_code) {
+					array_push($array, $emp_code);
+					$output1 .= "<tr>
+									<td class='bg-info'>
+										<div >".$row['emp_code']."</div>
+									</td>
+									<td class='bg-info'>
+										<div >".$row['emp_name']."</div>
+									</td>
+									<td class='bg-info'>
+										<div >".$row['day_n']."</div>
+									</td>
+								</tr>";
+					}
+					$output1 .="<tr>
+								 	<td colspan='3'></td>
+									<td>".  $row['case_desc']. "</td>
+									<td>".  $row['start_date']. "</td>
+									<td>".  $row['end_date']. "</td>
+									<td>".  $row['duration']. "</td>
+							 	</tr>";	
+							
+		}	
 		echo $output1 ;
-		 // echo $sql;
 	}
 	//------------get vacations' status feedback as Employee------------ 
 	function getVacationStatusAsEmp(){

@@ -52,7 +52,7 @@
 							    echo"<th>موافقة الرئيس الاعلى</th>";
 								echo"<th>اعتماد الاستحقاقات</th>";
 							}
-							if($_SESSION['UserGroup']==5  ){ //est72a2at
+							if($_SESSION['UserGroup']==5  ){ //est72a2at manager
 								echo"<th>الرئيس المباشر</th>";
 								echo"<th>موافقة الرئيس المباشر</th>";
 								echo"<th>الرئيس الاعلى</th>";
