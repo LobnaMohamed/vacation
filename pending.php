@@ -38,6 +38,7 @@
 							if($_SESSION['UserGroup']==2) { //top manager
 								 echo"<th>الرئيس المباشر</th>";
 								 echo"<th>موافقة الرئيس المباشر</th>";
+								 echo"<th>الرئيس الاعلى</th>";
 								 echo"<th>موافقة الرئيس الاعلى</th>";
 							
 							}elseif($_SESSION['UserGroup']==1){//direct manager

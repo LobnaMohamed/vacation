@@ -59,21 +59,22 @@
 						<th>الى تاريخ</th>
 						<th>المدة</th>
 						<?php
-							if($_SESSION['UserGroup']==2){
+							if($_SESSION['UserGroup']==2){ //top manager
 								echo"
 									<th>الرئيس المباشر</th>
 									<th>موافقة الرئيس المباشر</th>
+									<th>الرئيس الاعلى</th>
 									<th>موافقة الرئيس الاعلى</th>
 									<th>اعتماد الاستحقاقت</th>";
 							}
-							elseif($_SESSION['UserGroup']==1){
+							elseif($_SESSION['UserGroup']==1){//direct manager
 								echo"
 									<th>موافقة الرئيس المباشر</th>
 									<th>الرئيس الاعلى</th>
 									<th>موافقة الرئيس الاعلى</th>
 									<th>اعتماد الاستحقاقت</th>";
 							} 
-							elseif($_SESSION['UserGroup']==3){
+							elseif($_SESSION['UserGroup']==3){ //admin
 								echo"
 									<th>الرئيس المباشر</th>
 									<th>موافقة الرئيس المباشر</th>
@@ -81,7 +82,7 @@
 									<th>موافقة الرئيس الاعلى</th>
 									<th>اعتماد الاستحقاقت</th>";
 							}
-							elseif($_SESSION['UserGroup']==5){
+							elseif($_SESSION['UserGroup']==5){//admin and manager
 								echo"
 									<th>الرئيس المباشر</th>
 									<th>موافقة الرئيس المباشر</th>

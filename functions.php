@@ -509,14 +509,15 @@
 	function getPendingVacAsTopManager(){
 		$con = connect();
 		$sql= '';
-		$sql .= "SELECT t.id,t.start_date,t.end_date,t.duration,d.emp_code,d.emp_name,c.case_desc,t.manager_id,t.Manager_agree,t.top_manager_id,m.Management,vs.status,t.topManager_agree,IFNull( d2.emp_name,'لا يوجد') as MgrName 
+		$sql .= "SELECT t.id,t.start_date,t.end_date,t.duration,d.emp_code,d.emp_name,c.case_desc,t.manager_id,t.Manager_agree,t.top_manager_id,m.Management,vs.status,t.topManager_agree,IFNull( d2.emp_name,'لا يوجد') as MgrName ,d3.emp_name as topMgrName
 			FROM t_case c ,managements m , vac_status vs,t_data d 
 			RIGHT OUTER JOIN t_transe t ON d.ID = t.emp_id LEFT OUTER JOIN  t_data d2 ON t.manager_id=d2.ID
+			LEFT OUTER JOIN  t_data d3 ON t.top_manager_id=d3.ID 
 			WHERE t.id_case=c.ID 
 			and t.Mang_id=m.ID 
 			and t.topManager_agree=3
 			and t.Manager_agree=vs.ID
-			and t.Manager_agree in(1,4)
+			and t.Manager_agree in(1,3,4)
 			and (t.top_manager_id={$_SESSION['UserID']} or t.manager_id ={$_SESSION['UserID']} ) ";
           //-------------OLD SQL----------------//
 		// SELECT t.id,t.start_date,t.end_date,t.duration,d.emp_code,d.emp_name,c.case_desc,IFNULL(t.manager_id,'no manager')as directManger,t.Manager_agree,t.top_manager_id,m.Management,vs.status,t.topManager_agree,d2.emp_name as MgrName  
@@ -539,8 +540,10 @@
 		$agreement = $stmt2->fetchAll();
 		
 		foreach($result as $row){
+			//in_array($row['Manager_agree'], array(1, 2, 5))
 			$index= $row['id'];
 			echo"<tr>";
+			if($row['manager_id']==$_SESSION['UserID'] && $row['Manager_agree'] == 3){
 				echo"<td>".  $row['emp_code']. "</td>";
 				echo"<td>".  $row['emp_name']. "</td>";
 				echo"<td>".  $row['Management']. "</td>";
@@ -549,25 +552,38 @@
 				echo"<td>".  $row['end_date']. "</td>";
 				echo"<td>".  $row['duration']. "</td>";
 				echo"<td>".  $row['MgrName']. "</td>";
-				if($row['manager_id']==$_SESSION['UserID']){
-					echo'<td>'; 
-					foreach($agreement as $row2){
-						echo '<label >'.$row2['status']. '
-					            <input type="radio" class="radio-inline" name="MangrAgree['.$index.']" class="MangrAgreeRadio" value="'.$row2['ID'].'"';
-					            if($row['Manager_agree'] == $row2['ID']){ echo "checked"; }
-					    echo'></label>';	  
-					};
-				}else{
-					echo"<td>".  $row['status']. "</td>";
-				}
 				echo'<td>'; 
 				foreach($agreement as $row2){
 					echo '<label >'.$row2['status']. '
-				            <input type="radio" class="radio-inline" name="TopMangrAgree['.$index.']" class="TopMangrAgreeRadio" value="'.$row2['ID'].'"';
-				            if($row['topManager_agree'] == $row2['ID']){ echo "checked"; }
-				    echo'></label>';	  
-				};
-				echo'</td>';
+				            <input type="radio" class="radio-inline" name="MangrAgree['.$index.']" class="MangrAgreeRadio" value="'.$row2['ID'].'"';
+				            if($row['Manager_agree'] == $row2['ID']){ echo "checked"; }
+				    echo'></label>';
+				}
+				echo '</td>';
+				echo"<td>".  $row['topMgrName']. "</td>";
+				echo"<td>".  $row['status']. "</td>";
+			}elseif($row['top_manager_id']==$_SESSION['UserID']){
+				if(in_array($row['Manager_agree'], array(1, 2, 5))){
+					echo"<td>".  $row['emp_code']. "</td>";
+					echo"<td>".  $row['emp_name']. "</td>";
+					echo"<td>".  $row['Management']. "</td>";
+					echo"<td>".  $row['case_desc']. "</td>";
+					echo"<td>".  $row['start_date']. "</td>";
+					echo"<td>".  $row['end_date']. "</td>";
+					echo"<td>".  $row['duration']. "</td>";
+					echo"<td>".  $row['MgrName']. "</td>";
+					echo"<td>".  $row['status']. "</td>";
+					echo"<td>".  $row['topMgrName']. "</td>";
+					echo'<td>';
+					foreach($agreement as $row2){
+						echo '<label >'.$row2['status']. '
+					            <input type="radio" class="radio-inline" name="TopMangrAgree['.$index.']" class="TopMangrAgreeRadio" value="'.$row2['ID'].'"';
+					            if($row['topManager_agree'] == $row2['ID']){ echo "checked"; }
+					    echo'></label>';	  
+					}
+					echo'</td>';						
+				}
+			}
 			echo "</tr>";
 		} 
 	}	
@@ -961,18 +977,19 @@
 	function getConfirmedVacAsTopManager(){
 		$con = connect();
 		$sql= '';
-		$sql .= "SELECT t.id,t.start_date,t.end_date,t.duration,d.emp_code,d.emp_name,c.case_desc,t.manager_id,t.top_manager_id,m.Management,vs.status as mgrAgreeStatus,vs2.status as topAgreeStatus,vs3.status as AdminAgreeStatus,IFnull(d2.emp_name,'لا يوجد') as MgrName
+		$sql .= "SELECT t.id,t.start_date,t.end_date,t.duration,d.emp_code,d.emp_name,c.case_desc,t.manager_id,t.top_manager_id,m.Management,vs.status as mgrAgreeStatus,vs2.status as topAgreeStatus,vs3.status as AdminAgreeStatus,IFnull(d2.emp_name,'لا يوجد') as MgrName,d3.emp_name as topMgrName,t.topManager_agree,t.Manager_agree
 			FROM t_case c ,managements m , vac_status vs ,vac_status vs2,vac_status vs3,t_data d
 			RIGHT OUTER JOIN t_transe t ON d.ID = t.emp_id 
             LEFT OUTER JOIN  t_data d2 ON t.manager_id=d2.ID
+            LEFT OUTER JOIN  t_data d3 ON t.top_manager_id=d3.ID 
 			WHERE  t.id_case=c.ID 
 			and t.Mang_id=m.ID
-			and t.topManager_agree in (1,2)
+			and t.topManager_agree in (1,2,3)
 			and t.Manager_agree in (1,2,4)
 			and t.Manager_agree=vs.ID
 			and t.topManager_agree=vs2.ID
 			and t.AdminConfirm=vs3.ID
-            and  t.top_manager_id={$_SESSION['UserID']} ";
+            and (t.top_manager_id={$_SESSION['UserID']} or t.manager_id ={$_SESSION['UserID']} )";
 			//old sql
 			// $sql .= "SELECT t.id,t.start_date,t.end_date,t.duration,d.emp_code,d.emp_name,c.case_desc,t.manager_id,t.top_manager_id,m.Management,vs.status as mgrAgreeStatus,vs2.status as topAgreeStatus,vs3.status as AdminAgreeStatus,d2.emp_name as MgrName
 			// FROM t_data d,t_data d2,t_transe t ,t_case c ,managements m , vac_status vs ,vac_status vs2,vac_status vs3
@@ -1006,19 +1023,42 @@
 		
 		foreach($result as $row){
 			$index= $row['id'];
-			echo"<tr>";
-				echo"<td>".  $row['emp_code']. "</td>";
-				echo"<td>".  $row['emp_name']. "</td>";
-				echo"<td>".  $row['Management']. "</td>";
-				echo"<td>".  $row['case_desc']. "</td>";
-				echo"<td>".  $row['start_date']. "</td>";
-				echo"<td>".  $row['end_date']. "</td>";
-				echo"<td>".  $row['duration']. "</td>";
-				echo"<td>".  $row['MgrName']. "</td>";
-				echo"<td>".  $row['mgrAgreeStatus']. "</td>"; 
-				echo"<td>".  $row['topAgreeStatus']. "</td>";
-				echo"<td>".  $row['AdminAgreeStatus']. "</td>";
-			echo "</tr>";
+			if($row['top_manager_id']==$_SESSION['UserID'] && in_array($row['topManager_agree'], array(1, 2))){
+				
+				echo"<tr>";
+					echo"<td>".  $row['emp_code']. "</td>";
+					echo"<td>".  $row['emp_name']. "</td>";
+					echo"<td>".  $row['Management']. "</td>";
+					echo"<td>".  $row['case_desc']. "</td>";
+					echo"<td>".  $row['start_date']. "</td>";
+					echo"<td>".  $row['end_date']. "</td>";
+					echo"<td>".  $row['duration']. "</td>";
+					echo"<td>".  $row['MgrName']. "</td>";
+					echo"<td>".  $row['mgrAgreeStatus']. "</td>"; 
+					echo"<td>".  $row['topMgrName']. "</td>"; 
+					echo"<td>".  $row['topAgreeStatus']. "</td>";
+					echo"<td>".  $row['AdminAgreeStatus']. "</td>";
+				echo "</tr>";
+				echo"hi 1".$_SESSION['UserID']."<br>";
+			}elseif($row['manager_id']==$_SESSION['UserID'] && in_array($row['Manager_agree'], array(1, 2))){
+				
+				echo"<tr>";
+					echo"<td>".  $row['emp_code']. "</td>";
+					echo"<td>".  $row['emp_name']. "</td>";
+					echo"<td>".  $row['Management']. "</td>";
+					echo"<td>".  $row['case_desc']. "</td>";
+					echo"<td>".  $row['start_date']. "</td>";
+					echo"<td>".  $row['end_date']. "</td>";
+					echo"<td>".  $row['duration']. "</td>";
+					echo"<td>".  $row['MgrName']. "</td>";
+					echo"<td>".  $row['mgrAgreeStatus']. "</td>"; 
+					echo"<td>".  $row['topMgrName']. "</td>"; 
+					echo"<td>".  $row['topAgreeStatus']. "</td>";
+					echo"<td>".  $row['AdminAgreeStatus']. "</td>";
+				echo "</tr>";
+				echo"hi 2".$_SESSION['UserID'] ."<br>";
+			}
+			
 		} 
 	}
 	//------------get confirmed vacations as Admin------------ 
