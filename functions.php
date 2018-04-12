@@ -540,7 +540,7 @@
 		$agreement = $stmt2->fetchAll();
 		
 		foreach($result as $row){
-			//in_array($row['Manager_agree'], array(1, 2, 5))
+		
 			$index= $row['id'];
 			echo"<tr>";
 			if($row['manager_id']==$_SESSION['UserID'] && $row['Manager_agree'] == 3){
@@ -563,7 +563,7 @@
 				echo"<td>".  $row['topMgrName']. "</td>";
 				echo"<td>".  $row['status']. "</td>";
 			}elseif($row['top_manager_id']==$_SESSION['UserID']){
-				if(in_array($row['Manager_agree'], array(1, 2, 5))){
+				if(in_array($row['Manager_agree'], array(1, 2, 4))){
 					echo"<td>".  $row['emp_code']. "</td>";
 					echo"<td>".  $row['emp_name']. "</td>";
 					echo"<td>".  $row['Management']. "</td>";
@@ -1039,7 +1039,7 @@
 					echo"<td>".  $row['topAgreeStatus']. "</td>";
 					echo"<td>".  $row['AdminAgreeStatus']. "</td>";
 				echo "</tr>";
-				echo"hi 1".$_SESSION['UserID']."<br>";
+				
 			}elseif($row['manager_id']==$_SESSION['UserID'] && in_array($row['Manager_agree'], array(1, 2))){
 				
 				echo"<tr>";
@@ -1056,7 +1056,7 @@
 					echo"<td>".  $row['topAgreeStatus']. "</td>";
 					echo"<td>".  $row['AdminAgreeStatus']. "</td>";
 				echo "</tr>";
-				echo"hi 2".$_SESSION['UserID'] ."<br>";
+				
 			}
 			
 		} 
