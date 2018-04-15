@@ -12,7 +12,7 @@
 	<div class="container">
 	    <header class="row text-center">
 	    	<!-- <img class= "col-lg-2 logo" src="images/amoc2.png"> -->
-	  	    <h1 class="col-sm-12">الاجازات المطلوب اعتمادها</h1>  
+	  	    <h1 class="col-sm-12">الاجازات المطلوب تسجيلها</h1>  
 	    </header>
 	    <!-- search for emp code -->
 <!-- 		<form class="navbar-form" role="search" id="searchEmp" method="GET">
@@ -21,6 +21,29 @@
 				<input class="form-control" placeholder="ابحث.." name="search" id="search" type="text">
 			</div>
 		</form> -->
+		<form class="navbar-form row" role="search" id="searchEmp" method="GET" action="adminreport_forpending.php">
+			<div class="form-group add-on ">
+				<label for = "search">رقم القيد / الاسم :</label>
+				<input class="form-control" placeholder="ابحث.." name="search" id="search" type="text"> 
+				<?php
+				if($_SESSION['UserGroup']==3 || $_SESSION['UserGroup']==5){?>
+					<label for = "month">الشهر:</label>
+					<select name="month" class="form-control" id="month">
+						<option value='0'></option>"
+						<?php 
+							for($m = 1;$m <= 12; $m++){ 
+							    $month =  date("F", mktime(0, 0, 0, $m,1)); //prob with february so we must specify the day or it will be taken as 30th which is an overflow for feb
+							    echo "<option value='$m'>$month</option>"; 
+							} 
+						?>
+					</select> 
+					<label for = "year">السنة:</label>
+					<input class="form-control"  name="year" id="year" value="<?php echo date('Y'); ?>">	
+					<input  type="submit" class= "form-control btn btn-info" value="تقرير">
+				<?php }	?>
+			</div> 			
+		</form>
+
 		<!-- form to show pending vacations and confirm them -->
 	    <form class="form-horizontal row" method="POST" action="done.php"> 
 	    <!-- action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']) ?>" -->

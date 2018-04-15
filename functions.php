@@ -1182,6 +1182,66 @@
 		}	
 		echo $output1 ;
 	}
+
+	//-------------- get report as admin for pending-------------------
+
+	function getConfirmedVacAsAdminReportForPending(){
+		$con = connect();
+		$sql= "";
+		$output1="";
+		$sql .="SELECT t.id,d.emp_code,d.emp_name,t.start_date,t.end_date,t.duration,c.case_desc,dn.day_n
+				FROM t_case c RIGHT OUTER JOIN t_transe t ON c.ID = t.id_case 
+							  LEFT OUTER JOIN t_data d ON t.emp_id = d.ID 
+							  LEFT OUTER JOIN t_day_n DN ON d.day_night = dn.ID	
+				WHERE t.topManager_agree in(1,2)
+				AND	  t.AdminConfirm = 3";
+
+		if(!empty($_GET['search'])){
+			$sql .= " and (d.emp_code like '%". $_GET['search'] ."%' OR d.emp_name like '%". $_GET['search'] ."%')";	
+		}
+		if(!empty($_GET['month'])){
+			$sql .= " and MONTH(t.start_date)= ". $_GET['month'] ."";	
+		}
+		if(!empty($_GET['year'])){
+			$sql .= " and YEAR(t.start_date)= ". $_GET['year'] ."";	
+		}
+		// if(!empty($_GET['dateTo']) && !empty($_GET['dateFrom']) ){
+		// 	$sql .= " and (t.start_date between '".$_GET['dateFrom']."' and '".$_GET['dateTo'] ."')";
+		// }
+		$sql .= " ORDER BY d.emp_code,t.start_date asc ";
+		// echo $sql;
+		$stmt = $con->prepare($sql);
+		$stmt->execute();
+		$result = $stmt->fetchAll();
+		$count= $stmt->rowCount();
+		$array=[];
+		foreach($result as $row ){
+			$emp_code = $row['emp_code'];
+				if (end($array) != $emp_code) {
+					array_push($array, $emp_code);
+					$output1 .= "<tr>
+									<td class='bg-info'>
+										<div >".$row['emp_code']."</div>
+									</td>
+									<td class='bg-info'>
+										<div >".$row['emp_name']."</div>
+									</td>
+									<td class='bg-info'>
+										<div >".$row['day_n']."</div>
+									</td>
+								</tr>";
+					}
+					$output1 .="<tr>
+								 	<td colspan='3'></td>
+									<td>".  $row['case_desc']. "</td>
+									<td>".  $row['start_date']. "</td>
+									<td>".  $row['end_date']. "</td>
+									<td>".  $row['duration']. "</td>
+							 	</tr>";	
+							
+		}	
+		echo $output1 ;
+	}
 	//------------get vacations' status feedback as Employee------------ 
 	function getVacationStatusAsEmp(){
 		$con = connect();

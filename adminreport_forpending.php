@@ -27,8 +27,8 @@
 	    	      
 		    </form>
 		</div> -->
-	    <header class="row text-center">
-	  	    <h2 class="col-sm-4 col-sm-offset-4 ">الاجازات المسجلة</h1>	    
+		<header class="row text-center">
+	  	    <h2 class="col-sm-4 col-sm-offset-4 ">الاجازات المطلوب تسجيلها</h1>	    
 	    </header>
 		<table id="confirmedVacReport" class="table table-striped table-bordered table-responsive table-condensed">	
 			<thead>
@@ -45,7 +45,7 @@
 			<tbody id="Reportbody">
 				<?php
 					if($_SESSION['UserGroup']==3 || $_SESSION['UserGroup']==5){
-							getConfirmedVacAsAdminReport();
+							getConfirmedVacAsAdminReportForPending();
 					} 
 				?>
 			</tbody>

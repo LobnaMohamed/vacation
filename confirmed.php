@@ -12,7 +12,7 @@
 	<div class="container">
 	    <header class="row text-center">
 	    	<!-- <img class= "col-lg-2 logo" src="images/amoc2.png"> -->
-	  	    <h1 class="col-lg-12">الاجازات المعتمدة</h1>  
+	  	    <h1 class="col-lg-12">الاجازات المسجلة</h1>  
 	    </header>
 	    <div class="table-responsive row">
 	    	<form class="navbar-form row" role="search" id="searchEmp" method="GET" action="adminreport.php">
