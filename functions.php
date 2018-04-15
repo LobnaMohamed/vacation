@@ -540,7 +540,7 @@
 		$agreement = $stmt2->fetchAll();
 		
 		foreach($result as $row){
-		
+			
 			$index= $row['id'];
 			echo"<tr>";
 			if($row['manager_id']==$_SESSION['UserID'] && $row['Manager_agree'] == 3){
