@@ -29,6 +29,12 @@
 		if($_SESSION['UserGroup']==3){
 			getPendingVacAsAdmin(); 
 		}
+		if($_SESSION['UserGroup']==5){
+			getPendingVacAsAdminandManager(); 
+		}
+		if($_SESSION['UserGroup']==6){
+			getPendingVacAsAdminandTopManager(); 
+		}
 	}else if($currentURL == 'myvacationstatus.php'){
 		getVacationStatusAsEmp();
 	}

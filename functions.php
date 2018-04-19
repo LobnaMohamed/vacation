@@ -174,7 +174,7 @@
 	//------get Top Managers function-----------
 	function getTopManagers(){
 		$con = connect();
-		$sql= "SELECT ID,emp_code,emp_name FROM t_data where id_userGroup=2" ;
+		$sql= "SELECT ID,emp_code,emp_name FROM t_data where id_userGroup in(2,6)" ;
     	$stmt = $con->prepare($sql);
 		$stmt->execute();
 		$result = $stmt->fetchAll();
@@ -442,7 +442,7 @@
 				FROM 	t_data d,t_data d2 ,t_transe t ,t_case c ,managements m , vac_status vs, vac_status vs2 
 				WHERE 	t.emp_id=d.ID 
 						and t.id_case=c.ID 
-						and t.manager_id={$_SESSION['UserID']}
+						and t.manager_id={$_SESSION['UserID']} 
 						and t.Manager_agree=3 
 						and t.Mang_id=m.ID 
 						and t.Manager_agree=vs.ID
@@ -702,6 +702,7 @@
 		$agreement2 = $stmt3->fetchAll();
 		foreach($result as $row){
 			$index= $row['id'];
+
 			echo"<tr>";
 				echo"<td>".  $row['emp_code']. "</td>";
 				echo"<td>".  $row['emp_name']. "</td>";
@@ -711,9 +712,10 @@
 				echo"<td>".  $row['end_date']. "</td>";
 				echo"<td>".  $row['duration']. "</td>";
 				echo"<td>".  $row['MgrName']. "</td>";
+				//if direct manager is same as top
+
 				echo"<td>".  $row['mgrAgreeStatus']. "</td>" ;
 				echo"<td>".  $row['TopMgrName']. "</td>";
-
 				echo"<td>";  
 				if($row['topManager_agree']==3 && $row['top_manager_id']==$_SESSION['UserID']){
 					foreach($agreement2 as $row2){
