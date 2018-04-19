@@ -982,7 +982,7 @@
 			and t.top_manager_id=d3.ID";
 
 		if(!empty($_GET['search'])){
-			$sql .= " and (d.emp_code like '%". $_GET['search'] ."%' OR d.emp_name like '%". $_GET['search'] ."%')";	
+			$sql .= " and (d.emp_code like '%". $_GET['search'] ."%' OR d.emp_name like '%". $_GET['search'] ."%')";
 		}
 		if(!empty($_GET['dateTo']) && !empty($_GET['dateFrom']) ){
 			$sql .= " and (t.start_date between '".$_GET['dateFrom']."' and '".$_GET['dateTo'] ."')";

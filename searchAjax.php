@@ -14,7 +14,7 @@
 		if($_SESSION['UserGroup']==1){
 			getConfirmedVacAsManager(); 
 		}
-		if($_SESSION['UserGroup']==3){
+		if($_SESSION['UserGroup']==3 || $_SESSION['UserGroup']==5 || $_SESSION['UserGroup']==6){
 			getConfirmedVacAsAdmin();
 		}
 

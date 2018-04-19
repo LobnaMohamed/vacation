@@ -328,7 +328,6 @@ $(document).ready(function(){
  		var dateTo_value = $('#searchDateTo').val();
  		var dateFrom_value = $('#searchDateFrom').val();
  		var currentURL = document.location.href.match(/[^\/]+$/)[0];
- 		// alert(currentURL);
 		$.ajax({
 			url:'searchAjax.php',
 			method:"GET",
