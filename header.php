@@ -58,11 +58,13 @@
 			  <li><a href="logout.php">خروج</a></li>
 			  <li><a href="myvacationstatus.php">اجازاتى</a></li>
 			  <li><a href="vacationmodel.php">عمل اجازة</a></li>
-				<?php if($_SESSION['UserGroup']==3  || $_SESSION['UserGroup']==5){ ?>
+			   <!-- emp or manager or top manager in adminstration -->
+				<?php if($_SESSION['UserGroup']==3  || $_SESSION['UserGroup']==5 || $_SESSION['UserGroup']==6){ ?>
 						<li><a href="empdata.php">بيانات العاملين</a></li>
 						<li><a href="pending.php">الاجازات المطلوب تسجيلها</a></li>
 						<li><a href="confirmed.php">الاجازات المسجلة</a></li>
 				<?php 
+				// direct manager or top manager
 				   }elseif($_SESSION['UserGroup']==1 || $_SESSION['UserGroup']==2){ ?>
 				   	<li><a href="confirmed.php">الاجازات المعتمدة</a></li>
 				   	<li><a href="pending.php">الاجازات المطلوب اعتمادها</a></li>

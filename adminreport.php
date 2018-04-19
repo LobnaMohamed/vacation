@@ -44,7 +44,7 @@
 			</thead>
 			<tbody id="Reportbody">
 				<?php
-					if($_SESSION['UserGroup']==3 || $_SESSION['UserGroup']==5){
+					if($_SESSION['UserGroup']==3 || $_SESSION['UserGroup']==5 || $_SESSION['UserGroup']==6){
 							getConfirmedVacAsAdminReport();
 					} 
 				?>

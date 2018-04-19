@@ -26,7 +26,7 @@
 				<label for = "search">رقم القيد / الاسم :</label>
 				<input class="form-control" placeholder="ابحث.." name="search" id="search" type="text"> 
 				<?php
-				if($_SESSION['UserGroup']==3 || $_SESSION['UserGroup']==5){?>
+				if($_SESSION['UserGroup']==3 || $_SESSION['UserGroup']==5 || $_SESSION['UserGroup']==6){?>
 					<label for = "month">الشهر:</label>
 					<select name="month" class="form-control" id="month">
 						<option value='0'></option>"
@@ -76,7 +76,7 @@
 							    echo"<th>موافقة الرئيس الاعلى</th>";
 								echo"<th>اعتماد الاستحقاقات</th>";
 							}
-							if($_SESSION['UserGroup']==5  ){ //est72a2at manager
+							if($_SESSION['UserGroup']==5 || $_SESSION['UserGroup']==6){ //est72a2at manager or top manager
 								echo"<th>الرئيس المباشر</th>";
 								echo"<th>موافقة الرئيس المباشر</th>";
 								echo"<th>الرئيس الاعلى</th>";
@@ -97,8 +97,10 @@
 						}elseif($_SESSION['UserGroup']==3 ){ //est72a2at
 							getPendingVacAsAdmin(); 
 						}  
-						elseif( $_SESSION['UserGroup']==5){ //est72a2at and manager
+						elseif( $_SESSION['UserGroup']==5){ //est72a2at and direct manager
 							getPendingVacAsAdminandManager(); 
+						}elseif( $_SESSION['UserGroup']==6){ //est72a2at and top manager
+							getPendingVacAsAdminandTopManager(); 
 						} 
 					?>
 				</tbody>

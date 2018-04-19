@@ -63,7 +63,7 @@
 				$_SESSION['UserID'] = $userID;
 				$_SESSION['UserFullName'] = $user_fullName;
 				//redirect according to privillage
-				if($userGroup==3 ||$userGroup==5){
+				if($userGroup==3 ||$userGroup==5 || $userGroup==6){
 					$response = "nothing3";
 					$page = "empdata.php";
 					// header('Location: empdata.php');//redirect
@@ -313,16 +313,7 @@
 	function getAllEmp(){
 		$output="";
 		$con = connect();
-		$sql= '';
-		// $sql .= "SELECT d.ID,d.emp_code,d.emp_name,d.desc_job,d.management, a.active as activeStatus, dn.day_n as shift,m.management as g_management,j.job as job,l.level as level, c.contractType as contract
-		//     FROM t_data d left JOIN t_active a on d.active = a.ID 
-		//     			  left Join t_day_n  dn  on d.day_night = dn.ID
-		//     			  left Join managements m  on d.g_management_id = m.ID
-		//     			  left Join t_job j on d.id_job = j.ID
-		//     			  left Join t_level l on d.level_id = l.ID
-		//     			  left Join contract c on d.contract_type = c.ID";
-
-		
+		$sql= '';		
 		if(!empty($_GET['search'])){
 			$sql = "SELECT * 
 					FROM empdata 	
@@ -335,22 +326,6 @@
 		$stmt = $con->prepare($sql);
 		$stmt->execute();
 		$result = $stmt->fetchAll();
-		// foreach($result as $row){
-		// 	echo"<tr>";
-		// 	echo"<td>".  $row['emp_code']. "</td>";
-		// 	echo"<td>".  $row['emp_name']. "</td>";
-		// 	echo"<td>".  $row['contract']. "</td>";
-		// 	echo"<td>".  $row['job']. "</td>";
-		// 	echo"<td>".  $row['g_management']. "</td>";
-		// 	echo"<td>".  $row['level']. "</td>";
-		// 	echo"<td>".  $row['shift']. "</td>";
-		// 	echo"<td>".  $row['activeStatus']. "</td>";
-		// 	echo'<td><button type="button" class="btn btn-info btn-sm editEmpData" data-toggle="modal" data-target="#editEmpModal" id="'.$row['ID'].'">تعديل</button></td>';
-		// 	echo '</tr>';
-		//  } 
-		// echo "<pre>";
-		// print_r($result) ;
-		// echo "</pre>";
 		foreach($result as $row){
 			$output .= 
 			"<tr>
@@ -519,17 +494,6 @@
 			and t.Manager_agree=vs.ID
 			and t.Manager_agree in(1,3,4)
 			and (t.top_manager_id={$_SESSION['UserID']} or t.manager_id ={$_SESSION['UserID']} ) ";
-          //-------------OLD SQL----------------//
-		// SELECT t.id,t.start_date,t.end_date,t.duration,d.emp_code,d.emp_name,c.case_desc,IFNULL(t.manager_id,'no manager')as directManger,t.Manager_agree,t.top_manager_id,m.Management,vs.status,t.topManager_agree,d2.emp_name as MgrName  
-		// 		FROM t_data d,t_data d2 ,t_transe t ,t_case c ,managements m , vac_status vs 
-		// 		WHERE t.emp_id=d.ID 
-		// 		and t.id_case=c.ID 
-		// 		and  (t.top_manager_id={$_SESSION['UserID']} or t.manager_id={$_SESSION['UserID']})
-		// 		and t.topManager_agree=3 
-		// 		and t.Mang_id=m.ID 
-		// 		and t.Manager_agree=vs.ID
-		// 		and t.manager_id=d2.ID
-
 		$stmt = $con->prepare($sql);
 		$stmt->execute();
 		$result = $stmt->fetchAll();
@@ -592,19 +556,6 @@
 	function getPendingVacAsAdmin(){
 		$con = connect();
 		$sql= '';
-		//-----old sql-----------
-		// $sql .= "SELECT t.id, t.start_date,t.end_date,t.duration,d.emp_code,d.emp_name,c.case_desc,t.manager_id,t.Manager_agree,t.top_manager_id,m.Management,vs.status as mgrAgreeStatus,t.topManager_agree ,vs2.status as topAgreeStatus,t.AdminConfirm,d2.emp_name as MgrName ,d3.emp_name as TopMgrName
-		// 		FROM 	t_data d,t_data d2,t_data d3 ,t_transe t ,t_case c ,managements m , vac_status vs, vac_status vs2 
-		// 		WHERE 	t.emp_id=d.ID 
-		// 				and t.id_case=c.ID 
-		// 				and t.topManager_agree in (1,2) 
-		// 				and t.AdminConfirm=3
-		// 				and t.Mang_id=m.ID 
-		// 				and t.Manager_agree=vs.ID
-		// 				and t.topManager_agree=vs2.ID
-		// 				and t.manager_id=d2.ID
-		// 				and t.top_manager_id=d3.ID";
-
 		$sql .="SELECT t.id, t.start_date,t.end_date,t.duration,d.emp_code,d.emp_name,c.case_desc,t.manager_id,t.Manager_agree,t.top_manager_id,m.Management,vs.status as mgrAgreeStatus,t.topManager_agree ,vs2.status as topAgreeStatus,t.AdminConfirm,IFNULL(d2.emp_name,'لا يوجد') as MgrName ,d3.emp_name as TopMgrName
 				FROM t_data d3 ,t_case c ,managements m , vac_status vs, vac_status vs2,t_data d 
 				RIGHT OUTER JOIN t_transe t ON d.ID = t.emp_id LEFT OUTER JOIN  t_data d2 ON t.manager_id=d2.ID
@@ -649,27 +600,15 @@
 		} 
 	}
 
-		//-----get pending vacations as admin and manager --------------
+	//-----get pending vacations as admin and DIRECT manager --------------
 	function getPendingVacAsAdminandManager(){
 		$con = connect();
 		$sql= '';
-		// $sql .="SELECT t.id, t.start_date,t.end_date,t.duration,d.emp_code,d.emp_name,c.case_desc,t.manager_id,t.Manager_agree,t.top_manager_id,m.Management,vs.status as mgrAgreeStatus,t.topManager_agree ,vs2.status as topAgreeStatus,t.AdminConfirm,vs3.status as AdminAgreeStatus,d2.emp_name as MgrName ,d3.emp_name as TopMgrName
-		// 		FROM t_data d3 ,t_case c ,managements m , vac_status vs, vac_status vs2,vac_status vs3,t_data d 
-		// 		RIGHT OUTER JOIN t_transe t ON d.ID = t.emp_id LEFT OUTER JOIN  t_data d2 ON t.manager_id=d2.ID
-		// 		WHERE t.id_case=c.ID 
-		// 				and t.topManager_agree in (1,2,3)
-		// 				and t.AdminConfirm =vs3.ID
-		// 				and t.AdminConfirm =3
-		// 				and t.manager_id={$_SESSION['UserID']}
-		// 				and t.Mang_id=m.ID 
-		// 				and t.Manager_agree=vs.ID
-		// 				and t.topManager_agree=vs2.ID
-		// 				and t.top_manager_id=d3.ID";
-		$sql .="SELECT t.id, t.start_date,t.end_date,t.duration,d.emp_code,d.emp_name,c.case_desc,t.manager_id,t.Manager_agree,t.top_manager_id,m.Management,vs.status as mgrAgreeStatus,t.topManager_agree ,vs2.status as topAgreeStatus,t.AdminConfirm,vs3.status as AdminAgreeStatus,d2.emp_name as MgrName ,d3.emp_name as TopMgrName
+		$sql .="SELECT t.id, t.start_date,t.end_date,t.duration,d.emp_code,d.emp_name,c.case_desc,t.manager_id,t.Manager_agree,t.top_manager_id,m.Management,vs.status as mgrAgreeStatus,t.topManager_agree ,vs2.status as topAgreeStatus,t.AdminConfirm,vs3.status as AdminAgreeStatus,IFNULL(d2.emp_name,'لا يوجد') as MgrName ,d3.emp_name as TopMgrName
 		FROM t_data d3 ,t_case c ,managements m , vac_status vs, vac_status vs2,vac_status vs3,t_data d 
 		RIGHT OUTER JOIN t_transe t ON d.ID = t.emp_id LEFT OUTER JOIN  t_data d2 ON t.manager_id=d2.ID
 		WHERE t.id_case=c.ID 
-				and (t.topManager_agree in (1,2) or (t.Manager_agree =3 and t.manager_id={$_SESSION['UserID']}))
+				and (t.topManager_agree =1 or (t.Manager_agree =3 and t.manager_id={$_SESSION['UserID']}))
 						and t.AdminConfirm =vs3.ID
 						and t.AdminConfirm =3
 						and t.Mang_id=m.ID 
@@ -733,22 +672,106 @@
 			echo "</tr>";
 		} 
 	}
+	//-----get pending vacations as admin and TOP manager --------------
+	function getPendingVacAsAdminandTopManager(){
+		$con = connect();
+		$sql= '';
+		$sql .="SELECT t.id, t.start_date,t.end_date,t.duration,d.emp_code,d.emp_name,c.case_desc,t.manager_id,t.top_manager_id,m.Management,t.Manager_agree,vs.status as mgrAgreeStatus,t.topManager_agree ,vs2.status as topAgreeStatus,t.AdminConfirm,vs3.status as AdminAgreeStatus,IFNULL(d2.emp_name,'لا يوجد') as MgrName ,d3.emp_name as TopMgrName
+		FROM t_data d3 ,t_case c ,managements m , vac_status vs, vac_status vs2,vac_status vs3,t_data d 
+		RIGHT OUTER JOIN t_transe t ON d.ID = t.emp_id LEFT OUTER JOIN  t_data d2 ON t.manager_id=d2.ID
+		WHERE t.id_case=c.ID 
+				and (t.topManager_agree = 1 or (t.topManager_agree=3 and t.top_manager_id={$_SESSION['UserID']})) 
+				and t.AdminConfirm =vs3.ID
+				and t.AdminConfirm =3
+				and t.Mang_id=m.ID
+				and t.Manager_agree=vs.ID 
+				and (t.Manager_agree in (1,4)or (t.Manager_agree=3 and t.manager_id={$_SESSION['UserID']}))
+				and t.topManager_agree=vs2.ID
+				and t.top_manager_id=d3.ID";
+		$stmt = $con->prepare($sql);
+		$stmt->execute();
+		$result = $stmt->fetchAll();
+		$vacStatus= "SELECT ID,status FROM vac_status  where ID != 4";
+		//status for manager
+		$stmt2 = $con->prepare($vacStatus);
+		$stmt2->execute();
+		$agreement = $stmt2->fetchAll();
+		//status for admin
+		$stmt3 = $con->prepare($vacStatus);
+		$stmt3->execute();
+		$agreement2 = $stmt3->fetchAll();
+		foreach($result as $row){
+			$index= $row['id'];
+			echo"<tr>";
+				echo"<td>".  $row['emp_code']. "</td>";
+				echo"<td>".  $row['emp_name']. "</td>";
+				echo"<td>".  $row['Management']. "</td>";
+				echo"<td>".  $row['case_desc']. "</td>";
+				echo"<td>".  $row['start_date']. "</td>";
+				echo"<td>".  $row['end_date']. "</td>";
+				echo"<td>".  $row['duration']. "</td>";
+				echo"<td>".  $row['MgrName']. "</td>";
+				echo"<td>".  $row['mgrAgreeStatus']. "</td>" ;
+				echo"<td>".  $row['TopMgrName']. "</td>";
 
-
+				echo"<td>";  
+				if($row['topManager_agree']==3 && $row['top_manager_id']==$_SESSION['UserID']){
+					foreach($agreement2 as $row2){
+							if($row2['ID']<4){
+								echo '<label >'.$row2['status'].'
+							        <input type="radio" class="radio-inline" name="TopMangrAgree['.$index.']" class="TopMangrAgreeRadio" value="'.$row2['ID'].'"';
+							    if($row['topManager_agree'] == $row2['ID']){ echo "checked"; }
+							    echo'></label>';
+							}		  
+					}
+				}else{
+					echo $row['topAgreeStatus'];
+				}
+				echo "</td>";
+				echo'<td>'; 
+					if($row['topManager_agree']==1 ){
+						foreach($agreement2 as $row2){
+							if($row2['ID']!=4){
+								echo '<label >'.$row2['status'].'
+							        <input type="radio" class="radio-inline" name="AdminAgree['.$index.']" class="AdminAgreeRadio" value="'.$row2['ID'].'"';
+							    if($row['AdminConfirm'] == $row2['ID']){ echo "checked"; }
+							    echo'></label>';
+							}		  
+						}
+					}elseif($row['AdminConfirm']==3 && $row['top_manager_id']==$_SESSION['UserID']){
+						foreach($agreement2 as $row2){
+							if($row2['ID']!=4){
+								echo '<label >'.$row2['status'].'
+							        <input type="radio" class="radio-inline" name="AdminAgree['.$index.']" class="AdminAgreeRadio" value="'.$row2['ID'].'"';
+							    if($row['AdminConfirm'] == $row2['ID']){ echo "checked"; }
+							    echo'></label>';
+							}		  
+						}
+					}else{
+						echo $row['AdminAgreeStatus'];
+					}
+					
+				echo'</td>';
+			echo "</tr>";
+		} 
+	}
 	//------------reply to vacations function------------
 	function saveVacationAgree(){
-		if(isset($_POST['TopMangrAgree']) && isset($_POST['MangrAgree'])){
-			echo "in TOP manager agree";
-			$Topanswers = isset($_POST['TopMangrAgree']) ? $_POST['TopMangrAgree'] : array();
-			$answers = isset($_POST['MangrAgree']) ? $_POST['MangrAgree'] : array();
-			//$answers = $_POST['TopMangrAgree'];
-			print_r($Topanswers);
+		//NEWWW
+		$Topanswers = isset($_POST['TopMangrAgree']) ? $_POST['TopMangrAgree'] : array();
+		$Mgranswers = isset($_POST['MangrAgree']) ? $_POST['MangrAgree'] : array();
+		$Adminanswers = isset($_POST['AdminAgree']) ? $_POST['AdminAgree'] : array();
+		echo"<pre>";
+		print_r($Topanswers);
+		print_r($Mgranswers);
+		print_r($Adminanswers);
+		echo"</pre>";
+		if(isset($Topanswers)){
 			$con = connect();
 			$sql= '';
-			
 			//Iterate through each answer
 			foreach($Topanswers as $key => $answer) {
-				echo"1st foreach";
+				echo"top manager foreach";
 				print_r($answer) ;
 				echo $key;
 				$sql = "UPDATE t_transe SET topManager_agree =:Agree where ID= :key";
@@ -766,8 +789,13 @@
 					echo 'error!<br>';
 				}
 			}
-			foreach($answers as $key => $answer) {
-				echo"2nd foreach";
+		}
+		if(isset($Mgranswers)){
+			$con = connect();
+			$sql= '';
+			//Iterate through each answer
+			foreach($Mgranswers as $key => $answer) {
+				echo"Mgr  foreach";
 				print_r($answer) ;
 				echo $key;
 				$sql = "UPDATE t_transe SET Manager_agree =:Agree where ID= :key";
@@ -785,44 +813,13 @@
 					echo 'error!<br>';
 				}
 			}
-		}elseif(isset($_POST['TopMangrAgree'])){
-			echo "in TOP manager agree only";
-			$Topanswers = isset($_POST['TopMangrAgree']) ? $_POST['TopMangrAgree'] : array();
-			$answers = isset($_POST['MangrAgree']) ? $_POST['MangrAgree'] : array();
-			//$answers = $_POST['TopMangrAgree'];
-			print_r($Topanswers);
+		}
+		if(isset($Adminanswers)){
 			$con = connect();
 			$sql= '';
-			
 			//Iterate through each answer
-			foreach($Topanswers as $key => $answer) {
-				echo"1st foreach";
-				print_r($answer) ;
-				echo $key;
-				$sql = "UPDATE t_transe SET topManager_agree =:Agree where ID= :key";
-				$stmt = $con->prepare($sql);
-			    $stmt->bindParam(':Agree', $answer, PDO::PARAM_INT);
-			    $stmt->bindParam(':key', $key, PDO::PARAM_INT);
-				//$stmt->execute(array($answer));
-				$stmt->execute();
-				//echo $sql;
-				if($stmt){
-				    echo 'Row inserted!<br>';
-				    //echo $answer;
-				}
-				elseif(!$stmt){
-					echo 'error!<br>';
-				}
-			}
-		}elseif(isset($_POST['AdminAgree']) || isset($_POST['MangrAgree'])){ //admin
-			echo "in admin agree";
-			$answers = isset($_POST['AdminAgree']) ? $_POST['AdminAgree'] : array();
-			//$answers = $_POST['AdminAgree'];
-			$con = connect();
-			$sql= '';
-			
-			//Iterate through each answer
-			foreach($answers as $key => $answer) {
+			foreach($Adminanswers as $key => $answer) {
+				echo"admin foreach";
 				print_r($answer) ;
 				echo $key;
 				$sql = "UPDATE t_transe SET AdminConfirm =:Agree where ID= :key";
@@ -840,88 +837,9 @@
 					echo 'error!<br>';
 				}
 			}
-			//as managerrrrrrrrrrrrrrrrrrrrrrrrr
-			echo "in manager agree";
-			$mgranswers = isset($_POST['MangrAgree']) ? $_POST['MangrAgree'] : array();
-			//$answers = $_POST['MangrAgree'];
-			$con = connect();
-			$sql= '';
-			
-			//Iterate through each answer
-			foreach($mgranswers as $key => $answer) {
-				print_r($mgranswers) ;
-				echo $key;
-				$sql = "UPDATE t_transe SET Manager_agree =:Agree where ID= :key";
-				$stmt = $con->prepare($sql);
-			    $stmt->bindParam(':Agree', $answer, PDO::PARAM_INT);
-			    $stmt->bindParam(':key', $key, PDO::PARAM_INT);
-				//$stmt->execute(array($answer));
-				$stmt->execute();
-				//echo $sql;
-				if($stmt){
-				    echo 'Row inserted!<br>';
-				    //echo $answer;
-				}
-				elseif(!$stmt){
-					echo 'error!<br>';
-				}
-			}
-		}
-		elseif(isset($_POST['MangrAgree'])){
-			echo "in manager agree";
-			$answers = isset($_POST['MangrAgree']) ? $_POST['MangrAgree'] : array();
-			//$answers = $_POST['MangrAgree'];
-			$con = connect();
-			$sql= '';
-			
-			//Iterate through each answer
-			foreach($answers as $key => $answer) {
-				print_r($answer) ;
-				echo $key;
-				$sql = "UPDATE t_transe SET Manager_agree =:Agree where ID= :key";
-				$stmt = $con->prepare($sql);
-			    $stmt->bindParam(':Agree', $answer, PDO::PARAM_INT);
-			    $stmt->bindParam(':key', $key, PDO::PARAM_INT);
-				//$stmt->execute(array($answer));
-				$stmt->execute();
-				//echo $sql;
-				if($stmt){
-				    echo 'Row inserted!<br>';
-				    //echo $answer;
-				}
-				elseif(!$stmt){
-					echo 'error!<br>';
-				}
-			}
-		// }elseif(isset($_POST['AdminAgree'])){ //admin
-		// 	echo "in admin agree";
-		// 	$answers = isset($_POST['AdminAgree']) ? $_POST['AdminAgree'] : array();
-		// 	//$answers = $_POST['AdminAgree'];
-		// 	$con = connect();
-		// 	$sql= '';
-			
-		// 	//Iterate through each answer
-		// 	foreach($answers as $key => $answer) {
-		// 		print_r($answer) ;
-		// 		echo $key;
-		// 		$sql = "UPDATE t_transe SET AdminConfirm =:Agree where ID= :key";
-		// 		$stmt = $con->prepare($sql);
-		// 	    $stmt->bindParam(':Agree', $answer, PDO::PARAM_INT);
-		// 	    $stmt->bindParam(':key', $key, PDO::PARAM_INT);
-		// 		//$stmt->execute(array($answer));
-		// 		$stmt->execute();
-		// 		//echo $sql;
-		// 		if($stmt){
-		// 		    echo 'Row inserted!<br>';
-		// 		    //echo $answer;
-		// 		}
-		// 		elseif(!$stmt){
-		// 			echo 'error!<br>';
-		// 		}
-		// 	}
-		// }
 		}
 	}
+
 	//------------get confirmed vacations as manager------------ 
 
 	function getConfirmedVacAsManager(){
@@ -990,20 +908,7 @@
 			and t.topManager_agree=vs2.ID
 			and t.AdminConfirm=vs3.ID
             and (t.top_manager_id={$_SESSION['UserID']} or t.manager_id ={$_SESSION['UserID']} )";
-			//old sql
-			// $sql .= "SELECT t.id,t.start_date,t.end_date,t.duration,d.emp_code,d.emp_name,c.case_desc,t.manager_id,t.top_manager_id,m.Management,vs.status as mgrAgreeStatus,vs2.status as topAgreeStatus,vs3.status as AdminAgreeStatus,d2.emp_name as MgrName
-			// FROM t_data d,t_data d2,t_transe t ,t_case c ,managements m , vac_status vs ,vac_status vs2,vac_status vs3
-			// WHERE t.emp_id=d.ID 
-			// and t.id_case=c.ID 
-			// and  (t.top_manager_id={$_SESSION['UserID']} or t.manager_id={$_SESSION['UserID']})
-			// and (t.topManager_agree in (1,2) )
-			// and t.Mang_id=m.ID 
-			// and t.Manager_agree=vs.ID
-			// and t.topManager_agree=vs2.ID
-			// and t.AdminConfirm=vs3.ID
-			// and t.manager_id=d2.ID";
-
-
+			
 		if(!empty($_GET['search'])){
 			$sql .= " and (d.emp_code like '%". $_GET['search'] ."%' OR d.emp_name like '%". $_GET['search'] ."%')";	
 		}
@@ -1065,19 +970,6 @@
 	function getConfirmedVacAsAdmin(){
 		$con = connect();
 		$sql= '';
-		//--------old sql------------
-		// $sql .= "SELECT t.id,t.start_date,t.end_date,t.duration,d.emp_code,d.emp_name,c.case_desc,t.manager_id,t.top_manager_id,m.Management,vs.status as mgrAgreeStatus,vs2.status as topAgreeStatus,vs3.status as AdminAgreeStatus,d2.emp_name as MgrName,d3.emp_name as TopMgrName
-		// 	FROM t_data d,t_data d2,t_data d3 ,t_transe t ,t_case c ,managements m , vac_status vs ,vac_status vs2,vac_status vs3
-		// 	WHERE t.emp_id=d.ID 
-		// 	and t.id_case=c.ID 
-		// 	and t.AdminConfirm in(1,2)
-		// 	and t.Mang_id=m.ID 
-		// 	and t.Manager_agree=vs.ID
-		// 	and t.topManager_agree=vs2.ID
-		// 	and t.AdminConfirm=vs3.ID
-		// 	and t.manager_id=d2.ID
-		// 	and t.top_manager_id=d3.ID";
-
 		$sql .="SELECT t.id,t.start_date,t.end_date,t.duration,d.emp_code,d.emp_name,c.case_desc,t.manager_id,t.top_manager_id,m.Management,vs.status as mgrAgreeStatus,vs2.status as topAgreeStatus,vs3.status as AdminAgreeStatus,IFNULL(d2.emp_name,'لا يوجد' )as MgrName,d3.emp_name as TopMgrName
 			FROM t_data d3, t_case c ,managements m , vac_status vs ,vac_status vs2,vac_status vs3,t_data d 			
 			RIGHT OUTER JOIN t_transe t ON d.ID = t.emp_id LEFT OUTER JOIN  t_data d2 ON t.manager_id=d2.ID
@@ -1177,8 +1069,7 @@
 									<td>".  $row['start_date']. "</td>
 									<td>".  $row['end_date']. "</td>
 									<td>".  $row['duration']. "</td>
-							 	</tr>";	
-							
+							 	</tr>";						
 		}	
 		echo $output1 ;
 	}

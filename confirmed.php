@@ -21,14 +21,14 @@
 			    	<label for = "search">رقم القيد / الاسم :</label>
 					<input class="form-control" placeholder="ابحث.." name="search" id="search" type="text">
 					<?php
-					if($_SESSION['UserGroup']!=3 && $_SESSION['UserGroup']!=5){?>
+					if($_SESSION['UserGroup']!=3 && $_SESSION['UserGroup']!=5 && $_SESSION['UserGroup']!=6){?>
 					<label for = "searchDateFrom">التاريخ من:</label>
 					<input class="form-control"  name="searchDateFrom" id="searchDateFrom" type="date">
 					<label for = "searchDateTo">التاريخ الى:</label>
 					<input class="form-control"  name="searchDateTo" id="searchDateTo" type="date"> 
 					<?php
 					}
-					if($_SESSION['UserGroup']==3 || $_SESSION['UserGroup']==5){?>
+					if($_SESSION['UserGroup']==3 || $_SESSION['UserGroup']==5 || $_SESSION['UserGroup']==6){?>
 						<label for = "month">الشهر:</label>
 						<select name="month" class="form-control" id="month">
 							<option value='0'></option>"
@@ -82,7 +82,7 @@
 									<th>موافقة الرئيس الاعلى</th>
 									<th>اعتماد الاستحقاقت</th>";
 							}
-							elseif($_SESSION['UserGroup']==5){//admin and manager
+							elseif($_SESSION['UserGroup']==5 || $_SESSION['UserGroup']==6){//adminmanager or admin top manager
 								echo"
 									<th>الرئيس المباشر</th>
 									<th>موافقة الرئيس المباشر</th>
@@ -102,7 +102,7 @@
 							getConfirmedVacAsTopManager(); 
 						}elseif($_SESSION['UserGroup']==1){
 							getConfirmedVacAsManager(); 
-						}elseif($_SESSION['UserGroup']==3 || $_SESSION['UserGroup']==5){
+						}elseif($_SESSION['UserGroup']==3 || $_SESSION['UserGroup']==5 || $_SESSION['UserGroup']==6){
 							getConfirmedVacAsAdmin(); 
 						} 
 					?>
