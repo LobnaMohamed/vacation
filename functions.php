@@ -1159,7 +1159,7 @@
 		$stmt = $con->prepare($sql);
 		$stmt->execute();
 		$result = $stmt->fetchAll();
-		$credit= "	SELECT  COUNT(t.duration) as credit,c.case_desc
+		$credit= "	SELECT  sum(t.duration) as credit,c.case_desc
 					FROM t_case c RIGHT OUTER JOIN t_transe t on c.ID = t.id_case
                     			  INNER JOIN t_data d  on t.emp_id = d.Id 
 					WHERE  t.emp_id = {$_SESSION['UserID']}
