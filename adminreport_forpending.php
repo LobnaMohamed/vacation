@@ -39,13 +39,14 @@
 					<th >نوع الاجازة</th>
 					<th >من تاريخ</th>
 					<th >الى تاريخ</th>
+					<th>تاريخ إعتماد الرئيس الاعلى</th>
 					<th >المدة</th>
 			    </tr>		
 			</thead>
 			<tbody id="Reportbody">
 				<?php
-					if($_SESSION['UserGroup']==3 || $_SESSION['UserGroup']==5 || $_SESSION['UserGroup']==6){
-							getConfirmedVacAsAdminReportForPending();
+					if($_SESSION['UserGroup']==3 || $_SESSION['UserGroup']==5 || $_SESSION['UserGroup']==6){	
+							getVacAsAdminReportForPending();
 					} 
 				?>
 			</tbody>

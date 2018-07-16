@@ -239,9 +239,10 @@ $(document).ready(function(){
 				}
 				if(data.response == "noouser"){
 					alert ("من فضلك أدخل بيانات صحيحة");
-					$( '#signin' ).each(function(){
-						this.reset();
-					});
+					$( 'input[name=password]' ).val('');
+					// $( '#signin' ).each(function(){
+					// 	this.reset();
+					// });
 				}
 				if(data.response == "nothing3" || data.response == "nothing"){
 					 window.location.replace(data.redirect) ;

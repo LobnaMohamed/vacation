@@ -8,7 +8,6 @@
 
 
 <link rel="stylesheet" href="jquery-ui/jquery-ui.min.css">
-<script src="jquery-ui\external\jquery/jquery.js"></script>
 <script src="jquery-ui/jquery-ui.min.js"></script>
 <script>
  // If not native HTML5 support, fallback to jQuery datePicker

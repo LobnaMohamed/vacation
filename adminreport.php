@@ -33,13 +33,14 @@
 		<table id="confirmedVacReport" class="table table-striped table-bordered table-responsive table-condensed">	
 			<thead>
 				<tr class='bg-primary'>
-					<th ></th>
-					<th >الاسم</th>
-					<th >التشغيل</th>
-					<th >نوع الاجازة</th>
-					<th >من تاريخ</th>
-					<th >الى تاريخ</th>
-					<th >المدة</th>
+					<th></th>
+					<th>الاسم</th>
+					<th>التشغيل</th>
+					<th>نوع الاجازة</th>
+					<th>من تاريخ</th>
+					<th>الى تاريخ</th>
+					<th>تاريخ إعتماد الرئيس الاعلى</th>
+					<th>المدة</th>
 			    </tr>		
 			</thead>
 			<tbody id="Reportbody">

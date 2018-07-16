@@ -60,27 +60,29 @@
 						<?php
 							if($_SESSION['UserGroup']==2) { //top manager
 								 echo"<th>الرئيس المباشر</th>";
-								 echo"<th>موافقة الرئيس المباشر</th>";
+								 echo"<th>إعتماد الرئيس المباشر</th>";
 								 echo"<th>الرئيس الاعلى</th>";
-								 echo"<th>موافقة الرئيس الاعلى</th>";
+								 echo"<th>إعتماد الرئيس الاعلى</th>";
 							
 							}elseif($_SESSION['UserGroup']==1){//direct manager
-								 echo"<th>موافقة الرئيس المباشر</th>";
+								 echo"<th>إعتماد الرئيس المباشر</th>";
 								 echo"<th>الرئيس الاعلى</th>";
-								 echo"<th>موافقة الرئيس الاعلى</th>";
+								 echo"<th>إعتماد الرئيس الاعلى</th>";
 							}  
 							if($_SESSION['UserGroup']==3  ){ //est72a2at
 								echo"<th>الرئيس المباشر</th>";
-								echo"<th>موافقة الرئيس المباشر</th>";
+								echo"<th>إعتماد الرئيس المباشر</th>";
 								echo"<th>الرئيس الاعلى</th>";
-							    echo"<th>موافقة الرئيس الاعلى</th>";
+								echo"<th>إعتماد الرئيس الاعلى</th>";
+								echo"<th>تاريخ إعتماد الرئيس الاعلى</th>";
 								echo"<th>اعتماد الاستحقاقات</th>";
 							}
 							if($_SESSION['UserGroup']==5 || $_SESSION['UserGroup']==6){ //est72a2at manager or top manager
 								echo"<th>الرئيس المباشر</th>";
-								echo"<th>موافقة الرئيس المباشر</th>";
+								echo"<th>إعتماد الرئيس المباشر</th>";
 								echo"<th>الرئيس الاعلى</th>";
-							    echo"<th>موافقة الرئيس الاعلى</th>";
+								echo"<th>إعتماد الرئيس الاعلى</th>";
+								echo"<th>تاريخ إعتماد الرئيس الاعلى</th>";
 								echo"<th>اعتماد الاستحقاقات</th>";
 							}
 						?>
