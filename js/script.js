@@ -35,7 +35,7 @@ $(document).ready(function(){
 	 	checkErrors();
 	});
 
-	$('#dateTo').blur(function(){
+	$('#dateTo').change(function(){
 
 		var startDate = $('#date').val();
 		var endDate = $(this).val();

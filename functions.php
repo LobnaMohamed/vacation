@@ -276,6 +276,8 @@
 			$topManager= isset($_POST['topManager'])? $_POST['topManager'] :'';
 			$manager= isset($_POST['manager'])? filter_var($_POST['manager'],FILTER_SANITIZE_NUMBER_INT) :'';
 			$vacType= isset($_POST['case'])? $_POST['case'] :'';
+			//adjusting date formats
+			
 			// creating array of errors
 			$formErrors = array();
 			$manager_vacStatus = 3;

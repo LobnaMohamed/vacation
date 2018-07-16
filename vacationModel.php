@@ -19,7 +19,7 @@
     			<label class="col-form-label" for="address" >العنوان</label>
 		    	<input type="text" class="form-control" id="address" name="address" value="بالملف">
 		    	<label for="topManager">الرئيس الاعلى</label>
-			    <select class="form-control" id="topManager" name="topManager" required>
+			    <select class="form-control" id="topManager" name="topManager" required tabindex="3">
 			    	<option selected disabled hidden style='display: none' value=''></option>
 		   		    <?php 	getTopManagers();   ?>			    
 		   		</select>
@@ -28,7 +28,7 @@
 		    	<label for="day_n" >نهارى/ورادى</label>
 	    		<input type="text" class="form-control" id="day_n" name="day_n" placeholder="نهارى/ورادى.." required readonly>
 	    		<label for="manager">المدير المباشر</label>
-			    <select class="form-control" id="manager" name="manager">
+			    <select class="form-control" id="manager" name="manager" tabindex="2">
 			    	<!-- <option selected disabled hidden style='display: none' value=''></option> -->
 		   		    <?php  	getManagers();   ?>
 				</select>				    	
@@ -42,7 +42,7 @@
 		    </div>					
 			<div class="col-sm-3">
 				<label for="code">رقم القيد</label>
-		    	<input type="number" class="form-control" id="code" name="code" placeholder="رقم القيد..">
+		    	<input type="number" class="form-control" id="code" name="code" placeholder="رقم القيد.." tabindex="1">
 		    	<input hidden type="text" id="emp" name="empID"/>
 		    	<!-- <label for="Management" >الادارة العامة:</label>
 				<select class="form-control" id="Management" name="Management">
@@ -62,15 +62,16 @@
 			</div>
 			<div class="col-sm-3">
 				<label for="dateTo" >التاريخ الى</label>
-				<input type="date" class="form-control" id="dateTo" name="vacDateTo" placeholder="date to..">
+				<input type="date" class="form-control" id="dateTo" name="vacDateTo"  required tabindex="6">
 			</div>
+			<!-- placeholder="سنة/يوم/شهر" -->
 			<div class="col-sm-3">
 				<label for="date" >التاريخ من</label>
-				<input type="date" class="form-control" id="date" name="vacDate" placeholder="date.." required>
+				<input type="date" class="form-control" id="date" name="vacDate" required tabindex="5">
 			</div>
 			<div class="col-sm-3">
 				<label for="vacType">نوع الاجازة</label>
-	   		    <select class="form-control" id="vacType" name="case" required>
+	   		    <select class="form-control" id="vacType" name="case" required tabindex="4">
 	   		    	<option selected disabled hidden style='display: none' value='' ></option>
 		   		    <?php getCase();   ?>
 			    </select>
