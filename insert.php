@@ -9,7 +9,6 @@
 		 header("Location:empData.php");
 		
 	}elseif(isset($_POST['UpdateEmp'])){ //update existing employee
-		//echo "<h1>Emp updated!</h1>";
 		editEmp();
 		header("Location:empData.php");
 		

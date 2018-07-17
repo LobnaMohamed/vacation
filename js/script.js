@@ -160,7 +160,7 @@ $(document).ready(function(){
 		var $form = $('#editEmpForm');
 
 		$.ajax({
-			url:"insertEmp.php",
+			url:"insert.php",
 			method:"POST",
 			data: $('form#editEmpForm').serialize(),
 			//dataType:"json",
@@ -177,14 +177,14 @@ $(document).ready(function(){
 	//--------------get management data in edit modal---------------
 	$(document).on('click','.editManagementData', function(){
 		var management_id=$(this).attr("id");
-		 console.log(management_id);
+		// console.log(management_id);
 		$.ajax({
 			url:"fetch_Mang.php",
 			method:"POST",
 			data:{managementID:management_id},
 			dataType:"json",
 			success:function(data){
-				 console.log(data);
+				// console.log(data);
 				$('#management_id').val(data.ID);
 				$('#managementEdit').val(data.Management);
 			},
@@ -193,6 +193,28 @@ $(document).ready(function(){
 			}
 		});
 	});
+	//--------------onsubmit edit management form-----------------------------
+	$(document).on('submit','#editManagementForm', function(){
+		//alert("hi");
+		//e.preventDefault();
+		var $form = $('#editManagementForm');
+
+		$.ajax({
+			url:"insert.php",
+			method:"POST",
+			data: $('form#editManagementForm').serialize(),
+			//dataType:"json",
+
+			success:function(data){
+				//console.log(data);
+				$("#editManagementModal").modal('hide');	
+			},
+			error: function(error) {
+				console.log(error);
+			}
+		});		
+	});
+	
 	//--------------check in change password modal------------------
 	$('#changePassModal').on('show.bs.modal', function(e) {
 		//alert ("hi");
