@@ -14,7 +14,6 @@
       <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
     <![endif]-->
-
 </head>
 <body>
 	<nav class="navbar navbar-inverse fixed-top">
@@ -61,6 +60,7 @@
 			  <li><a href="vacationmodel.php">عمل اجازة</a></li>
 			   <!-- emp or manager or top manager in adminstration -->
 				<?php if($_SESSION['UserGroup']==3  || $_SESSION['UserGroup']==5 || $_SESSION['UserGroup']==6){ ?>
+					  <li><a href="managements.php">الادارات العامة</a></li>
 						<li><a href="empdata.php">بيانات العاملين</a></li>
 						<li><a href="pending.php">الاجازات المطلوب تسجيلها</a></li>
 						<li><a href="confirmed.php">الاجازات المسجلة</a></li>

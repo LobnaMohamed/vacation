@@ -118,4 +118,20 @@ text-align: right;
     font-weight: bold;
     font-family: "Arial"; 
 }
-
+.managements-container{
+    margin: 0 auto;
+}
+.managements{
+    background-color: #c2bfbfc4;
+    text-align: center;
+    font-weight: bold;
+    margin:10px 0;
+}
+.managements:hover{
+    background-color: #940308;
+    color: #f2f2f2;
+}
+#addManagementModal  input[type="submit"]:hover , #editManagementModal  input[type="submit"]:hover {
+    background-color: #940308;
+    color: #fff;
+}

@@ -174,6 +174,25 @@ $(document).ready(function(){
         	}
 		});		
 	});
+	//--------------get management data in edit modal---------------
+	$(document).on('click','.editManagementData', function(){
+		var management_id=$(this).attr("id");
+		 console.log(management_id);
+		$.ajax({
+			url:"fetch_Mang.php",
+			method:"POST",
+			data:{managementID:management_id},
+			dataType:"json",
+			success:function(data){
+				 console.log(data);
+				$('#management_id').val(data.ID);
+				$('#managementEdit').val(data.Management);
+			},
+			error:function(data){
+				console.log( data);
+			}
+		});
+	});
 	//--------------check in change password modal------------------
 	$('#changePassModal').on('show.bs.modal', function(e) {
 		//alert ("hi");

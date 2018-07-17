@@ -57,7 +57,7 @@
 						<h4 class="modal-title"> إضافة عامل جديد </h4>
 					</div>
 					<div class="modal-body row">
-						<form method="POST" id="addEmpForm" action="insertEmp.php">
+						<form method="POST" id="addEmpForm" action="insert.php">
 							<div class="form-group col-md-4">
 					    		<label for= "level">المستوى الوظيفى</label>
 					    		<select class="form-control" id="level" name="level">
@@ -132,7 +132,7 @@
 						<h4 class="modal-title"> تعديل البيانات </h4>
 					</div>
 					<div class="modal-body">
-						<form method="POST" id="editEmpForm" name="editEmpForm" action="insertEmp.php">
+						<form method="POST" id="editEmpForm" name="editEmpForm" action="insert.php">
 							<div class="form-group col-md-4">
 					    		<label for= "levelEdit">المستوى الوظيفى</label>
 					    		<select class="form-control" id="levelEdit" name="levelEdit" >

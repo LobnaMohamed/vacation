@@ -157,6 +157,19 @@
 	 
 	    return $ipaddress;
 	}
+	//-----------------function to get managements------------------
+	function get_All_Mangements(){
+		$con = connect();
+		$sql= "SELECT ID,Management FROM managements " ;
+		$stmt = $con->prepare($sql);
+		$stmt->execute();
+		$result = $stmt->fetchAll();
+			foreach($result as $row){
+			echo '<button  class="btn  btn-lg managements editManagementData well well-sm col-sm-4" data-toggle="modal" data-target="#editManagementModal" id="'.$row['ID'].'">'. $row['Management'] .'</button>';
+				// echo "<div class='managements well well-sm col-sm-4'><span>". $row['Management'] ."</span></div>";
+			}
+			echo "<div class='btn  btn-lg managements well well-sm col-sm-4' data-toggle='modal' data-target='#addManagementModal'><i class='fa fa-plus-circle'></i></div>";
+	}
 	//---------get All Managers who can approve vacations as both manager and top manager in manager combobox --------------
 	function getManagers(){
 		$con = connect();
@@ -435,6 +448,45 @@
 	    	foreach($result as $row){
 			    echo "<option value=" .$row['ID'].">" . $row['Management'] . "</option>";
 			}		
+	}
+		//---------------add new managment function-----------------------
+	function addManagement(){
+		if(isset($_POST['insertManagement'])){
+			//assign variables
+
+			$managementName= isset($_POST['managementName'])? filter_var($_POST['managementName'],FILTER_SANITIZE_STRING) : '';
+
+			// creating array of errors
+			$formErrors = array();
+
+			if (empty($managementName) ){
+				//$formErrors[] = 'username must be larger than  chars';
+				echo "management cant be empty";
+				// print_r($formErrors) ;
+			} else {
+				$con = connect();
+				$sql= "INSERT INTO managements(Management)VALUES ('".$managementName."')" ;
+				$stmt = $con->prepare($sql);
+				$stmt->execute();
+				echo "done";
+			}
+		}
+	}
+	//---------------edit managment function-----------------------
+	function editManagement(){
+
+			//assign variables
+			$managementID=isset($_POST['management_id'])? filter_var($_POST['management_id'],FILTER_SANITIZE_NUMBER_INT):'';
+			$managementName= isset($_POST['managementEdit'])? filter_var($_POST['managementEdit'],FILTER_SANITIZE_STRING) : '';
+			echo $managementID;
+			echo $managementName;
+				$con = connect();
+				$sql =     "UPDATE managements
+							SET Management = '$managementName'
+							WHERE ID= '$managementID'";
+				$stmt = $con->prepare($sql);
+				$stmt->execute();
+				echo "done";
 	}
 	//---------------get pending vacations
 	function getPendingVacAsManager(){
