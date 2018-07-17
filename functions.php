@@ -160,7 +160,7 @@
 	//---------get All Managers who can approve vacations as both manager and top manager in manager combobox --------------
 	function getManagers(){
 		$con = connect();
-		$sql= "SELECT ID,emp_code,emp_name FROM t_data where id_userGroup in(1,2,5)" ;
+		$sql= "SELECT ID,emp_code,emp_name FROM t_data where id_userGroup in(1,2,5) and active=1" ;
     	$stmt = $con->prepare($sql);
 		$stmt->execute();
 		$result = $stmt->fetchAll();
@@ -174,7 +174,7 @@
 	//------get Top Managers function-----------
 	function getTopManagers(){
 		$con = connect();
-		$sql= "SELECT ID,emp_code,emp_name FROM t_data where id_userGroup in(2,6)" ;
+		$sql= "SELECT ID,emp_code,emp_name FROM t_data where id_userGroup in(2,6)and active=1" ;
     	$stmt = $con->prepare($sql);
 		$stmt->execute();
 		$result = $stmt->fetchAll();
@@ -347,7 +347,7 @@
 	}
 	function getEmpCount(){
 		$con = connect();		
-		$sql = "SELECT count(*) FROM empdata "; //count emp from view
+		$sql = "SELECT count(*) FROM empdata where active=1 "; //count emp from view
 		$stmt = $con->prepare($sql);
 		$stmt->execute();
 		$result = $stmt->fetchColumn();
