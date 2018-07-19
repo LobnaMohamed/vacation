@@ -580,7 +580,7 @@
 				echo"<td>".  $row['topMgrName']. "</td>";
 				echo"<td>".  $row['status']. "</td>";
 			}elseif($row['top_manager_id']==$_SESSION['UserID']){
-				if(in_array($row['Manager_agree'], array(1, 2, 4))){
+				if(in_array($row['Manager_agree'], array(1,2,3, 4))){
 					echo"<td>".  $row['emp_code']. "</td>";
 					echo"<td>".  $row['emp_name']. "</td>";
 					echo"<td>".  $row['Management']. "</td>";
@@ -619,7 +619,6 @@
 						and t.Mang_id=m.ID 
 						and t.Manager_agree=vs.ID
 						and t.topManager_agree=vs2.ID
-						and t.topManager_agree = 1
 						and t.top_manager_id=d3.ID";
 		$stmt = $con->prepare($sql);
 		$stmt->execute();
@@ -743,7 +742,7 @@
 				and t.AdminConfirm =3
 				and t.Mang_id=m.ID
 				and t.Manager_agree=vs.ID 
-				and (t.Manager_agree in (1,4)or (t.Manager_agree=3 and t.manager_id={$_SESSION['UserID']}))
+				and (t.Manager_agree in (1,2,3,4)or (t.Manager_agree=3 and t.manager_id={$_SESSION['UserID']}))
 				and t.topManager_agree=vs2.ID
 				and t.top_manager_id=d3.ID";
 		$stmt = $con->prepare($sql);
@@ -788,6 +787,7 @@
 				}else{
 					echo $row['topAgreeStatus'];
 				}
+				
 				echo "</td>";
 				echo"<td>".  $row['topManagerAgree_timeStamp']. "</td>";
 				echo'<td>'; 
