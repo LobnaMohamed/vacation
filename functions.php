@@ -546,7 +546,6 @@
 			and t.Mang_id=m.ID 
 			and t.topManager_agree=3
 			and t.Manager_agree=vs.ID
-			and t.Manager_agree in(1,3,4)
 			and (t.top_manager_id={$_SESSION['UserID']} or t.manager_id ={$_SESSION['UserID']} ) ";
 		$stmt = $con->prepare($sql);
 		$stmt->execute();
@@ -969,7 +968,7 @@
 			WHERE  t.id_case=c.ID 
 			and t.Mang_id=m.ID
 			and t.topManager_agree in (1,2,3)
-			and t.Manager_agree in (1,2,4)
+			-- and t.Manager_agree in (1,2,4)
 			and t.Manager_agree=vs.ID
 			and t.topManager_agree=vs2.ID
 			and t.AdminConfirm=vs3.ID

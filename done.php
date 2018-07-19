@@ -14,7 +14,7 @@
 	    // Form has been submitted
 
 		saveVacationAgree();
-		//header("Location:pending.php");
+		header("Location:pending.php");
 	}
 	else
 	{
