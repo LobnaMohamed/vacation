@@ -27,6 +27,7 @@
 			<table id="confirmedVac" class="table table-striped table-bordered table-responsive">	
 				<thead>
 					<tr>
+						<th>تاريخ تحرير الاجازة </th>
 						<th>نوع الاجازة</th>
 						<th>من تاريخ</th>
 						<th>الى تاريخ</th>

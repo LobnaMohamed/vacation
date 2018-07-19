@@ -968,7 +968,6 @@
 			WHERE  t.id_case=c.ID 
 			and t.Mang_id=m.ID
 			and t.topManager_agree in (1,2,3)
-			-- and t.Manager_agree in (1,2,4)
 			and t.Manager_agree=vs.ID
 			and t.topManager_agree=vs2.ID
 			and t.AdminConfirm=vs3.ID
@@ -1010,7 +1009,8 @@
 					echo"<td>".  $row['AdminAgreeStatus']. "</td>";
 				echo "</tr>";
 				
-			}elseif($row['manager_id']==$_SESSION['UserID'] && in_array($row['Manager_agree'], array(1, 2))){
+			}
+			elseif($row['manager_id']==$_SESSION['UserID'] && in_array($row['Manager_agree'], array(1, 2))){
 				
 				echo"<tr>";
 					echo"<td>".  $row['emp_code']. "</td>";
@@ -1206,8 +1206,9 @@
 	function getVacationStatusAsEmp(){
 		$con = connect();
 		$sql= '';
-		$sql .= "SELECT  t.id, t.start_date,t.end_date,t.duration,d.emp_code,d.emp_name,c.case_desc,vs.status as mgrAgreeStatus ,vs2.status as topAgreeStatus,IFNULL(d2.emp_name,'لا يوجد') as MgrName ,d3.emp_name as TopMgrName,vs3.status as AdminAgreeStatus
-				FROM t_data d3 ,t_case c, vac_status vs, vac_status vs2,vac_status vs3,t_data d 
+		$sql .= "SELECT  t.id, t.start_date,t.end_date,t.duration,d.emp_code,d.emp_name,c.case_desc,vs.status as mgrAgreeStatus ,
+		vs2.status as topAgreeStatus,IFNULL(d2.emp_name,'لا يوجد') as MgrName ,d3.emp_name as TopMgrName,vs3.status as AdminAgreeStatus,t.trans_date as date_created
+				FROM t_data d3 ,t_case c, vac_status vs, vac_status vs2,vac_status vs3,t_data d
 				RIGHT OUTER JOIN t_transe t ON d.ID = t.emp_id LEFT OUTER JOIN  t_data d2 ON t.manager_id=d2.ID
 				WHERE   t.emp_id = {$_SESSION['UserID']}
                 		and t.id_case=c.ID 
@@ -1240,6 +1241,7 @@
 		foreach($result as $row){
 			$index= $row['id'];
 			echo"<tr>";
+				echo"<td>".  $row['date_created']. "</td>";
 				echo"<td>".  $row['case_desc']. "</td>";
 				echo"<td>".  $row['start_date']. "</td>";
 				echo"<td>".  $row['end_date']. "</td>";
