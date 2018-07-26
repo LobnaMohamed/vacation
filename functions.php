@@ -119,10 +119,10 @@
 									   WHERE emp_code=? ");
 				$stmt->execute(array($hashedNewPass,$username));
 			}else{
-				echo "write ur password correctly";
+				echo "إكتب كلمة سر صحيحة";
 			}
 		}else{
-			echo"no user found";
+			echo"لا يوجد مستخدم";
 		}
 
 	}

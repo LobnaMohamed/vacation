@@ -4,6 +4,9 @@ $(document).ready(function(){
 
 
 	'use strict';
+	var currentActivePage = document.location.href.match(/[^\/]+$/)[0];
+	// $('a[href="'+currentActivePage+'"]').addClass("activePage");
+	$('a[href="'+currentActivePage+'"]').attr('id', 'activePage');
 	var nameError = true ,
 		codeError = true,
 		daterror = true;
