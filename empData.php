@@ -26,7 +26,10 @@
 					<!-- <div class="input-group-btn">
 						<button class="btn btn-default" type="submit"><i class="glyphicon glyphicon-search"></i></button>
 					</div> -->
-			    </div>    
+			    </div>
+			    <button id="scroll_down" class="btn btn-lg btn-default form-control" type="button"><i class='fa fa-2x fa-angle-double-down '></i></button>
+				<button id="scroll_up" class="btn btn-lg btn-default form-control hide" type="button"><i class='fa fa-2x fa-angle-double-up '></i></button>
+    
 		    </form>
 			<table id="empData" class="table table-striped table-bordered">
 			  	<thead >
@@ -45,7 +48,8 @@
 				<tbody id="empDatabody">
 					<?php getAllEmp(); ?>
 				</tbody>
-			</table>	
+			</table>
+			<div id="endOfEmpData"></div>	
 	    </div>	  
 		<!-- add Modal -->
 		<div id="addEmpModal" class="modal fade" role="dialog">

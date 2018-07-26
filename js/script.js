@@ -4,6 +4,25 @@ $(document).ready(function(){
 
 
 	'use strict';
+	//scroll down
+	$("#scroll_down").click(function() {
+		$('html, body').animate({
+			scrollTop: $("#endOfEmpData").offset().top
+		}, 2000);
+		$("#scroll_down").addClass("hide");
+		$("#scroll_up").removeClass("hide");
+	});
+	//scroll up
+	$("#scroll_up").click(function() {
+		$('html, body').animate({
+			scrollTop: $("body").offset().top
+		}, 2000);
+		$("#scroll_down").removeClass("hide");
+		$("#scroll_up").addClass("hide");
+	});
+
+
+	//color active tab
 	var currentActivePage = document.location.href.match(/[^\/]+$/)[0];
 	// $('a[href="'+currentActivePage+'"]').addClass("activePage");
 	$('a[href="'+currentActivePage+'"]').attr('id', 'activePage');
