@@ -2,8 +2,10 @@
 $(document).ready(function(){
 
 
+	var currentActivePage ;
 
 	'use strict';
+
 	//scroll down
 	$("#scroll_down").click(function() {
 		$('html, body').animate({
@@ -22,10 +24,7 @@ $(document).ready(function(){
 	});
 
 
-	//color active tab
-	var currentActivePage = document.location.href.match(/[^\/]+$/)[0];
-	// $('a[href="'+currentActivePage+'"]').addClass("activePage");
-	$('a[href="'+currentActivePage+'"]').attr('id', 'activePage');
+	
 	var nameError = true ,
 		codeError = true,
 		daterror = true;
@@ -308,8 +307,9 @@ $(document).ready(function(){
 					// });
 				}
 				if(data.response == "nothing3" || data.response == "nothing"){
-					 window.location.replace(data.redirect) ;
+					 window.location.replace(data.redirect) ; 
 				}
+				$('a[href="'+currentActivePage+'"]').attr('id', 'activePage');
 			},
 			error: function(error) {
 				//alert("error");
@@ -423,4 +423,13 @@ $(document).ready(function(){
         	}
 		});	
 	});
+	   
+
+
+	   currentActivePage = document.location.href.match(/[^\/]+$/)[0];
+	   if(currentActivePage != null){
+		$('a[href="'+currentActivePage+'"]').attr('id', 'activePage');
+	   }else{
+		   console.log("error");
+	   }
 });

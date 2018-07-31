@@ -533,20 +533,30 @@
 			echo "</tr>";
 		} 
 		//$_POST = array();
-	}	
+	}		
 	//--------------get pending as top manager----------------------- 
 	function getPendingVacAsTopManager(){
 		$con = connect();
 		$sql= '';
-		$sql .= "SELECT t.id,t.start_date,t.end_date,t.duration,d.emp_code,d.emp_name,c.case_desc,t.manager_id,t.Manager_agree,t.top_manager_id,m.Management,vs.status,t.topManager_agree,IFNull( d2.emp_name,'لا يوجد') as MgrName ,d3.emp_name as topMgrName
-			FROM t_case c ,managements m , vac_status vs,t_data d 
+		// $sql .= "SELECT t.id,t.start_date,t.end_date,t.duration,d.emp_code,d.emp_name,c.case_desc,t.manager_id,t.Manager_agree,t.top_manager_id,m.Management,vs.status,t.topManager_agree,IFNull( d2.emp_name,'لا يوجد') as MgrName ,d3.emp_name as topMgrName
+		// 	FROM t_case c ,managements m , vac_status vs,t_data d 
+		// 	RIGHT OUTER JOIN t_transe t ON d.ID = t.emp_id LEFT OUTER JOIN  t_data d2 ON t.manager_id=d2.ID
+		// 	LEFT OUTER JOIN  t_data d3 ON t.top_manager_id=d3.ID 
+		// 	WHERE t.id_case=c.ID 
+		// 	and t.Mang_id=m.ID 
+		// 	and t.topManager_agree=3
+		// 	and t.Manager_agree=vs.ID
+		// 	and (t.top_manager_id={$_SESSION['UserID']} or t.manager_id ={$_SESSION['UserID']} ) ";
+		$sql .= "SELECT t.id,t.start_date,t.end_date,t.duration,d.emp_code,d.emp_name,c.case_desc,t.manager_id,t.Manager_agree,t.top_manager_id,
+		m.Management,vs.status,t.topManager_agree,vs2.status as topAgreeStatus,IFNull( d2.emp_name,'لا يوجد') as MgrName ,d3.emp_name as topMgrName
+			FROM t_case c ,managements m , vac_status vs, vac_status vs2,t_data d 
 			RIGHT OUTER JOIN t_transe t ON d.ID = t.emp_id LEFT OUTER JOIN  t_data d2 ON t.manager_id=d2.ID
 			LEFT OUTER JOIN  t_data d3 ON t.top_manager_id=d3.ID 
 			WHERE t.id_case=c.ID 
 			and t.Mang_id=m.ID 
-			and t.topManager_agree=3
+			and ((t.topManager_agree=3 and t.top_manager_id={$_SESSION['UserID']}) or (t.manager_id ={$_SESSION['UserID']} and  t.Manager_agree = 3))
 			and t.Manager_agree=vs.ID
-			and (t.top_manager_id={$_SESSION['UserID']} or t.manager_id ={$_SESSION['UserID']} ) ";
+			and t.topManager_agree=vs2.ID";
 		$stmt = $con->prepare($sql);
 		$stmt->execute();
 		$result = $stmt->fetchAll();
@@ -578,7 +588,7 @@
 				}
 				echo '</td>';
 				echo"<td>".  $row['topMgrName']. "</td>";
-				echo"<td>".  $row['status']. "</td>";
+				echo"<td>".  $row['topAgreeStatus']. "</td>";
 			}elseif($row['top_manager_id']==$_SESSION['UserID']){
 				if(in_array($row['Manager_agree'], array(1,2,3, 4))){
 					echo"<td>".  $row['emp_code']. "</td>";
