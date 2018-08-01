@@ -636,7 +636,8 @@
 						and t.Mang_id=m.ID 
 						and t.Manager_agree=vs.ID
 						and t.topManager_agree=vs2.ID
-						and t.top_manager_id=d3.ID";
+						and t.top_manager_id=d3.ID
+				ORDER BY d.emp_code";
 		$stmt = $con->prepare($sql);
 		$stmt->execute();
 		$result = $stmt->fetchAll();
@@ -686,7 +687,8 @@
 						and t.Mang_id=m.ID 
 						and t.Manager_agree=vs.ID
 						and t.topManager_agree=vs2.ID
-						and t.top_manager_id=d3.ID";
+						and t.top_manager_id=d3.ID
+		ORDER BY	d.emp_code";
 		$stmt = $con->prepare($sql);
 		$stmt->execute();
 		$result = $stmt->fetchAll();
@@ -761,7 +763,8 @@
 				and t.Manager_agree=vs.ID 
 				and (t.Manager_agree in (1,2,3,4)or (t.Manager_agree=3 and t.manager_id={$_SESSION['UserID']}))
 				and t.topManager_agree=vs2.ID
-				and t.top_manager_id=d3.ID";
+				and t.top_manager_id=d3.ID
+		ORDER BY d.emp_code";
 		$stmt = $con->prepare($sql);
 		$stmt->execute();
 		$result = $stmt->fetchAll();
@@ -1070,7 +1073,7 @@
 		if(!empty($_GET['dateTo']) && !empty($_GET['dateFrom']) ){
 			$sql .= " and (t.start_date between '".$_GET['dateFrom']."' and '".$_GET['dateTo'] ."')";
 		}
-		$sql .=" Order By  t.start_date desc ,d.emp_code";
+		$sql .=" Order By  d.emp_code,t.start_date desc";
 		$stmt = $con->prepare($sql);
 		$stmt->execute();
 		$result = $stmt->fetchAll();
@@ -1106,11 +1109,13 @@
 		$con = connect();
 		$sql= "";
 		$output1="";
-		$sql .="SELECT t.id,d.emp_code,d.emp_name,t.start_date,t.end_date,t.duration,c.case_desc,dn.day_n,IFNULL(topManagerAgree_date,'') as topManagerAgree_timeStamp
-				FROM t_case c RIGHT OUTER JOIN t_transe t ON c.ID = t.id_case 
+		$sql .="SELECT t.id,d.emp_code,d.emp_name,t.start_date,t.end_date,t.duration,c.case_desc,dn.day_n,
+						IFNULL(topManagerAgree_date,'') as topManagerAgree_timeStamp,vs.status as AdminAgreeStatus
+				FROM vac_status as vs ,t_case c RIGHT OUTER JOIN t_transe t ON c.ID = t.id_case 
 							  LEFT OUTER JOIN t_data d ON t.emp_id = d.ID 
 							  LEFT OUTER JOIN t_day_n DN ON d.day_night = dn.ID	
-				WHERE t.AdminConfirm not in(3,4)";
+				WHERE t.AdminConfirm not in(3,4)
+				 AND  t.AdminConfirm=vs.ID";
 
 		if(!empty($_GET['search'])){
 			$sql .= " and (d.emp_code like '%". $_GET['search'] ."%' OR d.emp_name like '%". $_GET['search'] ."%')";	
@@ -1124,7 +1129,7 @@
 		// if(!empty($_GET['dateTo']) && !empty($_GET['dateFrom']) ){
 		// 	$sql .= " and (t.start_date between '".$_GET['dateFrom']."' and '".$_GET['dateTo'] ."')";
 		// }
-		$sql .= " ORDER BY d.emp_code,t.start_date asc ";
+		$sql .= " ORDER BY d.emp_code,t.start_date DESC ";
 		// echo $sql;
 		$stmt = $con->prepare($sql);
 		$stmt->execute();
@@ -1154,6 +1159,7 @@
 									<td>".  $row['end_date']. "</td>
 									<td>".  $row['topManagerAgree_timeStamp']."</td>
 									<td>".  $row['duration']. "</td>
+									<td>".  $row['AdminAgreeStatus']. "</td>
 							 	</tr>";						
 		}	
 		echo $output1 ;
@@ -1184,7 +1190,7 @@
 		// if(!empty($_GET['dateTo']) && !empty($_GET['dateFrom']) ){
 		// 	$sql .= " and (t.start_date between '".$_GET['dateFrom']."' and '".$_GET['dateTo'] ."')";
 		// }
-		$sql .= " ORDER BY d.emp_code,t.start_date asc ";
+		$sql .= " ORDER BY d.emp_code,t.start_date DESC ";
 		// echo $sql;
 		$stmt = $con->prepare($sql);
 		$stmt->execute();
