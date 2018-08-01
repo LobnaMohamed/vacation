@@ -1,4 +1,11 @@
 <?php
+	session_start();
+	if(isset($_SESSION['Username'])){
+	//echo "Welcome" . $_SESSION['Username'];
+	}else{
+	header('Location: index.php');//redirect
+	exit();
+	}
 	include 'header.php';
 	// Include config file
 	include 'functions.php';

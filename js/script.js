@@ -2,7 +2,7 @@
 $(document).ready(function(){
 
 
-	var currentActivePage ;
+	//var currentActivePage ;
 
 	'use strict';
 
@@ -31,11 +31,11 @@ $(document).ready(function(){
 	function checkErrors() {
 
 		if(nameError == true || codeError == true || daterror == true){
-			console.log('there is  errors');
+			//console.log('there is  errors');
 			// alert("name cant be less than 3");
 
 		} else {
-			console.log('form is valid');
+			//console.log('form is valid');
 		}
 	}
 
@@ -210,7 +210,7 @@ $(document).ready(function(){
 				$('#managementEdit').val(data.Management);
 			},
 			error:function(data){
-				console.log( data);
+				//console.log( data);
 			}
 		});
 	});
@@ -231,7 +231,7 @@ $(document).ready(function(){
 				$("#editManagementModal").modal('hide');	
 			},
 			error: function(error) {
-				console.log(error);
+				//console.log(error);
 			}
 		});		
 	});
@@ -265,7 +265,7 @@ $(document).ready(function(){
 						},
 						error: function(error) {
 			            	// alert("error");
-			            	 // console.log(error);
+			            	// console.log(error);
 			        	}
 					});	
 			    }else{
@@ -294,7 +294,7 @@ $(document).ready(function(){
 			data: $('form#signin').serialize(),
 			dataType:"json",
 			success:function(data){
-				console.log(data);			
+				//console.log(data);			
 				if(data.response == "changePass"){
 					alert("يجب تغيير كلمة السر!");
 					$("#changePassModal").modal('show');					
@@ -309,11 +309,15 @@ $(document).ready(function(){
 				if(data.response == "nothing3" || data.response == "nothing"){
 					 window.location.replace(data.redirect) ; 
 				}
-				$('a[href="'+currentActivePage+'"]').attr('id', 'activePage');
+				//define it as global
+				// currentActivePage = document.location.href.match(/[^\/]+$/)[0];
+				// currentActivePage ;
+				//$('a[href="'+currentActivePage+'"]').attr('id', 'activePage');
+
 			},
 			error: function(error) {
 				//alert("error");
-				console.log(error);
+				//console.log(error);
 			}
 		});	
  	});
@@ -404,12 +408,12 @@ $(document).ready(function(){
 				// console.log(data);
 				
 				if(currentURL == 'confirmed.php'){
-					console.log(data);
+					//console.log(data);
 					$('#confirmedVacbody').html(data);
 					
 				}
 				else if(currentURL == 'empdata.php'){
-					console.log(data);
+					//console.log(data);
 					$('#empDatabody').html(data);
 
 				 }
@@ -419,17 +423,17 @@ $(document).ready(function(){
 				
 			},
 			error: function(error) {
-            	console.log(error);
+            	//console.log(error);
         	}
 		});	
 	});
 	   
 
 
-	   currentActivePage = document.location.href.match(/[^\/]+$/)[0];
-	   if(currentActivePage != null){
-		$('a[href="'+currentActivePage+'"]').attr('id', 'activePage');
-	   }else{
-		   console.log("error");
-	   }
+	 //   currentActivePage = document.location.href.match(/[^\/]+$/)[0];
+	 //   if(currentActivePage != null){
+		// $('a[href="'+currentActivePage+'"]').attr('id', 'activePage');
+	 //   }else{
+		//    console.log("error");
+	 //   }
 });

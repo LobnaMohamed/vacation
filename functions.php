@@ -289,6 +289,13 @@
 			$topManager= isset($_POST['topManager'])? $_POST['topManager'] :'';
 			$manager= isset($_POST['manager'])? filter_var($_POST['manager'],FILTER_SANITIZE_NUMBER_INT) :'';
 			$vacType= isset($_POST['case'])? $_POST['case'] :'';
+			$username=$_SESSION['Username']; // user id
+			if (gethostbyaddr($_SERVER['REMOTE_ADDR']) != null){
+				$userIP = gethostbyaddr($_SERVER['REMOTE_ADDR']);
+			}
+			else{
+				$userIP = 'undefined';
+			}
 			//adjusting date formats
 			
 			// creating array of errors
@@ -310,8 +317,8 @@
 				
 
 				$con = connect();
-				$sql= "INSERT INTO t_transe(emp_id,id_case,start_date,end_date,manager_id,top_manager_id,duration,mang_id,	Manager_agree) 
-					   VALUES (".$empID.",".$vacType.",'".$date."','".$dateTo."',".$manager.",".$topManager.",".$duration." ,".$management.",".$manager_vacStatus.")" ;
+				$sql= "INSERT INTO t_transe(emp_id,id_case,start_date,end_date,manager_id,top_manager_id,duration,mang_id,	Manager_agree,made_by_user,made_by_ip) 
+					   VALUES (".$empID.",".$vacType.",'".$date."','".$dateTo."',".$manager.",".$topManager.",".$duration." ,".$management.",".$manager_vacStatus.",'".$username."','".$userIP."')" ;
 					   echo $sql;
 		        $stmt = $con->prepare($sql);
 				$stmt->execute();		
