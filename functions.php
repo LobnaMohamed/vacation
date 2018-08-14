@@ -499,7 +499,8 @@
 	function getPendingVacAsManager(){
 		$con = connect();
 		$sql= '';
-		$sql .= "SELECT t.id, t.start_date,t.end_date,t.duration,d.emp_code,d.emp_name,c.case_desc,t.manager_id,t.Manager_agree,t.top_manager_id,m.Management,vs.status as mgrAgreeStatus,t.topManager_agree ,vs2.status as topAgreeStatus,d2.emp_name as TopMgrName
+		$sql .= "SELECT t.id, t.start_date,t.end_date,t.duration,d.emp_code,d.emp_name,c.case_desc,t.manager_id,t.Manager_agree,t.top_manager_id,m.Management,
+		vs.status as mgrAgreeStatus,t.topManager_agree ,vs2.status as topAgreeStatus,d2.emp_name as TopMgrName,t.trans_date as date_created
 				FROM 	t_data d,t_data d2 ,t_transe t ,t_case c ,managements m , vac_status vs, vac_status vs2 
 				WHERE 	t.emp_id=d.ID 
 						and t.id_case=c.ID 
@@ -522,6 +523,7 @@
 				echo"<td>".  $row['emp_code']. "</td>";
 				echo"<td>".  $row['emp_name']. "</td>";
 				echo"<td>".  $row['Management']. "</td>";
+				echo"<td>".  $row['date_created']. "</td>";
 				echo"<td>".  $row['case_desc']. "</td>";
 				echo"<td>".  $row['start_date']. "</td>";
 				echo"<td>".  $row['end_date']. "</td>";
@@ -555,7 +557,7 @@
 		// 	and t.Manager_agree=vs.ID
 		// 	and (t.top_manager_id={$_SESSION['UserID']} or t.manager_id ={$_SESSION['UserID']} ) ";
 		$sql .= "SELECT t.id,t.start_date,t.end_date,t.duration,d.emp_code,d.emp_name,c.case_desc,t.manager_id,t.Manager_agree,t.top_manager_id,
-		m.Management,vs.status,t.topManager_agree,vs2.status as topAgreeStatus,IFNull( d2.emp_name,'لا يوجد') as MgrName ,d3.emp_name as topMgrName
+		m.Management,vs.status,t.topManager_agree,vs2.status as topAgreeStatus,IFNull( d2.emp_name,'لا يوجد') as MgrName ,d3.emp_name as topMgrName,t.trans_date as date_created
 			FROM t_case c ,managements m , vac_status vs, vac_status vs2,t_data d 
 			RIGHT OUTER JOIN t_transe t ON d.ID = t.emp_id LEFT OUTER JOIN  t_data d2 ON t.manager_id=d2.ID
 			LEFT OUTER JOIN  t_data d3 ON t.top_manager_id=d3.ID 
@@ -581,6 +583,7 @@
 				echo"<td>".  $row['emp_code']. "</td>";
 				echo"<td>".  $row['emp_name']. "</td>";
 				echo"<td>".  $row['Management']. "</td>";
+				echo"<td>".  $row['date_created']. "</td>";
 				echo"<td>".  $row['case_desc']. "</td>";
 				echo"<td>".  $row['start_date']. "</td>";
 				echo"<td>".  $row['end_date']. "</td>";
@@ -601,6 +604,7 @@
 					echo"<td>".  $row['emp_code']. "</td>";
 					echo"<td>".  $row['emp_name']. "</td>";
 					echo"<td>".  $row['Management']. "</td>";
+					echo"<td>".  $row['date_created']. "</td>";
 					echo"<td>".  $row['case_desc']. "</td>";
 					echo"<td>".  $row['start_date']. "</td>";
 					echo"<td>".  $row['end_date']. "</td>";
@@ -627,7 +631,7 @@
 		$con = connect();
 		$sql= '';
 		$sql .="SELECT t.id, t.start_date,t.end_date,t.duration,d.emp_code,d.emp_name,c.case_desc,t.manager_id,t.Manager_agree,t.top_manager_id,m.Management,vs.status as mgrAgreeStatus,t.topManager_agree ,
-					   vs2.status as topAgreeStatus,t.AdminConfirm,IFNULL(d2.emp_name,'لا يوجد') as MgrName ,d3.emp_name as TopMgrName,IFNULL(topManagerAgree_date,'') as topManagerAgree_timeStamp
+					   vs2.status as topAgreeStatus,t.AdminConfirm,IFNULL(d2.emp_name,'لا يوجد') as MgrName ,d3.emp_name as TopMgrName,IFNULL(topManagerAgree_date,'') as topManagerAgree_timeStamp,t.trans_date as date_created
 				FROM t_data d3 ,t_case c ,managements m , vac_status vs, vac_status vs2,t_data d 
 				RIGHT OUTER JOIN t_transe t ON d.ID = t.emp_id LEFT OUTER JOIN  t_data d2 ON t.manager_id=d2.ID
 				WHERE t.id_case=c.ID 
@@ -651,6 +655,7 @@
 				echo"<td>".  $row['emp_code']. "</td>";
 				echo"<td>".  $row['emp_name']. "</td>";
 				echo"<td>".  $row['Management']. "</td>";
+				echo"<td>".  $row['date_created']. "</td>";
 				echo"<td>".  $row['case_desc']. "</td>";
 				echo"<td>".  $row['start_date']. "</td>";
 				echo"<td>".  $row['end_date']. "</td>";
@@ -677,7 +682,7 @@
 		$con = connect();
 		$sql= '';
 		$sql .="SELECT t.id, t.start_date,t.end_date,t.duration,d.emp_code,d.emp_name,c.case_desc,t.manager_id,t.Manager_agree,t.top_manager_id,m.Management,vs.status as mgrAgreeStatus,t.topManager_agree ,
-		vs2.status as topAgreeStatus,t.AdminConfirm,vs3.status as AdminAgreeStatus,IFNULL(d2.emp_name,'لا يوجد') as MgrName ,d3.emp_name as TopMgrName,IFNULL(topManagerAgree_date,'') as topManagerAgree_timeStamp
+		vs2.status as topAgreeStatus,t.AdminConfirm,vs3.status as AdminAgreeStatus,IFNULL(d2.emp_name,'لا يوجد') as MgrName ,d3.emp_name as TopMgrName,IFNULL(topManagerAgree_date,'') as topManagerAgree_timeStamp,t.trans_date as date_created
 		FROM t_data d3 ,t_case c ,managements m , vac_status vs, vac_status vs2,vac_status vs3,t_data d 
 		RIGHT OUTER JOIN t_transe t ON d.ID = t.emp_id LEFT OUTER JOIN  t_data d2 ON t.manager_id=d2.ID
 		WHERE t.id_case=c.ID 
@@ -707,13 +712,14 @@
 				echo"<td>".  $row['emp_code']. "</td>";
 				echo"<td>".  $row['emp_name']. "</td>";
 				echo"<td>".  $row['Management']. "</td>";
+				echo"<td>".  $row['date_created']. "</td>";
 				echo"<td>".  $row['case_desc']. "</td>";
 				echo"<td>".  $row['start_date']. "</td>";
 				echo"<td>".  $row['end_date']. "</td>";
 				echo"<td>".  $row['duration']. "</td>";
 				echo"<td>".  $row['MgrName']. "</td>";
 				echo'<td>'; 
-					if($row['Manager_agree'] ==3){
+					if($row['Manager_agree'] ==3 and $row['manager_id']==$_SESSION['UserID']){
 						foreach($agreement as $row2){
 							if( $row2['ID']<4){
 								echo '<label >'.$row2['status'].'
@@ -752,16 +758,16 @@
 		$con = connect();
 		$sql= '';
 		$sql .="SELECT t.id, t.start_date,t.end_date,t.duration,d.emp_code,d.emp_name,c.case_desc,t.manager_id,t.top_manager_id,m.Management,t.Manager_agree,vs.status as mgrAgreeStatus,t.topManager_agree ,vs2.status as topAgreeStatus,
-		t.AdminConfirm,vs3.status as AdminAgreeStatus,IFNULL(d2.emp_name,'لا يوجد') as MgrName ,d3.emp_name as TopMgrName,IFNULL(topManagerAgree_date,'') as topManagerAgree_timeStamp
+		t.AdminConfirm,vs3.status as AdminAgreeStatus,IFNULL(d2.emp_name,'لا يوجد') as MgrName ,d3.emp_name as TopMgrName,IFNULL(topManagerAgree_date,'') as topManagerAgree_timeStamp,t.trans_date as date_created
 		FROM t_data d3 ,t_case c ,managements m , vac_status vs, vac_status vs2,vac_status vs3,t_data d 
 		RIGHT OUTER JOIN t_transe t ON d.ID = t.emp_id LEFT OUTER JOIN  t_data d2 ON t.manager_id=d2.ID
 		WHERE t.id_case=c.ID 
-				and (t.topManager_agree = 1 or (t.topManager_agree=3 and t.top_manager_id={$_SESSION['UserID']})) 
+				and (t.topManager_agree = 1 or (t.topManager_agree=3 and t.top_manager_id={$_SESSION['UserID']}) or (t.Manager_agree=3 and t.manager_id={$_SESSION['UserID']})) 
 				and t.AdminConfirm =vs3.ID
 				and t.AdminConfirm =3
 				and t.Mang_id=m.ID
 				and t.Manager_agree=vs.ID 
-				and (t.Manager_agree in (1,2,3,4)or (t.Manager_agree=3 and t.manager_id={$_SESSION['UserID']}))
+				and (t.Manager_agree in (1,2,3,4))
 				and t.topManager_agree=vs2.ID
 				and t.top_manager_id=d3.ID
 		ORDER BY d.emp_code";
@@ -784,14 +790,29 @@
 				echo"<td>".  $row['emp_code']. "</td>";
 				echo"<td>".  $row['emp_name']. "</td>";
 				echo"<td>".  $row['Management']. "</td>";
+				echo"<td>".  $row['date_created']. "</td>";
 				echo"<td>".  $row['case_desc']. "</td>";
 				echo"<td>".  $row['start_date']. "</td>";
 				echo"<td>".  $row['end_date']. "</td>";
 				echo"<td>".  $row['duration']. "</td>";
 				echo"<td>".  $row['MgrName']. "</td>";
 				//if direct manager is same as top
-
-				echo"<td>".  $row['mgrAgreeStatus']. "</td>" ;
+				
+				if($row['Manager_agree'] ==3 && $row['manager_id']==$_SESSION['UserID']){
+					echo"<td>"; 
+					foreach($agreement as $row2){
+						if( $row2['ID']<4){
+							echo '<label >'.$row2['status'].'
+							<input type="radio" class="radio-inline" name="MangrAgree['.$index.']" class="MangrAgreeRadio" value="'.$row2['ID'].'"';
+							if($row['Manager_agree'] == $row2['ID']){ echo "checked"; }
+							echo'></label>';
+						}	  
+					}
+					echo"</td>";
+				}else{
+					echo"<td>".  $row['mgrAgreeStatus']. "</td>" ;
+				}
+				 
 				echo"<td>".  $row['TopMgrName']. "</td>";
 				
 				echo"<td>";  
@@ -843,19 +864,19 @@
 		$Topanswers = isset($_POST['TopMangrAgree']) ? $_POST['TopMangrAgree'] : array();
 		$Mgranswers = isset($_POST['MangrAgree']) ? $_POST['MangrAgree'] : array();
 		$Adminanswers = isset($_POST['AdminAgree']) ? $_POST['AdminAgree'] : array();
-		echo"<pre>";
-		print_r($Topanswers);
-		print_r($Mgranswers);
-		print_r($Adminanswers);
-		echo"</pre>";
+		// echo"<pre>";
+		// print_r($Topanswers);
+		// print_r($Mgranswers);
+		// print_r($Adminanswers);
+		// echo"</pre>";
 		if(isset($Topanswers)){
 			$con = connect();
 			$sql= '';
 			//Iterate through each answer
 			foreach($Topanswers as $key => $answer) {
-				echo"top manager foreach";
-				print_r($answer) ;
-				echo $key;
+				// echo"top manager foreach";
+				// print_r($answer) ;
+				// echo $key;
 				$sql = "UPDATE t_transe 
 						SET topManager_agree =:Agree,
 							topManagerAgree_date = now() 
@@ -880,9 +901,9 @@
 			$sql= '';
 			//Iterate through each answer
 			foreach($Mgranswers as $key => $answer) {
-				echo"Mgr  foreach";
-				print_r($answer) ;
-				echo $key;
+				// echo"Mgr  foreach";
+				// print_r($answer) ;
+				// echo $key;
 				$sql = "UPDATE t_transe SET Manager_agree =:Agree where ID= :key";
 				$stmt = $con->prepare($sql);
 			    $stmt->bindParam(':Agree', $answer, PDO::PARAM_INT);
@@ -904,9 +925,9 @@
 			$sql= '';
 			//Iterate through each answer
 			foreach($Adminanswers as $key => $answer) {
-				echo"admin foreach";
-				print_r($answer) ;
-				echo $key;
+				// echo"admin foreach";
+				// print_r($answer) ;
+				// echo $key;
 				$sql = "UPDATE t_transe SET AdminConfirm =:Agree where ID= :key";
 				$stmt = $con->prepare($sql);
 			    $stmt->bindParam(':Agree', $answer, PDO::PARAM_INT);
@@ -915,7 +936,7 @@
 				$stmt->execute();
 				//echo $sql;
 				if($stmt){
-				    echo 'Row inserted!<br>';
+				    //echo 'Row inserted!<br>';
 				    //echo $answer;
 				}
 				elseif(!$stmt){
@@ -930,7 +951,8 @@
 	function getConfirmedVacAsManager(){
 		$con = connect();
 		$sql= '';
-		$sql .= "SELECT t.id, t.start_date,t.end_date,t.duration,d.emp_code,d.emp_name,c.case_desc,t.manager_id,t.top_manager_id,m.Management,t.AdminConfirm,vs.status as mgrAgreeStatus,vs2.status as topAgreeStatus,vs3.status as AdminAgreeStatus,d2.emp_name as TopMgrName
+		$sql .= "SELECT t.id, t.start_date,t.end_date,t.duration,d.emp_code,d.emp_name,c.case_desc,t.manager_id,t.top_manager_id,m.Management,t.AdminConfirm,vs.status as mgrAgreeStatus,vs2.status as topAgreeStatus,
+		vs3.status as AdminAgreeStatus,d2.emp_name as TopMgrName,t.trans_date as date_created
 				FROM 	t_data d,t_data d2,t_transe t ,t_case c ,managements m , vac_status vs, vac_status vs2 ,vac_status vs3
 				WHERE 	t.emp_id=d.ID 
 						and t.id_case=c.ID 
@@ -965,6 +987,7 @@
 				echo"<td>".  $row['emp_code']. "</td>";
 				echo"<td>".  $row['emp_name']. "</td>";
 				echo"<td>".  $row['Management']. "</td>";
+				echo"<td>".  $row['date_created']. "</td>";
 				echo"<td>".  $row['case_desc']. "</td>";
 				echo"<td>".  $row['start_date']. "</td>";
 				echo"<td>".  $row['end_date']. "</td>";
@@ -980,7 +1003,8 @@
 	function getConfirmedVacAsTopManager(){
 		$con = connect();
 		$sql= '';
-		$sql .= "SELECT t.id,t.start_date,t.end_date,t.duration,d.emp_code,d.emp_name,c.case_desc,t.manager_id,t.top_manager_id,m.Management,vs.status as mgrAgreeStatus,vs2.status as topAgreeStatus,vs3.status as AdminAgreeStatus,IFnull(d2.emp_name,'لا يوجد') as MgrName,d3.emp_name as topMgrName,t.topManager_agree,t.Manager_agree
+		$sql .= "SELECT t.id,t.start_date,t.end_date,t.duration,d.emp_code,d.emp_name,c.case_desc,t.manager_id,t.top_manager_id,m.Management,vs.status as mgrAgreeStatus,vs2.status as topAgreeStatus,
+		vs3.status as AdminAgreeStatus,IFnull(d2.emp_name,'لا يوجد') as MgrName,d3.emp_name as topMgrName,t.topManager_agree,t.Manager_agree,t.trans_date as date_created
 			FROM t_case c ,managements m , vac_status vs ,vac_status vs2,vac_status vs3,t_data d
 			RIGHT OUTER JOIN t_transe t ON d.ID = t.emp_id 
             LEFT OUTER JOIN  t_data d2 ON t.manager_id=d2.ID
@@ -1018,6 +1042,7 @@
 					echo"<td>".  $row['emp_code']. "</td>";
 					echo"<td>".  $row['emp_name']. "</td>";
 					echo"<td>".  $row['Management']. "</td>";
+					echo"<td>".  $row['date_created']. "</td>";
 					echo"<td>".  $row['case_desc']. "</td>";
 					echo"<td>".  $row['start_date']. "</td>";
 					echo"<td>".  $row['end_date']. "</td>";
@@ -1056,7 +1081,7 @@
 		$con = connect();
 		$sql= '';
 		$sql .="SELECT t.id,t.start_date,t.end_date,t.duration,d.emp_code,d.emp_name,c.case_desc,t.manager_id,t.top_manager_id,m.Management,vs.status as mgrAgreeStatus,
-				vs2.status as topAgreeStatus,vs3.status as AdminAgreeStatus,IFNULL(d2.emp_name,'لا يوجد' )as MgrName,d3.emp_name as TopMgrName,IFNULL(topManagerAgree_date,'') as topManagerAgree_timeStamp
+				vs2.status as topAgreeStatus,vs3.status as AdminAgreeStatus,IFNULL(d2.emp_name,'لا يوجد' )as MgrName,d3.emp_name as TopMgrName,IFNULL(topManagerAgree_date,'') as topManagerAgree_timeStamp,t.trans_date as date_created
 			FROM t_data d3, t_case c ,managements m , vac_status vs ,vac_status vs2,vac_status vs3,t_data d 			
 			RIGHT OUTER JOIN t_transe t ON d.ID = t.emp_id LEFT OUTER JOIN  t_data d2 ON t.manager_id=d2.ID
 			WHERE t.id_case=c.ID 
@@ -1089,6 +1114,7 @@
 				echo"<td>".  $row['emp_code']. "</td>";
 				echo"<td>".  $row['emp_name']. "</td>";
 				echo"<td>".  $row['Management']. "</td>";
+				echo"<td>".  $row['date_created']. "</td>";
 				echo"<td>".  $row['case_desc']. "</td>";
 				echo"<td>".  $row['start_date']. "</td>";
 				echo"<td>".  $row['end_date']. "</td>";
@@ -1110,7 +1136,7 @@
 		$sql= "";
 		$output1="";
 		$sql .="SELECT t.id,d.emp_code,d.emp_name,t.start_date,t.end_date,t.duration,c.case_desc,dn.day_n,
-						IFNULL(topManagerAgree_date,'') as topManagerAgree_timeStamp,vs.status as AdminAgreeStatus
+						IFNULL(topManagerAgree_date,'') as topManagerAgree_timeStamp,vs.status as AdminAgreeStatus,t.trans_date as date_created
 				FROM vac_status as vs ,t_case c RIGHT OUTER JOIN t_transe t ON c.ID = t.id_case 
 							  LEFT OUTER JOIN t_data d ON t.emp_id = d.ID 
 							  LEFT OUTER JOIN t_day_n DN ON d.day_night = dn.ID	
@@ -1153,7 +1179,8 @@
 								</tr>";
 					}
 					$output1 .="<tr>
-								 	<td colspan='3'></td>
+									<td colspan='3'></td>
+									<td>".  $row['date_created']. "</td>
 									<td>".  $row['case_desc']. "</td>
 									<td>".  $row['start_date']. "</td>
 									<td>".  $row['end_date']. "</td>
@@ -1171,7 +1198,8 @@
 		$con = connect();
 		$sql= "";
 		$output1="";
-		$sql .="SELECT t.id,d.emp_code,d.emp_name,t.start_date,t.end_date,t.duration,c.case_desc,dn.day_n,IFNULL(topManagerAgree_date,'') as topManagerAgree_timeStamp
+		$sql .="SELECT t.id,d.emp_code,d.emp_name,t.start_date,t.end_date,t.duration,c.case_desc,dn.day_n,
+		IFNULL(topManagerAgree_date,'') as topManagerAgree_timeStamp,t.trans_date as date_created
 				FROM t_case c RIGHT OUTER JOIN t_transe t ON c.ID = t.id_case 
 							  LEFT OUTER JOIN t_data d ON t.emp_id = d.ID 
 							  LEFT OUTER JOIN t_day_n DN ON d.day_night = dn.ID	
@@ -1214,7 +1242,8 @@
 								</tr>";
 					}
 					$output1 .="<tr>
-								 	<td colspan='3'></td>
+									<td colspan='3'></td>
+									<td>".  $row['date_created']. "</td>
 									<td>".  $row['case_desc']. "</td>
 									<td>".  $row['start_date']. "</td>
 									<td>".  $row['end_date']. "</td>
