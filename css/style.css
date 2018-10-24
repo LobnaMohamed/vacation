@@ -27,7 +27,7 @@ label{
 .form-control input[type="text"], input[type="date"]{
 text-align: right;
 }
-#search,#searchDateFrom,#searchDateTo,#year,#month{
+#search,#searchTo,#searchDateFrom,#searchDateTo,#year,#month{
     margin-bottom:3px;
 }
 /* Add a background color and some padding around the form */
@@ -99,7 +99,7 @@ text-align: right;
 }#pendingVac th ,#confirmedVac th,#confirmedVacReport th{
     font-size: 16px;
 }
-#pendingVac th ,#confirmedVac th{
+#pendingVac th ,#confirmedVac th,#empData th{
     background-color: #999999;
 }
 #confirmedVacReport{

@@ -68,6 +68,19 @@ $(document).ready(function(){
 		// console.log(days);
 		$('#duration').val(days);
 	});
+	//search by id
+	$('#dateTo').change(function(){
+
+		var startDate = $('#date').val();
+		var endDate = $(this).val();
+		// end - start returns difference in milliseconds 
+		var diff = new Date(endDate) - new Date(startDate);
+		// console.log( diff);
+		// get days
+		var days = (diff/1000/60/60/24)+1;
+		// console.log(days);
+		$('#duration').val(days);
+	});
 
 	// edit employees info modal
 	$('a.edit').on('click', function() {
@@ -390,9 +403,10 @@ $(document).ready(function(){
  //     }
 	// });
 	//-----------search confirmed vacs---------------------------- 
- 	$('#searchDateTo,#searchDateFrom,#search').bind('change keyup',function(){
+ 	$('#searchDateTo,#searchDateFrom,#searchTo,#search').bind('change keyup',function(){
  		//get dates between 2 dates
- 		var value = $('#search').val();
+	    var value = $('#search').val();
+		var valueTo =  $('#searchTo').val();
  		var dateTo_value = $('#searchDateTo').val();
  		var dateFrom_value = $('#searchDateFrom').val();
  		var currentURL = document.location.href.match(/[^\/]+$/)[0];
@@ -400,6 +414,7 @@ $(document).ready(function(){
 			url:'searchAjax.php',
 			method:"GET",
 			data: {search:value,
+					searchTo:valueTo,
 					dateFrom:dateFrom_value,
 				    dateTo:dateTo_value,
 				    pageurl:currentURL},
@@ -410,6 +425,11 @@ $(document).ready(function(){
 				if(currentURL == 'confirmed.php'){
 					//console.log(data);
 					$('#confirmedVacbody').html(data);
+					
+				}
+				else if(currentURL == 'pending.php'){
+					//console.log(data);
+					$('#pendingVacbody').html(data);
 					
 				}
 				else if(currentURL == 'empdata.php'){

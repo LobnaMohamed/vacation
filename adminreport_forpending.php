@@ -33,7 +33,7 @@
 		<table id="confirmedVacReport" class="table table-striped table-bordered table-responsive table-condensed">	
 			<thead>
 				<tr class='bg-primary'>
-					<th ></th>
+					<th >رقم القيد</th>
 					<th >الاسم</th>
 					<th >التشغيل</th>
 					<th>تاريخ تحرير الاجازة </th>

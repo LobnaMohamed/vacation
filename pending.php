@@ -24,9 +24,11 @@
 		<form class="navbar-form row" role="search" id="searchEmp" method="GET" action="adminreport_forpending.php">
 			<div class="form-group add-on ">
 				<label for = "search">رقم القيد / الاسم :</label>
-				<input class="form-control" placeholder="ابحث.." name="search" id="search" type="text"> 
+				<input class="form-control" placeholder=" ابحث رقم قيد" name="search" id="search" type="text"> 
 				<?php
 				if($_SESSION['UserGroup']==3 || $_SESSION['UserGroup']==5 || $_SESSION['UserGroup']==6){?>
+					<label for = "searchTo"> إلى:</label>
+					<input class="form-control" placeholder="الى رقم قيد" name="searchTo" id="searchTo" type="text">
 					<label for = "month">الشهر:</label>
 					<select name="month" class="form-control" id="month">
 						<option value='0'></option>"

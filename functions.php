@@ -365,9 +365,28 @@
 		 }
 		echo $output;
 	}
+	//---------------get number of Employees---------------------
 	function getEmpCount(){
 		$con = connect();		
 		$sql = "SELECT count(*) FROM empdata where active=1 "; //count emp from view
+		$stmt = $con->prepare($sql);
+		$stmt->execute();
+		$result = $stmt->fetchColumn();
+		echo $result;
+	}
+	//---------------get number of pending vacations---------------------
+	function getPendingVacCount_Admin(){
+		$con = connect();		
+		$sql = "SELECT count(*) FROM t_transe where AdminConfirm =3 and topManager_agree in(1,2)"; 
+		$stmt = $con->prepare($sql);
+		$stmt->execute();
+		$result = $stmt->fetchColumn();
+		echo $result;
+	}
+	//---------------get number of confirmed vacations---------------------
+	function getConfirmedVacCount_Admin(){
+		$con = connect();		
+		$sql = "SELECT count(*) FROM t_transe where AdminConfirm not in (3,4)"; 
 		$stmt = $con->prepare($sql);
 		$stmt->execute();
 		$result = $stmt->fetchColumn();
@@ -640,8 +659,13 @@
 						and t.Mang_id=m.ID 
 						and t.Manager_agree=vs.ID
 						and t.topManager_agree=vs2.ID
-						and t.top_manager_id=d3.ID
-				ORDER BY d.emp_code";
+						and t.top_manager_id=d3.ID";
+		if(!empty($_GET['search'])){
+			//$sql .= " and (d.emp_code like '%". $_GET['search'] ."%')";	
+			$sql .= " and (d.emp_code between '".$_GET['search']."' and '".$_GET['searchTo'] ."')";	
+			
+		}
+		$sql.= " ORDER BY d.emp_code, t.start_date desc";
 		$stmt = $con->prepare($sql);
 		$stmt->execute();
 		$result = $stmt->fetchAll();
@@ -686,14 +710,18 @@
 		FROM t_data d3 ,t_case c ,managements m , vac_status vs, vac_status vs2,vac_status vs3,t_data d 
 		RIGHT OUTER JOIN t_transe t ON d.ID = t.emp_id LEFT OUTER JOIN  t_data d2 ON t.manager_id=d2.ID
 		WHERE t.id_case=c.ID 
-				and (t.topManager_agree =1 or (t.Manager_agree =3 and t.manager_id={$_SESSION['UserID']}))
+				and (t.topManager_agree in(1,2) or (t.Manager_agree =3 and t.manager_id={$_SESSION['UserID']}))
 						and t.AdminConfirm =vs3.ID
 						and t.AdminConfirm =3
 						and t.Mang_id=m.ID 
 						and t.Manager_agree=vs.ID
 						and t.topManager_agree=vs2.ID
-						and t.top_manager_id=d3.ID
-		ORDER BY	d.emp_code";
+						and t.top_manager_id=d3.ID";
+		if(!empty($_GET['search'])){
+			//$sql .= " and (d.emp_code like '%". $_GET['search'] ."%')";	
+			$sql .= " and (d.emp_code between '".$_GET['search']."' and '".$_GET['searchTo'] ."')";		
+		}
+		$sql.= " ORDER BY d.emp_code, t.start_date desc";
 		$stmt = $con->prepare($sql);
 		$stmt->execute();
 		$result = $stmt->fetchAll();
@@ -769,8 +797,12 @@
 				and t.Manager_agree=vs.ID 
 				and (t.Manager_agree in (1,2,3,4))
 				and t.topManager_agree=vs2.ID
-				and t.top_manager_id=d3.ID
-		ORDER BY d.emp_code";
+				and t.top_manager_id=d3.ID";
+		if(!empty($_GET['search'])){
+			//$sql .= " and (d.emp_code like '%". $_GET['search'] ."%')";	
+			$sql .= " and (d.emp_code between '".$_GET['search']."' and '".$_GET['searchTo'] ."')";		
+		}
+		$sql.= " ORDER BY d.emp_code, t.start_date desc";
 		$stmt = $con->prepare($sql);
 		$stmt->execute();
 		$result = $stmt->fetchAll();
@@ -785,7 +817,6 @@
 		$agreement2 = $stmt3->fetchAll();
 		foreach($result as $row){
 			$index= $row['id'];
-
 			echo"<tr>";
 				echo"<td>".  $row['emp_code']. "</td>";
 				echo"<td>".  $row['emp_name']. "</td>";
@@ -1011,7 +1042,7 @@
             LEFT OUTER JOIN  t_data d3 ON t.top_manager_id=d3.ID 
 			WHERE  t.id_case=c.ID 
 			and t.Mang_id=m.ID
-			and t.topManager_agree in (1,2,3)
+			and t.topManager_agree in (1,2)
 			and t.Manager_agree=vs.ID
 			and t.topManager_agree=vs2.ID
 			and t.AdminConfirm=vs3.ID
@@ -1061,6 +1092,7 @@
 					echo"<td>".  $row['emp_code']. "</td>";
 					echo"<td>".  $row['emp_name']. "</td>";
 					echo"<td>".  $row['Management']. "</td>";
+					echo"<td>".  $row['date_created']. "</td>";
 					echo"<td>".  $row['case_desc']. "</td>";
 					echo"<td>".  $row['start_date']. "</td>";
 					echo"<td>".  $row['end_date']. "</td>";
