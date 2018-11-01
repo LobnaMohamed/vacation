@@ -301,13 +301,13 @@
 			// creating array of errors
 			$formErrors = array();
 			$manager_vacStatus = 3;
-			echo $manager;
+			//echo $manager;
 			if( $manager == 0){
-				echo "manager is zero";
+				//echo "manager is zero";
 				$manager = 'NULL';
-				echo"new manager is ".$manager;
+				//echo"new manager is ".$manager;
 				$manager_vacStatus = 4;
-				echo $manager_vacStatus;
+				//echo $manager_vacStatus;
 			}
 			if (empty($empName) || empty($empCode) ){
 				//$formErrors[] = 'username must be larger than  chars';
@@ -328,9 +328,53 @@
 
 	// --------------Edit vacation function----------------------
 	function editVacation(){
-
+		//assign variables
+		$vacID=isset($_POST['vac_id'])? filter_var($_POST['vac_id'],FILTER_SANITIZE_NUMBER_INT):'';
+		$durationEdit= isset($_POST['durationEdit'])? filter_var($_POST['durationEdit'],FILTER_SANITIZE_NUMBER_FLOAT):'';
+		$dateEdit= isset($_POST['dateEdit'])? $_POST['dateEdit']:'';
+		$dateToEdit = isset($_POST['dateToEdit'])? $_POST['dateToEdit'] :'';
+		$topManagerEdit= isset($_POST['topManagerEdit'])? filter_var($_POST['topManagerEdit'],FILTER_SANITIZE_NUMBER_INT):'';
+		$managerEdit= isset($_POST['managerEdit'])? filter_var($_POST['managerEdit'],FILTER_SANITIZE_NUMBER_INT) :'';
+		$vacTypeEdit= isset($_POST['vacTypeEdit'])? filter_var($_POST['vacTypeEdit'],FILTER_SANITIZE_NUMBER_INT) :'';
+		//$username=$_SESSION['Username']; // user id
+		// if (gethostbyaddr($_SERVER['REMOTE_ADDR']) != null){
+		// 	$userIP = gethostbyaddr($_SERVER['REMOTE_ADDR']);
+		// }
+		// else{
+		// 	$userIP = 'undefined';
+		// }
+		if( $managerEdit == 0){//if no direct manager set it to null
+			//echo "manager is zero";
+			$managerEdit = 'NULL';
+			//echo"new manager is ".$manager;
+			$manager_vacStatus = 4;
+			//echo $manager_vacStatus;
+		}
+		$con = connect();
+		$sql= " UPDATE t_transe
+			    SET id_case = $vacTypeEdit,
+					start_date = '$dateEdit',
+					end_date = '$dateToEdit',
+					manager_id = $managerEdit,
+					top_manager_id = $topManagerEdit,
+					duration = $durationEdit
+				WHERE ID =$vacID" ;
+		$stmt = $con->prepare($sql);
+		$stmt->execute();
 	}
+	//----------------delete vacation-----------------------------
+	function deleteVacationAsEmp(){
+		$vacationID=isset($_POST['vac_id'])? filter_var($_POST['vac_id'], FILTER_SANITIZE_NUMBER_INT):'';
+		$con = connect();
+		$sql= '';
+		$sql .= "DELETE FROM t_transe
+					WHERE id = '$vacationID' ";
 
+		$stmt = $con->prepare($sql);
+		$stmt->execute();
+		
+		//$result = $stmt->fetchAll();
+	}
 	// --------------get Employee function-----------------------
 	function getAllEmp(){
 		$output="";
@@ -1286,23 +1330,21 @@
 		}	
 		echo $output1 ;
 	}
-	//------------get vacations' status feedback as Employee------------ 
+//------------get vacations' status feedback as Employee------------ 
 	function getVacationStatusAsEmp(){
 		$con = connect();
 		$sql= '';
-		$sql .= "SELECT  t.id, t.start_date,t.end_date,t.duration,d.emp_code,d.emp_name,c.case_desc,vs.status as mgrAgreeStatus ,
+		$sql .= "SELECT  t.id, t.start_date,t.end_date,t.duration,d.emp_code,d.emp_name,c.case_desc,vs.status as mgrAgreeStatus,t.topManager_agree,
 		vs2.status as topAgreeStatus,IFNULL(d2.emp_name,'لا يوجد') as MgrName ,d3.emp_name as TopMgrName,vs3.status as AdminAgreeStatus,t.trans_date as date_created
 				FROM t_data d3 ,t_case c, vac_status vs, vac_status vs2,vac_status vs3,t_data d
 				RIGHT OUTER JOIN t_transe t ON d.ID = t.emp_id LEFT OUTER JOIN  t_data d2 ON t.manager_id=d2.ID
 				WHERE   t.emp_id = {$_SESSION['UserID']}
-                		and t.id_case=c.ID 
+						and t.id_case=c.ID 
 						and t.Manager_agree=vs.ID
 						and t.topManager_agree=vs2.ID
-                        AND t.AdminConfirm= vs3.ID
+						AND t.AdminConfirm= vs3.ID
 						and t.top_manager_id=d3.ID";
-		// if(!empty($_GET['search'])){
-		// 	$sql .= " and (d.emp_code like '%". $_GET['search'] ."%' OR d.emp_name like '%". $_GET['search'] ."%')";	
-		// }
+
 		if(!empty($_GET['dateTo']) && !empty($_GET['dateFrom']) ){
 			$sql .= " and (t.start_date between '".$_GET['dateFrom']."' and '".$_GET['dateTo'] ."')";
 		}
@@ -1311,20 +1353,20 @@
 		$stmt = $con->prepare($sql);
 		$stmt->execute();
 		$result = $stmt->fetchAll();
-		$credit= "	SELECT  sum(t.duration) as credit,c.case_desc
+		$credit= "	SELECT  sum(t.duration) as credit,c.case_desc,t.id
 					FROM t_case c RIGHT OUTER JOIN t_transe t on c.ID = t.id_case
-                    			  INNER JOIN t_data d  on t.emp_id = d.Id 
+								INNER JOIN t_data d  on t.emp_id = d.Id 
 					WHERE  t.emp_id = {$_SESSION['UserID']}
-	                and    t.id_case = c.id
-	                and t.AdminConfirm not in (3,4,6)
-	                and year(t.start_date) = year(CURDATE()) 
-	                GROUP BY t.id_case ";
+					and    t.id_case = c.id
+					and t.AdminConfirm not in (3,4,6)
+					and year(t.start_date) = year(CURDATE()) 
+					GROUP BY t.id_case ";
 		$stmt2 = $con->prepare($credit);
 		$stmt2->execute();
 		$agreement = $stmt2->fetchAll();
 		foreach($result as $row){
 			$index= $row['id'];
-			echo"<tr>";
+			echo"<tr class='rowdata' id='$index'>";
 				echo"<td>".  $row['date_created']. "</td>";
 				echo"<td>".  $row['case_desc']. "</td>";
 				echo"<td>".  $row['start_date']. "</td>";
@@ -1335,6 +1377,13 @@
 				echo"<td>".  $row['TopMgrName']. "</td>";
 				echo"<td>".  $row['topAgreeStatus']. "</td>";
 				echo"<td>".  $row['AdminAgreeStatus']. "</td>";
+			if($row['topManager_agree'] >=3){
+				echo"<td><a class='btn btn-sm editVacData' ><i class='fa fa-edit fa-lg' data-toggle='modal' data-target='#editVacationModal'></i></a></td>";
+				echo"<td><a class='btn btn-sm delete_vacation'><i class='fa fa-trash fa-lg'></i></a></td>";
+			}else{
+				echo"<td><a class='btn btn-sm disabled' role='button'><i class='fa fa-edit fa-lg'></i></a></td>";	
+				echo"<td><a class='btn btn-sm disabled' role='button'><i class='fa fa-trash fa-lg'></i></a></td>";
+			}
 			echo "</tr>";
 		}
 		echo " <ul class='nav nav-pills vac-credit panel'  role='tablist'>";

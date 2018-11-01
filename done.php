@@ -1,6 +1,6 @@
 <?php
 	session_start();
-		if(isset($_SESSION['Username'])){
+	if(isset($_SESSION['Username'])){
 		//echo "Welcome" . $_SESSION['Username'];
 	}else{
 		header('Location: index.php');//redirect
@@ -15,6 +15,12 @@
 
 		saveVacationAgree();
 		header("Location:pending.php");
+	}
+	
+	// delete vacation
+	elseif (isset($_POST['vac_id'])){
+		deleteVacationAsEmp();
+		//header("Location:myvacationstatus.php");
 	}
 	else
 	{

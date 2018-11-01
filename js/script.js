@@ -3,6 +3,12 @@ $(document).ready(function(){
 
 
 	//var currentActivePage ;
+		 //   currentActivePage = document.location.href.match(/[^\/]+$/)[0];
+	 //   if(currentActivePage != null){
+		// $('a[href="'+currentActivePage+'"]').attr('id', 'activePage');
+	 //   }else{
+		//    console.log("error");
+	 //   }
 
 	'use strict';
 
@@ -55,9 +61,8 @@ $(document).ready(function(){
 	 	}
 	 	checkErrors();
 	});
-
+	//get duration between 2 dates in vacation submittion form
 	$('#dateTo').change(function(){
-
 		var startDate = $('#date').val();
 		var endDate = $(this).val();
 		// end - start returns difference in milliseconds 
@@ -68,18 +73,15 @@ $(document).ready(function(){
 		// console.log(days);
 		$('#duration').val(days);
 	});
-	//search by id
-	$('#dateTo').change(function(){
-
-		var startDate = $('#date').val();
+	//get duration between 2 dates in vacation EDIT submittion form
+	$('#dateToEdit').change(function(){
+		var startDate = $('#dateEdit').val();
 		var endDate = $(this).val();
 		// end - start returns difference in milliseconds 
 		var diff = new Date(endDate) - new Date(startDate);
-		// console.log( diff);
 		// get days
 		var days = (diff/1000/60/60/24)+1;
-		// console.log(days);
-		$('#duration').val(days);
+		$('#durationEdit').val(days);
 	});
 
 	// edit employees info modal
@@ -403,10 +405,9 @@ $(document).ready(function(){
  //     }
 	// });
 	//-----------search confirmed vacs---------------------------- 
- 	$('#searchDateTo,#searchDateFrom,#searchTo,#search').bind('change keyup',function(){
+ 	$('#searchDateTo,#searchDateFrom,#search').bind('change keyup',function(){
  		//get dates between 2 dates
-	    var value = $('#search').val();
-		var valueTo =  $('#searchTo').val();
+ 		var value = $('#search').val();
  		var dateTo_value = $('#searchDateTo').val();
  		var dateFrom_value = $('#searchDateFrom').val();
  		var currentURL = document.location.href.match(/[^\/]+$/)[0];
@@ -414,7 +415,6 @@ $(document).ready(function(){
 			url:'searchAjax.php',
 			method:"GET",
 			data: {search:value,
-					searchTo:valueTo,
 					dateFrom:dateFrom_value,
 				    dateTo:dateTo_value,
 				    pageurl:currentURL},
@@ -427,11 +427,6 @@ $(document).ready(function(){
 					$('#confirmedVacbody').html(data);
 					
 				}
-				else if(currentURL == 'pending.php'){
-					//console.log(data);
-					$('#pendingVacbody').html(data);
-					
-				}
 				else if(currentURL == 'empdata.php'){
 					//console.log(data);
 					$('#empDatabody').html(data);
@@ -440,6 +435,9 @@ $(document).ready(function(){
 				 else if(currentURL == 'myvacationstatus.php'){
 					$('#VacStatusbody').html(data);
 				}
+				else if(currentURL == 'pending.php'){
+					$('#pendingVacbody').html(data);
+				}
 				
 			},
 			error: function(error) {
@@ -447,13 +445,96 @@ $(document).ready(function(){
         	}
 		});	
 	});
-	   
+	//delete vacation
+	$('.delete_vacation').on('click',function(){
+		if(confirm("سيتم حذف الاجازة نهائياً .. هل أنت متأكد؟")){
+			//var vac_id=$(this).attr("id");
+			var vac_id=$(this).closest('tr').attr('id');
+			
+			$.ajax({
+				url:"done.php",
+				method:"POST",
+				data: {vac_id:vac_id},
+				success:function(data){
+				},
+				error: function(error) {
+					alert(" لم يتم حذف الاجازة بنجاح..حاول مرة أخرى ");
+					//console.log(error);
+				}
+			});	
+			$(this).closest('tr').css("text-decoration", "line-through");
+			$(this).closest('tr').fadeOut(1200,function(){
+				$(this).closest('tr').remove();
+			});
+			
+		}
+
+	});
+	//--------------------get data for edit vacation------------------------
+	$(document).on('click','.editVacData', function(){
+		var vac_id=$(this).closest('tr').attr('id');
+		
+		$.ajax({
+			url:"fetch.php",
+			method:"POST",
+			data:{vacID:vac_id},
+			dataType:"json",
+			success:function(data){
+				$('#vac_id').val(data.ID);
+				$('#vacTypeEdit').val(data.id_case);
+				$('#topManagerEdit').val(data.top_manager_id);
+				$('#managerEdit').val(data.manager_id);
+				$('#dateEdit').val(data.start_date);
+				$('#dateToEdit').val(data.end_date);
+				$('#durationEdit').val(data.duration);
+				if(data.Manager_agree <3){
+					$('#managerEdit').prop('disabled', true);
+				}
+			},
+			error:function(error) {
+            	alert(error);
+        	}
+		});
+	});
+	//--------------onsubmit edit emp form-----------------------------
+	$(document).on('submit','#editEmpForm', function(){
+		//alert("hi");
+		//e.preventDefault();
+		var $form = $('#editEmpForm');
+
+		$.ajax({
+			url:"insert.php",
+			method:"POST",
+			data: $('form#editEmpForm').serialize(),
+			//dataType:"json",
+
+			success:function(data){
+				//console.log(data);
+				$("#editEmpModal").modal('hide');	
+			},
+			error: function(error) {
+            	alert(error);
+        	}
+		});		
+	});
+
+	//--------------onsubmit edit vacation form-----------------------------
+	$(document).on('submit','#editVacForm', function(){
+		var $form = $('#editVacForm');
+		$.ajax({
+			url:"insert.php",
+			method:"POST",
+			data: $('form#editVacForm').serialize(),
+			//dataType:"json",
+			success:function(data){
+				//console.log(data);
+				$("#editVacationModal").modal('hide');	
+			},
+			error: function(error) {
+				//console.log(error);
+			}
+		});		
+	});
 
 
-	 //   currentActivePage = document.location.href.match(/[^\/]+$/)[0];
-	 //   if(currentActivePage != null){
-		// $('a[href="'+currentActivePage+'"]').attr('id', 'activePage');
-	 //   }else{
-		//    console.log("error");
-	 //   }
 });

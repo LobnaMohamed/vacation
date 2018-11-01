@@ -15,14 +15,19 @@
 	}elseif(isset($_POST['ResetPassword'])){ //reset password
 		resetPassword();
 		header("Location:empData.php");
-	}
-	if(isset($_POST['insertManagement'])){ // insert new management
+
+	}elseif(isset($_POST['insertManagement'])){ // insert new management
 		addManagement();
 		header("Location:managements.php");
 
     }elseif(isset($_POST['updateManagement'])){ // edit management
 		editManagement();
 		header("Location:managements.php");
-    }
+
+		}elseif(isset($_POST['UpdateVac'])){ // edit existing vacation
+		editVacation();
+		header("Location:myvacationstatus.php");
+		}
+		
 	include 'footer.php';
 ?>
