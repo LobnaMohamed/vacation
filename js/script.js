@@ -405,46 +405,50 @@ $(document).ready(function(){
  //     }
 	// });
 	//-----------search confirmed vacs---------------------------- 
- 	$('#searchDateTo,#searchDateFrom,#search').bind('change keyup',function(){
- 		//get dates between 2 dates
- 		var value = $('#search').val();
- 		var dateTo_value = $('#searchDateTo').val();
- 		var dateFrom_value = $('#searchDateFrom').val();
- 		var currentURL = document.location.href.match(/[^\/]+$/)[0];
-		$.ajax({
-			url:'searchAjax.php',
-			method:"GET",
-			data: {search:value,
-					dateFrom:dateFrom_value,
-				    dateTo:dateTo_value,
-				    pageurl:currentURL},
-			// dataType:"json",
-			success:function(data){
-				// console.log(data);
-				
-				if(currentURL == 'confirmed.php'){
-					//console.log(data);
-					$('#confirmedVacbody').html(data);
-					
-				}
-				else if(currentURL == 'empdata.php'){
-					//console.log(data);
-					$('#empDatabody').html(data);
+	$('#searchDateTo,#searchDateFrom,#searchTo,#search').bind('change keyup',function(){
+		//get dates between 2 dates
+	   var value = $('#search').val();
+	   var valueTo =  $('#searchTo').val();
+		var dateTo_value = $('#searchDateTo').val();
+		var dateFrom_value = $('#searchDateFrom').val();
+		var currentURL = document.location.href.match(/[^\/]+$/)[0];
+	   $.ajax({
+		   url:'searchAjax.php',
+		   method:"GET",
+		   data: {search:value,
+				   searchTo:valueTo,
+				   dateFrom:dateFrom_value,
+				   dateTo:dateTo_value,
+				   pageurl:currentURL},
+		   // dataType:"json",
+		   success:function(data){
+			   // console.log(data);
+			   
+			   if(currentURL == 'confirmed.php'){
+				   //console.log(data);
+				   $('#confirmedVacbody').html(data);
+				   
+			   }
+			   else if(currentURL == 'pending.php'){
+				   //console.log(data);
+				   $('#pendingVacbody').html(data);
+				   
+			   }
+			   else if(currentURL == 'empdata.php'){
+				   //console.log(data);
+				   $('#empDatabody').html(data);
 
-				 }
-				 else if(currentURL == 'myvacationstatus.php'){
-					$('#VacStatusbody').html(data);
 				}
-				else if(currentURL == 'pending.php'){
-					$('#pendingVacbody').html(data);
-				}
-				
-			},
-			error: function(error) {
-            	//console.log(error);
-        	}
-		});	
-	});
+				else if(currentURL == 'myvacationstatus.php'){
+				   $('#VacStatusbody').html(data);
+			   }
+			   
+		   },
+		   error: function(error) {
+			   //console.log(error);
+		   }
+	   });	
+   });
 	//delete vacation
 	$('.delete_vacation').on('click',function(){
 		if(confirm("سيتم حذف الاجازة نهائياً .. هل أنت متأكد؟")){
