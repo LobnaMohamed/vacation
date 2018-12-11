@@ -29,6 +29,8 @@
 					<?php
 					}
 					if($_SESSION['UserGroup']==3 || $_SESSION['UserGroup']==5 || $_SESSION['UserGroup']==6){?>
+						<label for = "searchTo"> إلى:</label>
+						<input class="form-control" placeholder="الى رقم قيد" name="searchTo" id="searchTo" type="text">
 						<label for = "month">الشهر:</label>
 						<select name="month" class="form-control" id="month">
 							<option value='0'></option>"
@@ -105,9 +107,10 @@
 							getConfirmedVacAsTopManager(); 
 						}elseif($_SESSION['UserGroup']==1){
 							getConfirmedVacAsManager(); 
-						}elseif($_SESSION['UserGroup']==3 || $_SESSION['UserGroup']==5 || $_SESSION['UserGroup']==6){
-							getConfirmedVacAsAdmin(); 
-						} 
+						}
+						// elseif($_SESSION['UserGroup']==3 || $_SESSION['UserGroup']==5 || $_SESSION['UserGroup']==6){
+						// 	getConfirmedVacAsAdmin(); 
+						// } 
 					?>
 				</tbody>
 			</table>	

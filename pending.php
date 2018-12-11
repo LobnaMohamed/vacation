@@ -99,14 +99,15 @@
 							getPendingVacAsTopManager(); 	
 						}elseif($_SESSION['UserGroup']==1 ){//direct manager
 							getPendingVacAsManager(); 
-						}elseif($_SESSION['UserGroup']==3 ){ //est72a2at
-							getPendingVacAsAdmin(); 
-						}  
-						elseif( $_SESSION['UserGroup']==5){ //est72a2at and direct manager
-							getPendingVacAsAdminandManager(); 
-						}elseif( $_SESSION['UserGroup']==6){ //est72a2at and top manager
-							getPendingVacAsAdminandTopManager(); 
-						} 
+						}
+						// elseif($_SESSION['UserGroup']==3 ){ //est72a2at
+						// 	getPendingVacAsAdmin(); 
+						// }  
+						// elseif( $_SESSION['UserGroup']==5){ //est72a2at and direct manager
+						// 	getPendingVacAsAdminandManager(); 
+						// }elseif( $_SESSION['UserGroup']==6){ //est72a2at and top manager
+						// 	getPendingVacAsAdminandTopManager(); 
+						// } 
 					?>
 				</tbody>
 			</table>

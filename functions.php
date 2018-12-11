@@ -1168,8 +1168,8 @@
 			and t.AdminConfirm=vs3.ID
 			and t.top_manager_id=d3.ID";
 
-		if(!empty($_GET['search'])){
-			$sql .= " and (d.emp_code like '%". $_GET['search'] ."%' OR d.emp_name like '%". $_GET['search'] ."%')";
+		if(!empty($_GET['searchTo'])){
+			$sql .= " and (d.emp_code between '".$_GET['search']."' and '".$_GET['searchTo'] ."')";	
 		}
 		if(!empty($_GET['dateTo']) && !empty($_GET['dateFrom']) ){
 			$sql .= " and (t.start_date between '".$_GET['dateFrom']."' and '".$_GET['dateTo'] ."')";
@@ -1219,8 +1219,8 @@
 				WHERE t.AdminConfirm not in(3,4)
 				 AND  t.AdminConfirm=vs.ID";
 
-		if(!empty($_GET['search'])){
-			$sql .= " and (d.emp_code like '%". $_GET['search'] ."%' OR d.emp_name like '%". $_GET['search'] ."%')";	
+		if(!empty($_GET['searchTo'])){
+			$sql .= " and (d.emp_code between '".$_GET['search']."' and '".$_GET['searchTo'] ."')";	
 		}
 		if(!empty($_GET['month'])){
 			$sql .= " and MONTH(t.start_date)= ". $_GET['month'] ."";	
@@ -1282,8 +1282,8 @@
 				WHERE t.topManager_agree =1
 				AND	  t.AdminConfirm = 3";
 
-		if(!empty($_GET['search'])){
-			$sql .= " and (d.emp_code like '%". $_GET['search'] ."%' OR d.emp_name like '%". $_GET['search'] ."%')";	
+		if(!empty($_GET['searchTo'])){
+			$sql .= " and (d.emp_code between '".$_GET['search']."' and '".$_GET['searchTo'] ."')";	
 		}
 		if(!empty($_GET['month'])){
 			$sql .= " and MONTH(t.start_date)= ". $_GET['month'] ."";	
