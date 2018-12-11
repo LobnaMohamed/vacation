@@ -936,9 +936,9 @@
 	//------------reply to vacations function------------
 	function saveVacationAgree(){
 		//NEWWW
-		$Topanswers = isset($_POST['TopMangrAgree']) ? $_POST['TopMangrAgree'] : array();
-		$Mgranswers = isset($_POST['MangrAgree']) ? $_POST['MangrAgree'] : array();
-		$Adminanswers = isset($_POST['AdminAgree']) ? $_POST['AdminAgree'] : array();
+		$Topanswers = isset($_POST['TopMangrAgree']) ? $_POST['TopMangrAgree'] : "";
+		$Mgranswers = isset($_POST['MangrAgree']) ? $_POST['MangrAgree'] : "";
+		$Adminanswers = isset($_POST['AdminAgree']) ? $_POST['AdminAgree'] : "";
 		// echo"<pre>";
 		// print_r($Topanswers);
 		// print_r($Mgranswers);
@@ -1168,7 +1168,7 @@
 			and t.AdminConfirm=vs3.ID
 			and t.top_manager_id=d3.ID";
 
-		if(!empty($_GET['searchTo'])){
+		if(!empty($_GET['search'])){
 			$sql .= " and (d.emp_code between '".$_GET['search']."' and '".$_GET['searchTo'] ."')";	
 		}
 		if(!empty($_GET['dateTo']) && !empty($_GET['dateFrom']) ){
