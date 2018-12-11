@@ -594,7 +594,7 @@
 				echo'<td>'; 
 					foreach($agreement as $row2){
 						echo '<label >'.$row2['status'].'
-					            <input type="radio" class="radio-inline" name="MangrAgree['.$index.']" class="MangrAgreeRadio" value="'.$row2['ID'].'"';
+					            <input type="radio" class="radio-inline MangrAgreeRadio" name="MangrAgree['.$index.']" value="'.$row2['ID'].'"';
 					            if($row['Manager_agree'] == $row2['ID']){ echo "checked"; }
 					    echo'></label>';	  
 					};
@@ -610,15 +610,6 @@
 	function getPendingVacAsTopManager(){
 		$con = connect();
 		$sql= '';
-		// $sql .= "SELECT t.id,t.start_date,t.end_date,t.duration,d.emp_code,d.emp_name,c.case_desc,t.manager_id,t.Manager_agree,t.top_manager_id,m.Management,vs.status,t.topManager_agree,IFNull( d2.emp_name,'لا يوجد') as MgrName ,d3.emp_name as topMgrName
-		// 	FROM t_case c ,managements m , vac_status vs,t_data d 
-		// 	RIGHT OUTER JOIN t_transe t ON d.ID = t.emp_id LEFT OUTER JOIN  t_data d2 ON t.manager_id=d2.ID
-		// 	LEFT OUTER JOIN  t_data d3 ON t.top_manager_id=d3.ID 
-		// 	WHERE t.id_case=c.ID 
-		// 	and t.Mang_id=m.ID 
-		// 	and t.topManager_agree=3
-		// 	and t.Manager_agree=vs.ID
-		// 	and (t.top_manager_id={$_SESSION['UserID']} or t.manager_id ={$_SESSION['UserID']} ) ";
 		$sql .= "SELECT t.id,t.start_date,t.end_date,t.duration,d.emp_code,d.emp_name,c.case_desc,t.manager_id,t.Manager_agree,t.top_manager_id,
 		m.Management,vs.status,t.topManager_agree,vs2.status as topAgreeStatus,IFNull( d2.emp_name,'لا يوجد') as MgrName ,d3.emp_name as topMgrName,t.trans_date as date_created
 			FROM t_case c ,managements m , vac_status vs, vac_status vs2,t_data d 
@@ -655,7 +646,7 @@
 				echo'<td>'; 
 				foreach($agreement as $row2){
 					echo '<label >'.$row2['status']. '
-				            <input type="radio" class="radio-inline" name="MangrAgree['.$index.']" class="MangrAgreeRadio" value="'.$row2['ID'].'"';
+				            <input type="radio" class="radio-inline MangrAgreeRadio" name="MangrAgree['.$index.']" value="'.$row2['ID'].'"';
 				            if($row['Manager_agree'] == $row2['ID']){ echo "checked"; }
 				    echo'></label>';
 				}
@@ -678,7 +669,7 @@
 					echo'<td>';
 					foreach($agreement as $row2){
 						echo '<label >'.$row2['status']. '
-					            <input type="radio" class="radio-inline" name="TopMangrAgree['.$index.']" class="TopMangrAgreeRadio" value="'.$row2['ID'].'"';
+					            <input type="radio" class="radio-inline TopMangrAgreeRadio" name="TopMangrAgree['.$index.']" value="'.$row2['ID'].'"';
 					            if($row['topManager_agree'] == $row2['ID']){ echo "checked"; }
 					    echo'></label>';	  
 					}
@@ -736,7 +727,7 @@
 				echo'<td>'; 
 					foreach($agreement as $row2){
 						echo '<label >'.$row2['status'].'
-					            <input type="radio" class="radio-inline" name="AdminAgree['.$index.']" class="AdminAgreeRadio" value="'.$row2['ID'].'"';
+					            <input type="radio" class="radio-inline AdminAgreeRadio" name="AdminAgree['.$index.']" value="'.$row2['ID'].'"';
 					            if($row['AdminConfirm'] == $row2['ID']){ echo "checked"; }
 					    echo'></label>';	  
 					};
@@ -795,7 +786,7 @@
 						foreach($agreement as $row2){
 							if( $row2['ID']<4){
 								echo '<label >'.$row2['status'].'
-					            <input type="radio" class="radio-inline" name="MangrAgree['.$index.']" class="MangrAgreeRadio" value="'.$row2['ID'].'"';
+					            <input type="radio" class="radio-inline MangrAgreeRadio" name="MangrAgree['.$index.']" value="'.$row2['ID'].'"';
 					            if($row['Manager_agree'] == $row2['ID']){ echo "checked"; }
 					    		echo'></label>';
 							}	  
@@ -812,7 +803,7 @@
 						foreach($agreement2 as $row2){
 							if($row2['ID']!=4){
 								echo '<label >'.$row2['status'].'
-							        <input type="radio" class="radio-inline" name="AdminAgree['.$index.']" class="AdminAgreeRadio" value="'.$row2['ID'].'"';
+							        <input type="radio" class="radio-inline AdminAgreeRadio" name="AdminAgree['.$index.']" value="'.$row2['ID'].'"';
 							    if($row['AdminConfirm'] == $row2['ID']){ echo "checked"; }
 							    echo'></label>';
 							}		  
@@ -878,7 +869,7 @@
 					foreach($agreement as $row2){
 						if( $row2['ID']<4){
 							echo '<label >'.$row2['status'].'
-							<input type="radio" class="radio-inline" name="MangrAgree['.$index.']" class="MangrAgreeRadio" value="'.$row2['ID'].'"';
+							<input type="radio" class="radio-inline MangrAgreeRadio" name="MangrAgree['.$index.']" value="'.$row2['ID'].'"';
 							if($row['Manager_agree'] == $row2['ID']){ echo "checked"; }
 							echo'></label>';
 						}	  
@@ -895,7 +886,7 @@
 					foreach($agreement2 as $row2){
 							if($row2['ID']<4){
 								echo '<label >'.$row2['status'].'
-							        <input type="radio" class="radio-inline" name="TopMangrAgree['.$index.']" class="TopMangrAgreeRadio" value="'.$row2['ID'].'"';
+							        <input type="radio" class="radio-inline TopMangrAgreeRadio" name="TopMangrAgree['.$index.']" value="'.$row2['ID'].'"';
 							    if($row['topManager_agree'] == $row2['ID']){ echo "checked"; }
 							    echo'></label>';
 							}		  
@@ -911,7 +902,7 @@
 						foreach($agreement2 as $row2){
 							if($row2['ID']!=4){
 								echo '<label >'.$row2['status'].'
-							        <input type="radio" class="radio-inline" name="AdminAgree['.$index.']" class="AdminAgreeRadio" value="'.$row2['ID'].'"';
+							        <input type="radio" class="radio-inline AdminAgreeRadio" name="AdminAgree['.$index.']" value="'.$row2['ID'].'"';
 							    if($row['AdminConfirm'] == $row2['ID']){ echo "checked"; }
 							    echo'></label>';
 							}		  
@@ -920,7 +911,7 @@
 						foreach($agreement2 as $row2){
 							if($row2['ID']!=4){
 								echo '<label >'.$row2['status'].'
-							        <input type="radio" class="radio-inline" name="AdminAgree['.$index.']" class="AdminAgreeRadio" value="'.$row2['ID'].'"';
+							        <input type="radio" class="radio-inline AdminAgreeRadio" name="AdminAgree['.$index.']" value="'.$row2['ID'].'"';
 							    if($row['AdminConfirm'] == $row2['ID']){ echo "checked"; }
 							    echo'></label>';
 							}		  
