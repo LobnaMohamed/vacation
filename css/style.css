@@ -107,6 +107,11 @@ text-align: right;
     font-weight: bold;
     font-family: "Arial";
 }
+
+.table-striped>tbody>tr:nth-child(even)>td {
+   background-color: #bfbfbf; 
+ }
+
 #year{
     width: 10%;
 }
