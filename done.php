@@ -21,7 +21,7 @@
 	{
 	    // Form has been submitted
 
-		saveVacationAgree();
+		//saveVacationAgree();
 		header("Location:pendingPermit.php");
 	}
 	// delete vacation
