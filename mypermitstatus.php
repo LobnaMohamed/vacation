@@ -14,7 +14,7 @@
 <div class="container">
 	<header class="row text-center">
 		<!-- <img class= "col-lg-2 logo" src="images/amoc2.png"> -->
-		<h1 class="col-lg-12">اجازاتى</h1>  
+		<h1 class="col-lg-12">التصاريح</h1>  
 	</header>
 	<div class="table-responsive row">
 		<form class="navbar-form row" role="search" id="searchEmp" method="GET">
@@ -26,47 +26,46 @@
 				<input class="form-control"  name="searchDateTo" id="searchDateTo" type="date"> 
 			</div>   
 		</form>
-		<table id="myVacStatus" class="table table-striped table-bordered table-responsive">	
+		<table id="myPermitStatus" class="table table-striped table-bordered table-responsive">	
 			<thead>
 				<tr>
-					<th>تاريخ تحرير الاجازة </th>
-					<th>نوع الاجازة</th>
-					<th>من تاريخ</th>
-					<th>الى تاريخ</th>
-					<th>المدة</th>
+					<th>تاريخ تحرير التصريح </th>
+					<th>التاريخ</th>
+					<th>سبب الخروج</th>
 					<th>الرئيس المباشر</th>
 					<th>موافقة الرئيس المباشر</th>
 					<th>الرئيس الاعلى</th>
 					<th>موافقة الرئيس الاعلى</th>
-					<th>اعتماد الاستحقاقت</th>	
+					<th>اعتماد الاستحقاقت</th>
+					<th>اعتماد الأمن</th>
 					<th>تعديل</th>
 					<th>حذف</th>
 					
 				</tr>		
 			</thead>
-			<tbody id="VacStatusbody">
+			<tbody id="PermitStatusbody">
 				<?php
 				//check if the logged in manager or top manager or admin then 
 				//run the corresponding function 
-					getVacationStatusAsEmp(); 
+					getPermitStatusAsEmp(); 
 				?>
 				
 			</tbody>
 		</table>
 	</div>
-<!-- Edit vacation Modal -->
-	<div id="editVacationModal" class="modal fade" role="dialog">
+<!-- Edit Permit Modal -->
+	<div id="editPermitModal" class="modal fade" role="dialog">
 		<div class="modal-dialog modal-lg">
 			<!-- Modal content-->
 			<div class="modal-content">
 				<div class="modal-header">
 					<button type="button" class="close" data-dismiss="modal">&times;</button>
-					<h4 class="modal-title"> تعديل الاجازة </h4>
+					<h4 class="modal-title"> تعديل التصريح </h4>
 				</div>
 				<div class="modal-body">
-					<form method="POST" id="editVacForm" name="editVacForm" action="insert.php">	    
+					<form method="POST" id="editPermitForm" name="editPermitForm" action="insert.php">	    
 						<div class="col-sm-4">
-							<input type="hidden" name="vac_id" id="vac_id"> 
+							<input type="hidden" name="permit_id" id="permit_id"> 
 							<label for="topManagerEdit">الرئيس الاعلى</label>
 							<select class="form-control" id="topManagerEdit" name="topManagerEdit" required tabindex="3">
 								<option selected disabled hidden style='display: none' value=''></option>
@@ -94,7 +93,7 @@
 							<input type="date" class="form-control" id="dateEdit" name="dateEdit" required tabindex="5">
 						</div>
 						<div class="form-group col-md-3 col-md-offset-4 ">
-							<input type="submit" name="UpdateVac" class="btn btn-success" value="حفظ التعديل" >
+							<input type="submit" name="UpdatePermit" class="btn btn-success" value="حفظ التعديل" >
 						</div>	
 					</form>
 				</div>

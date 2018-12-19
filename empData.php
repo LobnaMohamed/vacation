@@ -42,7 +42,7 @@
 				      <th>المستوى</th>
 				      <th>نهارى/ورادى</th>
 				      <th>بالخدمة/خارج الخدمة</th>
-				      <th><button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#addEmpModal">إضافة</button></th>
+				      <th><button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#addEmpModal">إضافة</button></th>
 				    </tr>
 			  	</thead>
 				<tbody id="empDatabody">

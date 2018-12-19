@@ -403,7 +403,7 @@
 				<td>".  $row['level']. "</td>
 				<td>".  $row['shift']. "</td>
 				<td>".  $row['activeStatus']. '</td>
-				<td><button type="button" class="btn btn-info btn-sm editEmpData" data-toggle="modal" data-target="#editEmpModal" id="'.$row['ID'].'">تعديل</button></td>
+				<td><button type="button" class="btn btn-primary btn-sm editEmpData" data-toggle="modal" data-target="#editEmpModal" id="'.$row['ID'].'">تعديل</button></td>
 			 </tr>';
 			
 		 }
@@ -1321,7 +1321,7 @@
 		}	
 		echo $output1 ;
 	}
-//------------get vacations' status feedback as Employee------------ 
+	//------------get vacations' status feedback as Employee------------ 
 	function getVacationStatusAsEmp(){
 		$con = connect();
 		$sql= '';
@@ -1385,4 +1385,726 @@
 					</li>";
 			}	
 			echo "<span>مجموع الاجازات:</span></ul>";
+	}
+	//---------------------------------------------------------------------------------------------------------------
+	//---------------PERMITS FUNCTIONS-----------------------------------------------------------------------------
+	//---------------------------------------------------------------------------------------------------------------
+	// --------------Add Permit function---------------------
+	function addPermit(){
+		
+		//check if user comming from a request
+		 // $_SERVER['REQUEST_METHOD'] == 'POST'
+		if(isset($_POST['submitPermit'])){
+			//assign variables
+			$empID=isset($_POST['empID'])? filter_var($_POST['empID'],FILTER_SANITIZE_NUMBER_INT):'';
+			$empName= isset($_POST['name'])? filter_var($_POST['name'],FILTER_SANITIZE_STRING) : '';
+			$empCode= isset($_POST['code'])? filter_var($_POST['code'],FILTER_SANITIZE_NUMBER_INT):'';
+			$management= isset($_POST['Management'])? filter_var($_POST['Management'],FILTER_SANITIZE_STRING):'';
+			$permitReason= isset($_POST['permitReason'])? filter_var($_POST['permitReason'],FILTER_SANITIZE_STRING):'';
+			$permitDate= isset($_POST['permitDate'])? $_POST['permitDate'] :'';
+			$departTime= isset($_POST['departTime'])? $_POST['departTime'] :'';
+			$returnTime = isset($_POST['returnTime'])? $_POST['returnTime'] :'';
+			$topManager= isset($_POST['topManager'])? filter_var($_POST['topManager'],FILTER_SANITIZE_NUMBER_INT)  :'';
+			$manager= isset($_POST['manager'])? filter_var($_POST['manager'],FILTER_SANITIZE_NUMBER_INT) :'';
+			$returnCheckbox= isset($_POST['returnCheckbox'])? $_POST['returnCheckbox']:0;
+			$username=$_SESSION['Username']; // user id
+			if (gethostbyaddr($_SERVER['REMOTE_ADDR']) != null){
+				$userIP = gethostbyaddr($_SERVER['REMOTE_ADDR']);
+			}
+			else{
+				$userIP = 'undefined';
+			}
+			//adjusting date formats
+			
+			// creating array of errors
+			$formErrors = array();
+			$manager_vacStatus = 3;
+			//echo $manager;
+			if( $manager == 0){
+				//echo "manager is zero";
+				$manager = 'NULL';
+				//echo"new manager is ".$manager;
+				$manager_vacStatus = 4;
+				//echo $manager_vacStatus;
+			}
+			if (empty($empName) || empty($empCode) ){
+				//$formErrors[] = 'username must be larger than  chars';
+				echo "name and code cant be empty";
+				// print_r($formErrors) ;
+			} else {
+				$con = connect();
+				$sql= "INSERT INTO t_permit_trans(emp_id,permitReason,permit_date,departureTime,returnTime,manager_id,
+								   top_manager_id,mang_id,returnCheck,Manager_agree,made_by_user,made_by_ip) 
+					   VALUES (".$empID.",'".$permitReason."','".$permitDate."','".$departTime."','".$returnTime."',".$manager.",
+					  		 ".$topManager." ,".$management.",".$returnCheckbox.",".$manager_vacStatus.",'".$username."','".$userIP."')" ;
+					   echo $sql;
+		        $stmt = $con->prepare($sql);
+				$stmt->execute();		
+			}
+		}
+	}
+	//---------------get pending permits---------------------
+	function getPendingPermitAsManager(){
+		$con = connect();
+		$sql= '';
+		$sql .= "SELECT t.id, t.permit_date,t.permitReason,t.Manager_agree,m.Management,t.departureTime,t.returnTime,t.returnCheck,
+				t.top_manager_id,vs.status as mgrAgreeStatus,t.topManager_agree ,vs2.status as topAgreeStatus,
+				d2.emp_name as TopMgrName,t.permit_trans_date as date_created,d.emp_code,d.emp_name
+				FROM 	t_data d,t_data d2 ,t_permit_trans t,managements m , vac_status vs, vac_status vs2 
+				WHERE 	t.emp_id=d.ID 
+						and t.manager_id={$_SESSION['UserID']} 
+						and t.Manager_agree=3 
+						and t.Mang_id=m.ID 
+						and t.Manager_agree=vs.ID
+						and t.topManager_agree=vs2.ID
+						and t.top_manager_id=d2.ID";
+		$stmt = $con->prepare($sql);
+		$stmt->execute();
+		$result = $stmt->fetchAll();
+		$vacStatus= "SELECT ID,status FROM vac_status  where ID NOT IN (4,5,6)";
+		$stmt2 = $con->prepare($vacStatus);
+		$stmt2->execute();
+		$agreement = $stmt2->fetchAll();
+		foreach($result as $row){
+			$index= $row['id'];
+			echo"<tr>";
+				echo"<td>".  $row['emp_code']. "</td>";
+				echo"<td>".  $row['emp_name']. "</td>";
+				echo"<td>".  $row['Management']. "</td>";
+				echo"<td>".  $row['date_created']. "</td>";
+				echo"<td>".  $row['permitReason']. "</td>";
+				echo"<td>".  $row['permit_date']. "</td>";
+				if($row['returnCheck'] ==0){
+					echo"<td><input type='checkbox' disabled ".  $row['returnCheck']. "/></td>";
+				}else{
+					echo"<td><input type='checkbox' disabled checked ".  $row['returnCheck']. "/></td>";
+				}
+				echo"<td>".  $row['departureTime']. "</td>";
+				echo"<td>".  $row['returnTime']. "</td>";
+				
+				echo'<td>'; 
+					foreach($agreement as $row2){
+						echo '<label >'.$row2['status'].'
+								<input type="radio" class="radio-inline MangrAgreeRadio" name="MangrAgree['.$index.']" value="'.$row2['ID'].'"';
+								if($row['Manager_agree'] == $row2['ID']){ echo "checked"; }
+						echo'></label>';	  
+					};
+					//name="MangrAgree'.$row['id'].'"
+				echo'</td>';
+				echo"<td>".  $row['TopMgrName']. "</td>";
+				echo"<td>".  $row['topAgreeStatus']. "</td>";
+			echo "</tr>";
+		} 
+		//$_POST = array();
+	}
+	//--------------get pending as top manager----------------------- 
+	function getPendingPermitAsTopManager(){
+		$con = connect();
+		$sql= '';
+		$sql .= "SELECT t.id,t.permit_date,t.departureTime,t.returnTime,d.emp_code,d.emp_name,t.manager_id,t.Manager_agree,t.top_manager_id,
+		m.Management,vs.status,t.topManager_agree,vs2.status as topAgreeStatus,IFNull( d2.emp_name,'لا يوجد') as MgrName ,
+		d3.emp_name as topMgrName,t.permit_trans_date as date_created,permitReason,returnCheck
+			FROM managements m , vac_status vs, vac_status vs2,t_data d 
+			RIGHT OUTER JOIN t_permit_trans t ON d.ID = t.emp_id LEFT OUTER JOIN  t_data d2 ON t.manager_id=d2.ID
+			LEFT OUTER JOIN  t_data d3 ON t.top_manager_id=d3.ID 
+			WHERE t.Mang_id=m.ID 
+			and ((t.topManager_agree=3 and t.top_manager_id={$_SESSION['UserID']}) or (t.manager_id ={$_SESSION['UserID']} and  t.Manager_agree = 3))
+			and t.Manager_agree=vs.ID
+			and t.topManager_agree=vs2.ID";
+		$stmt = $con->prepare($sql);
+		$stmt->execute();
+		$result = $stmt->fetchAll();
+		$count= $stmt->rowCount();
+		$vacStatus= "SELECT ID,status FROM vac_status where ID NOT IN (4,5,6)";
+		$stmt2 = $con->prepare($vacStatus);
+		$stmt2->execute();
+		$agreement = $stmt2->fetchAll();
+		
+		foreach($result as $row){
+			
+			$index= $row['id'];
+			echo"<tr>";
+			if($row['manager_id']==$_SESSION['UserID'] && $row['Manager_agree'] == 3){
+				echo"<td>".  $row['emp_code']. "</td>";
+				echo"<td>".  $row['emp_name']. "</td>";
+				echo"<td>".  $row['Management']. "</td>";
+				echo"<td>".  $row['date_created']. "</td>";
+				echo"<td>".  $row['permitReason']. "</td>";
+				echo"<td>".  $row['permit_date']. "</td>";
+				if($row['returnCheck'] ==0){
+					echo"<td><input type='checkbox' disabled ".  $row['returnCheck']. "/></td>";
+				}else{
+					echo"<td><input type='checkbox' disabled checked ".  $row['returnCheck']. "/></td>";
+				}
+				echo"<td>".  $row['departureTime']. "</td>";
+				echo"<td>".  $row['returnTime']. "</td>";
+				echo"<td>".  $row['MgrName']. "</td>";
+				echo'<td>'; 
+				foreach($agreement as $row2){
+					echo '<label >'.$row2['status']. '
+				            <input type="radio" class="radio-inline MangrAgreeRadio" name="MangrAgree['.$index.']" value="'.$row2['ID'].'"';
+				            if($row['Manager_agree'] == $row2['ID']){ echo "checked"; }
+				    echo'></label>';
+				}
+				echo '</td>';
+				echo"<td>".  $row['topMgrName']. "</td>";
+				echo"<td>".  $row['topAgreeStatus']. "</td>";
+			}elseif($row['top_manager_id']==$_SESSION['UserID']){
+				if(in_array($row['Manager_agree'], array(1,2,3, 4))){
+					echo"<td>".  $row['emp_code']. "</td>";
+					echo"<td>".  $row['emp_name']. "</td>";
+					echo"<td>".  $row['Management']. "</td>";
+					echo"<td>".  $row['date_created']. "</td>";
+					echo"<td>".  $row['permitReason']. "</td>";
+					echo"<td>".  $row['permit_date']. "</td>";
+					if($row['returnCheck'] ==0){
+						echo"<td><input type='checkbox' disabled ".  $row['returnCheck']. "/></td>";
+					}else{
+						echo"<td><input type='checkbox' disabled checked ".  $row['returnCheck']. "/></td>";
+					}
+					echo"<td>".  $row['departureTime']. "</td>";
+					echo"<td>".  $row['returnTime']. "</td>";
+					echo"<td>".  $row['MgrName']. "</td>";
+					echo"<td>".  $row['status']. "</td>";
+					echo"<td>".  $row['topMgrName']. "</td>";
+					echo'<td>';
+					foreach($agreement as $row2){
+						echo '<label >'.$row2['status']. '
+					            <input type="radio" class="radio-inline TopMangrAgreeRadio" name="TopMangrAgree['.$index.']" value="'.$row2['ID'].'"';
+					            if($row['topManager_agree'] == $row2['ID']){ echo "checked"; }
+					    echo'></label>';	  
+					}
+					echo'</td>';						
+				}
+			}
+			echo "</tr>";
+		} 
+	}
+	
+	//-----get pending Permits as admin--------------
+	function getPendingPermitAsAdmin(){
+		$con = connect();
+		$sql= '';
+		$sql .="SELECT t.id, t.permit_date,t.departureTime,t.returnTime,t.returnCheck,d.emp_code,d.emp_name,t.manager_id,t.Manager_agree,
+				t.top_manager_id,m.Management,vs.status as mgrAgreeStatus,t.topManager_agree ,t.permitReason,
+					vs2.status as topAgreeStatus,t.AdminConfirm,IFNULL(d2.emp_name,'لا يوجد') as MgrName ,
+					d3.emp_name as TopMgrName,IFNULL(topManagerAgree_date,'') as topManagerAgree_timeStamp,t.permit_trans_date as date_created
+				FROM t_data d3 ,managements m , vac_status vs, vac_status vs2,t_data d 
+				RIGHT OUTER JOIN t_permit_trans t ON d.ID = t.emp_id LEFT OUTER JOIN  t_data d2 ON t.manager_id=d2.ID
+				WHERE  t.topManager_agree in (1,2) 
+						and t.AdminConfirm=3
+						and t.Mang_id=m.ID 
+						and t.Manager_agree=vs.ID
+						and t.topManager_agree=vs2.ID
+						and t.top_manager_id=d3.ID";
+		if(!empty($_GET['search'])){
+			//$sql .= " and (d.emp_code like '%". $_GET['search'] ."%')";	
+			$sql .= " and (d.emp_code between '".$_GET['search']."' and '".$_GET['searchTo'] ."')";	
+			
+		}
+		$sql.= " ORDER BY d.emp_code, t.permit_date desc";
+		$stmt = $con->prepare($sql);
+		$stmt->execute();
+		$result = $stmt->fetchAll();
+		$vacStatus= "SELECT ID,status FROM vac_status  where ID NOT IN (4,5,6)";
+		$stmt2 = $con->prepare($vacStatus);
+		$stmt2->execute();
+		$agreement = $stmt2->fetchAll();
+		foreach($result as $row){
+			$index= $row['id'];
+			echo"<tr>";
+				echo"<td>".  $row['emp_code']. "</td>";
+				echo"<td>".  $row['emp_name']. "</td>";
+				echo"<td>".  $row['Management']. "</td>";
+				echo"<td>".  $row['date_created']. "</td>";
+				echo"<td>".  $row['permitReason']. "</td>";
+				echo"<td>".  $row['permit_date']. "</td>";
+				if($row['returnCheck'] ==0){
+					echo"<td><input type='checkbox' disabled ".  $row['returnCheck']. "/></td>";
+				}else{
+					echo"<td><input type='checkbox' disabled checked ".  $row['returnCheck']. "/></td>";
+				}
+				echo"<td>".  $row['departureTime']. "</td>";
+				echo"<td>".  $row['returnTime']. "</td>";
+				echo"<td>".  $row['MgrName']. "</td>";
+				echo"<td>".  $row['mgrAgreeStatus']. "</td>";
+				echo"<td>".  $row['TopMgrName']. "</td>";
+				echo"<td>".  $row['topAgreeStatus']. "</td>";
+				echo"<td>".  $row['topManagerAgree_timeStamp']. "</td>";
+				echo'<td>'; 
+					foreach($agreement as $row2){
+						echo '<label >'.$row2['status'].'
+								<input type="radio" class="radio-inline AdminAgreeRadio" name="AdminAgree['.$index.']" value="'.$row2['ID'].'"';
+								if($row['AdminConfirm'] == $row2['ID']){ echo "checked"; }
+						echo'></label>';	  
+					};
+				echo'</td>';
+			echo "</tr>";
+		} 
+	}
+	//-----get pending Permits as admin and DIRECT manager --------------
+	function getPendingPermitAsAdminandManager(){
+		$con = connect();
+		$sql= '';
+		$sql .="SELECT t.id, t.permit_date,t.departureTime,t.returnTime,d.emp_code,d.emp_name,t.permitReason,t.manager_id,t.Manager_agree,
+			t.top_manager_id,m.Management,vs.status as mgrAgreeStatus,t.topManager_agree,vs2.status as topAgreeStatus,t.AdminConfirm,
+			vs3.status as AdminAgreeStatus,IFNULL(d2.emp_name,'لا يوجد') as MgrName ,d3.emp_name as TopMgrName,t.returnCheck,
+			IFNULL(topManagerAgree_date,'') as topManagerAgree_timeStamp,t.permit_trans_date as date_created
+				FROM t_data d3  ,managements m , vac_status vs, vac_status vs2,vac_status vs3,t_data d 
+				RIGHT OUTER JOIN t_permit_trans t ON d.ID = t.emp_id LEFT OUTER JOIN  t_data d2 ON t.manager_id=d2.ID
+				WHERE   (t.topManager_agree in(1,2) or (t.Manager_agree =3 and t.manager_id={$_SESSION['UserID']}))
+						and t.AdminConfirm =vs3.ID
+						and t.AdminConfirm =3
+						and t.Mang_id=m.ID 
+						and t.Manager_agree=vs.ID
+						and t.topManager_agree=vs2.ID
+						and t.top_manager_id=d3.ID";
+		if(!empty($_GET['search'])){
+			//$sql .= " and (d.emp_code like '%". $_GET['search'] ."%')";	
+			$sql .= " and (d.emp_code between '".$_GET['search']."' and '".$_GET['searchTo'] ."')";		
+		}
+		$sql.= " ORDER BY d.emp_code, t.permit_date desc";
+		$stmt = $con->prepare($sql);
+		$stmt->execute();
+		$result = $stmt->fetchAll();
+		$vacStatus= "SELECT ID,status FROM vac_status  where ID NOT IN (4,5,6)";
+		//status for manager
+		$stmt2 = $con->prepare($vacStatus);
+		$stmt2->execute();
+		$agreement = $stmt2->fetchAll();
+		//status for admin
+		$stmt3 = $con->prepare($vacStatus);
+		$stmt3->execute();
+		$agreement2 = $stmt3->fetchAll();
+		foreach($result as $row){
+			$index= $row['id'];
+			echo"<tr>";
+				echo"<td>".  $row['emp_code']. "</td>";
+				echo"<td>".  $row['emp_name']. "</td>";
+				echo"<td>".  $row['Management']. "</td>";
+				echo"<td>".  $row['date_created']. "</td>";
+				echo"<td>".  $row['permitReason']. "</td>";
+				echo"<td>".  $row['permit_date']. "</td>";
+				if($row['returnCheck'] ==0){
+					echo"<td><input type='checkbox' disabled ".  $row['returnCheck']. "/></td>";
+				}else{
+					echo"<td><input type='checkbox' disabled checked ".  $row['returnCheck']. "/></td>";
+				}
+				echo"<td>".  $row['departureTime']. "</td>";
+				echo"<td>".  $row['returnTime']. "</td>";
+				echo"<td>".  $row['MgrName']. "</td>";
+				echo'<td>'; 
+					if($row['Manager_agree'] ==3 and $row['manager_id']==$_SESSION['UserID']){
+						foreach($agreement as $row2){
+							if( $row2['ID']<4){
+								echo '<label >'.$row2['status'].'
+					            <input type="radio" class="radio-inline MangrAgreeRadio" name="MangrAgree['.$index.']" value="'.$row2['ID'].'"';
+					            if($row['Manager_agree'] == $row2['ID']){ echo "checked"; }
+					    		echo'></label>';
+							}	  
+					    }
+					}else{
+						echo  $row['mgrAgreeStatus'] ;
+					}
+				echo'</td>';
+				echo"<td>".  $row['TopMgrName']. "</td>";
+				echo"<td>".  $row['topAgreeStatus']. "</td>";
+				echo"<td>".  $row['topManagerAgree_timeStamp']. "</td>";
+				echo'<td>'; 
+					if($row['topManager_agree']<3){
+						foreach($agreement2 as $row2){
+							if($row2['ID']!=4){
+								echo '<label >'.$row2['status'].'
+							        <input type="radio" class="radio-inline AdminAgreeRadio" name="AdminAgree['.$index.']" value="'.$row2['ID'].'"';
+							    if($row['AdminConfirm'] == $row2['ID']){ echo "checked"; }
+							    echo'></label>';
+							}		  
+						}
+					}else{
+						echo $row['AdminAgreeStatus'];
+					}
+					
+				echo'</td>';
+			echo "</tr>";
+		} 
+	}
+	//-----get pending permits as admin and TOP manager --------------
+	function getPendingPermitAsAdminandTopManager(){
+		$con = connect();
+		$sql= '';
+		$sql .="SELECT t.id, t.permit_date,t.departureTime,t.returnTime,t.returnCheck,t.permitReason,d.emp_code,d.emp_name,t.manager_id,t.top_manager_id,m.Management,t.Manager_agree,vs.status as mgrAgreeStatus,t.topManager_agree ,vs2.status as topAgreeStatus,
+		t.AdminConfirm,vs3.status as AdminAgreeStatus,IFNULL(d2.emp_name,'لا يوجد') as MgrName ,d3.emp_name as TopMgrName,IFNULL(topManagerAgree_date,'') as topManagerAgree_timeStamp,t.permit_trans_date as date_created
+		FROM t_data d3 ,managements m , vac_status vs, vac_status vs2,vac_status vs3,t_data d 
+		RIGHT OUTER JOIN t_permit_trans t ON d.ID = t.emp_id LEFT OUTER JOIN  t_data d2 ON t.manager_id=d2.ID
+		WHERE  (t.topManager_agree = 1 or (t.topManager_agree=3 and t.top_manager_id={$_SESSION['UserID']}) or (t.Manager_agree=3 and t.manager_id={$_SESSION['UserID']})) 
+				and t.AdminConfirm =vs3.ID
+				and t.AdminConfirm =3
+				and t.Mang_id=m.ID
+				and t.Manager_agree=vs.ID 
+				and (t.Manager_agree in (1,2,3,4))
+				and t.topManager_agree=vs2.ID
+				and t.top_manager_id=d3.ID";
+		if(!empty($_GET['search'])){
+			//$sql .= " and (d.emp_code like '%". $_GET['search'] ."%')";	
+			$sql .= " and (d.emp_code between '".$_GET['search']."' and '".$_GET['searchTo'] ."')";		
+		}
+		$sql.= " ORDER BY d.emp_code, t.permit_date desc";
+		$stmt = $con->prepare($sql);
+		$stmt->execute();
+		$result = $stmt->fetchAll();
+		$vacStatus= "SELECT ID,status FROM vac_status  where ID NOT IN(4,5,6)";
+		//status for manager
+		$stmt2 = $con->prepare($vacStatus);
+		$stmt2->execute();
+		$agreement = $stmt2->fetchAll();
+		//status for admin
+		$stmt3 = $con->prepare($vacStatus);
+		$stmt3->execute();
+		$agreement2 = $stmt3->fetchAll();
+		foreach($result as $row){
+			$index= $row['id'];
+			echo"<tr>";
+				echo"<td>".  $row['emp_code']. "</td>";
+				echo"<td>".  $row['emp_name']. "</td>";
+				echo"<td>".  $row['Management']. "</td>";
+				echo"<td>".  $row['date_created']. "</td>";
+				echo"<td>".  $row['permitReason']. "</td>";
+				echo"<td>".  $row['permit_date']. "</td>";
+				if($row['returnCheck'] ==0){
+					echo"<td><input type='checkbox' disabled ".  $row['returnCheck']. "/></td>";
+				}else{
+					echo"<td><input type='checkbox' disabled checked ".  $row['returnCheck']. "/></td>";
+				}
+				echo"<td>".  $row['departureTime']. "</td>";
+				echo"<td>".  $row['returnTime']. "</td>";
+				echo"<td>".  $row['MgrName']. "</td>";
+				//if direct manager is same as top
+				
+				if($row['Manager_agree'] ==3 && $row['manager_id']==$_SESSION['UserID']){
+					echo"<td>"; 
+					foreach($agreement as $row2){
+						if( $row2['ID']<4){
+							echo '<label >'.$row2['status'].'
+							<input type="radio" class="radio-inline MangrAgreeRadio" name="MangrAgree['.$index.']" value="'.$row2['ID'].'"';
+							if($row['Manager_agree'] == $row2['ID']){ echo "checked"; }
+							echo'></label>';
+						}	  
+					}
+					echo"</td>";
+				}else{
+					echo"<td>".  $row['mgrAgreeStatus']. "</td>" ;
+				}
+					
+				echo"<td>".  $row['TopMgrName']. "</td>";
+				
+				echo"<td>";  
+				if($row['topManager_agree']==3 && $row['top_manager_id']==$_SESSION['UserID']){
+					foreach($agreement2 as $row2){
+							if($row2['ID']<4){
+								echo '<label >'.$row2['status'].'
+									<input type="radio" class="radio-inline TopMangrAgreeRadio" name="TopMangrAgree['.$index.']" value="'.$row2['ID'].'"';
+								if($row['topManager_agree'] == $row2['ID']){ echo "checked"; }
+								echo'></label>';
+							}		  
+					}
+				}else{
+					echo $row['topAgreeStatus'];
+				}
+				
+				echo "</td>";
+				echo"<td>".  $row['topManagerAgree_timeStamp']. "</td>";
+				echo'<td>'; 
+					if($row['topManager_agree']==1 ){
+						foreach($agreement2 as $row2){
+							if($row2['ID']!=4){
+								echo '<label >'.$row2['status'].'
+									<input type="radio" class="radio-inline AdminAgreeRadio" name="AdminAgree['.$index.']" value="'.$row2['ID'].'"';
+								if($row['AdminConfirm'] == $row2['ID']){ echo "checked"; }
+								echo'></label>';
+							}		  
+						}
+					}elseif($row['AdminConfirm']==3 && $row['top_manager_id']==$_SESSION['UserID']){
+						foreach($agreement2 as $row2){
+							if($row2['ID']!=4){
+								echo '<label >'.$row2['status'].'
+									<input type="radio" class="radio-inline AdminAgreeRadio" name="AdminAgree['.$index.']" value="'.$row2['ID'].'"';
+								if($row['AdminConfirm'] == $row2['ID']){ echo "checked"; }
+								echo'></label>';
+							}		  
+						}
+					}else{
+						echo $row['AdminAgreeStatus'];
+					}
+					
+				echo'</td>';
+			echo "</tr>";
+		} 
+	}
+	//------------get confirmed permits as manager------------ 
+	function getConfirmedPermitAsManager(){
+		$con = connect();
+		$sql= '';
+		$sql .= "SELECT t.id, t.permit_date,t.departureTime,t.returnTime,t.returnCheck,t.permitReason,d.emp_code,d.emp_name,t.manager_id,t.top_manager_id,m.Management,
+		t.AdminConfirm,vs.status as mgrAgreeStatus,vs2.status as topAgreeStatus,vs3.status as AdminAgreeStatus,d2.emp_name as TopMgrName,
+		t.permit_trans_date as date_created
+				FROM 	t_data d,t_data d2,t_permit_trans t,managements m , vac_status vs, vac_status vs2 ,vac_status vs3
+				WHERE 	t.emp_id=d.ID 
+						and t.manager_id={$_SESSION['UserID']}
+						and t.Manager_agree in(1,2) 
+						and t.Mang_id=m.ID 
+						and t.Manager_agree=vs.ID
+						and t.topManager_agree=vs2.ID
+						and t.AdminConfirm=vs3.ID
+						and t.top_manager_id=d2.ID";
+		if(!empty($_GET['search'])){
+			$sql .= " and (d.emp_code like '%". $_GET['search'] ."%' OR d.emp_name like '%". $_GET['search'] ."%')";	
+		}
+		if(!empty($_GET['dateTo']) && !empty($_GET['dateFrom']) ){
+			$sql .= " and (t.permit_date between '".$_GET['dateFrom']."' and '".$_GET['dateTo'] ."')";
+		}
+
+		$sql .= " Order By t.permit_date desc";
+		$stmt = $con->prepare($sql);
+		$stmt->execute();
+		$result = $stmt->fetchAll();
+		$vacStatus= "SELECT ID,status FROM vac_status ";
+		$stmt2 = $con->prepare($vacStatus);
+		$stmt2->execute();
+		$agreement = $stmt2->fetchAll();
+		foreach($result as $row){
+			$index= $row['id'];
+			echo"<tr>";
+				echo"<td>".  $row['emp_code']. "</td>";
+				echo"<td>".  $row['emp_name']. "</td>";
+				echo"<td>".  $row['Management']. "</td>";
+				echo"<td>".  $row['date_created']. "</td>";
+				echo"<td>".  $row['permitReason']. "</td>";
+				echo"<td>".  $row['permit_date']. "</td>";
+				if($row['returnCheck'] ==0){
+					echo"<td><input type='checkbox' disabled ".  $row['returnCheck']. "/></td>";
+				}else{
+					echo"<td><input type='checkbox' disabled checked ".  $row['returnCheck']. "/></td>";
+				}
+				echo"<td>".  $row['departureTime']. "</td>";
+				echo"<td>".  $row['returnTime']. "</td>";
+				echo"<td>".  $row['mgrAgreeStatus']. "</td>";
+				echo"<td>".  $row['TopMgrName']. "</td>";
+				echo"<td>".  $row['topAgreeStatus']. "</td>";
+				echo"<td>".  $row['AdminAgreeStatus']. "</td>";
+			echo "</tr>";
+		} 
+	}
+	//------------get confirmed vacations as Top manager------------ 
+	function getConfirmedPermitAsTopManager(){
+		$con = connect();
+		$sql= '';
+		$sql .= "SELECT t.id,t.permit_date,t.permitReason,t.departureTime,t.returnCheck,t.returnTime,d.emp_code,d.emp_name,
+				t.manager_id,t.top_manager_id,m.Management,vs.status as mgrAgreeStatus,vs2.status as topAgreeStatus,
+				vs3.status as AdminAgreeStatus,IFnull(d2.emp_name,'لا يوجد') as MgrName,d3.emp_name as topMgrName,
+				t.topManager_agree,t.Manager_agree,t.permit_trans_date as date_created
+				FROM managements m , vac_status vs ,vac_status vs2,vac_status vs3,t_data d
+				RIGHT OUTER JOIN t_permit_trans t ON d.ID = t.emp_id 
+				LEFT OUTER JOIN  t_data d2 ON t.manager_id=d2.ID
+				LEFT OUTER JOIN  t_data d3 ON t.top_manager_id=d3.ID 
+				WHERE  t.Mang_id=m.ID
+					and t.topManager_agree in (1,2)
+					and t.Manager_agree=vs.ID
+					and t.topManager_agree=vs2.ID
+					and t.AdminConfirm=vs3.ID
+					and (t.top_manager_id={$_SESSION['UserID']} or t.manager_id ={$_SESSION['UserID']} )";
+			
+		if(!empty($_GET['search'])){
+			$sql .= " and (d.emp_code like '%". $_GET['search'] ."%' OR d.emp_name like '%". $_GET['search'] ."%')";	
+		}
+		if(!empty($_GET['dateTo']) && !empty($_GET['dateFrom']) ){
+			$sql .= " and (t.permit_date between '".$_GET['dateFrom']."' and '".$_GET['dateTo'] ."')";
+		}
+
+		$sql .=" Order By  t.permit_date desc";
+		$stmt = $con->prepare($sql);
+		$stmt->execute();
+		$result = $stmt->fetchAll();
+		$count= $stmt->rowCount();
+		$vacStatus= "SELECT ID,status FROM vac_status ";
+		$stmt2 = $con->prepare($vacStatus);
+		$stmt2->execute();
+		$agreement = $stmt2->fetchAll();
+		
+		foreach($result as $row){
+			$index= $row['id'];
+			if($row['top_manager_id']==$_SESSION['UserID'] && in_array($row['topManager_agree'], array(1, 2))){
+				
+				echo"<tr>";
+					echo"<td>".  $row['emp_code']. "</td>";
+					echo"<td>".  $row['emp_name']. "</td>";
+					echo"<td>".  $row['Management']. "</td>";
+					echo"<td>".  $row['date_created']. "</td>";
+					echo"<td>".  $row['permitReason']. "</td>";
+					echo"<td>".  $row['permit_date']. "</td>";
+					if($row['returnCheck'] ==0){
+						echo"<td><input type='checkbox' disabled ".  $row['returnCheck']. "/></td>";
+					}else{
+						echo"<td><input type='checkbox' disabled checked ".  $row['returnCheck']. "/></td>";
+					}
+					echo"<td>".  $row['departureTime']. "</td>";
+					echo"<td>".  $row['returnTime']. "</td>";
+					echo"<td>".  $row['MgrName']. "</td>";
+					echo"<td>".  $row['mgrAgreeStatus']. "</td>"; 
+					echo"<td>".  $row['topMgrName']. "</td>"; 
+					echo"<td>".  $row['topAgreeStatus']. "</td>";
+					echo"<td>".  $row['AdminAgreeStatus']. "</td>";
+				echo "</tr>";
+				
+			}
+			elseif($row['manager_id']==$_SESSION['UserID'] && in_array($row['Manager_agree'], array(1, 2))){
+				
+				echo"<tr>";
+					echo"<td>".  $row['emp_code']. "</td>";
+					echo"<td>".  $row['emp_name']. "</td>";
+					echo"<td>".  $row['Management']. "</td>";
+					echo"<td>".  $row['date_created']. "</td>";
+					echo"<td>".  $row['permitReason']. "</td>";
+					echo"<td>".  $row['permit_date']. "</td>";
+					if($row['returnCheck'] ==0){
+						echo"<td><input type='checkbox' disabled ".  $row['returnCheck']. "/></td>";
+					}else{
+						echo"<td><input type='checkbox' disabled checked ".  $row['returnCheck']. "/></td>";
+					}
+					echo"<td>".  $row['departureTime']. "</td>";
+					echo"<td>".  $row['returnTime']. "</td>";
+					echo"<td>".  $row['MgrName']. "</td>";
+					echo"<td>".  $row['mgrAgreeStatus']. "</td>"; 
+					echo"<td>".  $row['topMgrName']. "</td>"; 
+					echo"<td>".  $row['topAgreeStatus']. "</td>";
+					echo"<td>".  $row['AdminAgreeStatus']. "</td>";
+				echo "</tr>";
+				
+			}
+			
+		} 
+	}
+	//------------get confirmed vacations as Admin------------ 
+	function getConfirmedPermitAsAdmin(){
+		$con = connect();
+		$sql= '';
+		$sql .="SELECT t.id,t.permit_date,t.departureTime,t.returnTime,d.emp_code,d.emp_name,t.manager_id,t.top_manager_id,t.returnCheck,
+		        m.Management,vs.status as mgrAgreeStatus,vs2.status as topAgreeStatus,vs3.status as AdminAgreeStatus,t.permitReason,
+				IFNULL(d2.emp_name,'لا يوجد' )as MgrName,d3.emp_name as TopMgrName,IFNULL(topManagerAgree_date,'') as topManagerAgree_timeStamp,
+				t.permit_trans_date as date_created
+			FROM t_data d3,managements m , vac_status vs ,vac_status vs2,vac_status vs3,t_data d 			
+			RIGHT OUTER JOIN t_permit_trans t ON d.ID = t.emp_id LEFT OUTER JOIN  t_data d2 ON t.manager_id=d2.ID
+			WHERE  t.AdminConfirm not in(3,4)
+			and t.Mang_id=m.ID 
+			and t.Manager_agree=vs.ID
+			and t.topManager_agree=vs2.ID
+			and t.AdminConfirm=vs3.ID
+			and t.top_manager_id=d3.ID";
+
+		if(!empty($_GET['search'])){
+			$sql .= " and (d.emp_code between '".$_GET['search']."' and '".$_GET['searchTo'] ."')";	
+		}
+		if(!empty($_GET['dateTo']) && !empty($_GET['dateFrom']) ){
+			$sql .= " and (t.permit_date between '".$_GET['dateFrom']."' and '".$_GET['dateTo'] ."')";
+		}
+		$sql .=" Order By  d.emp_code,t.permit_date desc";
+		$stmt = $con->prepare($sql);
+		$stmt->execute();
+		$result = $stmt->fetchAll();
+		$count= $stmt->rowCount();
+		$vacStatus= "SELECT ID,status FROM vac_status ";
+		$stmt2 = $con->prepare($vacStatus);
+		$stmt2->execute();
+		$agreement = $stmt2->fetchAll();
+		
+		foreach($result as $row){
+			$index= $row['id'];
+			echo"<tr>";
+				echo"<td>".  $row['emp_code']. "</td>";
+				echo"<td>".  $row['emp_name']. "</td>";
+				echo"<td>".  $row['Management']. "</td>";
+				echo"<td>".  $row['date_created']. "</td>";
+				echo"<td>".  $row['permitReason']. "</td>";
+				echo"<td>".  $row['permit_date']. "</td>";
+				if($row['returnCheck'] ==0){
+					echo"<td><input type='checkbox' disabled ".  $row['returnCheck']. "/></td>";
+				}else{
+					echo"<td><input type='checkbox' disabled checked ".  $row['returnCheck']. "/></td>";
+				}
+				echo"<td>".  $row['departureTime']. "</td>";
+				echo"<td>".  $row['returnTime']. "</td>";
+				echo"<td>".  $row['MgrName']. "</td>";
+				echo"<td>".  $row['mgrAgreeStatus']. "</td>"; 
+				echo"<td>".  $row['TopMgrName']. "</td>";
+				echo"<td>".  $row['topAgreeStatus']. "</td>";
+				echo"<td>".  $row['topManagerAgree_timeStamp']. "</td>";
+				echo"<td>".  $row['AdminAgreeStatus']. "</td>";
+			echo "</tr>";
+		} 
+	}
+	//------------get permission' status feedback as Employee------------ 
+	function getPermitStatusAsEmp(){
+		$con = connect();
+		$sql= '';
+		$sql .= "SELECT  t.id, t.permit_date,d.emp_code,vs.status as mgrAgreeStatus,vs2.status as topAgreeStatus,
+						IFNULL(d2.emp_name,'لا يوجد') as MgrName,d3.emp_name as TopMgrName,topManager_agree,permitReason,
+						vs3.status as AdminAgreeStatus,vs4.status as SecurityAgreeStatus,t.permit_trans_date as date_created
+				FROM t_data d3 , vac_status vs, vac_status vs2,vac_status vs3,vac_status vs4,t_data d
+				RIGHT OUTER JOIN t_permit_trans t ON d.ID = t.emp_id 
+				LEFT OUTER JOIN  t_data d2 ON t.manager_id=d2.ID
+				WHERE   t.emp_id = {$_SESSION['UserID']}
+						and t.Manager_agree=vs.ID
+						and t.topManager_agree=vs2.ID
+						and t.AdminConfirm= vs3.ID
+						and t.securityConfirm= vs4.ID
+						and t.top_manager_id=d3.ID";
+
+		if(!empty($_GET['dateTo']) && !empty($_GET['dateFrom']) ){
+			$sql .= " and (t.permit_date between '".$_GET['dateFrom']."' and '".$_GET['dateTo'] ."')";
+		}
+
+		$sql .= " Order By  t.permit_date desc";
+		$stmt = $con->prepare($sql);
+		$stmt->execute();
+		$result = $stmt->fetchAll();
+		$credit= "	SELECT  sum(t.duration) as credit,c.case_desc,t.id
+					FROM t_case c RIGHT OUTER JOIN t_transe t on c.ID = t.id_case
+								INNER JOIN t_data d  on t.emp_id = d.Id 
+					WHERE  t.emp_id = {$_SESSION['UserID']}
+					and    t.id_case = c.id
+					and t.AdminConfirm not in (3,4,6)
+					and year(t.start_date) = year(CURDATE()) 
+					GROUP BY t.id_case ";
+		$stmt2 = $con->prepare($credit);
+		$stmt2->execute();
+		$agreement = $stmt2->fetchAll();
+		foreach($result as $row){
+			$index= $row['id'];
+			echo"<tr class='rowdata' id='$index'>";
+				echo"<td>".  $row['date_created']. "</td>";
+				echo"<td>".  $row['permit_date']. "</td>";
+				echo"<td>".  $row['permitReason']. "</td>";
+				echo"<td>".  $row['MgrName']. "</td>";
+				echo"<td>".  $row['mgrAgreeStatus']. "</td>";
+				echo"<td>".  $row['TopMgrName']. "</td>";
+				echo"<td>".  $row['topAgreeStatus']. "</td>";
+				echo"<td>".  $row['AdminAgreeStatus']. "</td>";
+				echo"<td>".  $row['SecurityAgreeStatus']. "</td>";
+				
+			if($row['topManager_agree'] >=3){
+				echo"<td><a class='btn btn-sm editPermitData' ><i class='fa fa-edit fa-lg' data-toggle='modal' data-target='#editPermitModal'></i></a></td>";
+				echo"<td><a class='btn btn-sm delete_permit'><i class='fa fa-trash fa-lg'></i></a></td>";
+			}else{
+				echo"<td><a class='btn btn-sm disabled' role='button'><i class='fa fa-edit fa-lg'></i></a></td>";	
+				echo"<td><a class='btn btn-sm disabled' role='button'><i class='fa fa-trash fa-lg'></i></a></td>";
+			}
+			echo "</tr>";
+		}
+		echo " <ul class='nav nav-pills vac-credit panel'  role='tablist'>";
+		foreach ($agreement as $row) {
+			echo "
+					<li class='label label-info' >".  $row['case_desc'] ."
+						<span class='badge'>".  $row['credit']. "</span>
+					</li>";
+			}	
+			echo "<span>مجموع التصاريح:</span></ul>";
 	}

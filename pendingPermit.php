@@ -12,7 +12,7 @@
 	<div class="container">
 	    <header class="row text-center">
 	    	<!-- <img class= "col-lg-2 logo" src="images/amoc2.png"> -->
-	  	    <h1 class="col-sm-12">الاجازات المطلوب تسجيلها</h1>  
+	  	    <h1 class="col-sm-12">التصاريح المطلوب تسجيلها</h1>  
 	    </header>
 	    <!-- search for emp code -->
 <!-- 		<form class="navbar-form" role="search" id="searchEmp" method="GET">
@@ -49,17 +49,18 @@
 		<!-- form to show pending vacations and confirm them -->
 	    <form class="form-horizontal row" method="POST" action="done.php"> 
 	    <!-- action="<?php echo htmlspecialchars($_SERVER['PHP_SELF']) ?>" -->
-	    	<table id="pendingVac" class="table table-striped table-bordered table-responsive">		
+	    	<table id="pendingPermit" class="table table-striped table-bordered table-responsive">		
 				<thead>
 					<tr>
 						<th>رقم القيد</th>
 						<th>الاسم</th>
 						<th>الادارة</th>
-						<th>تاريخ تحرير الاجازة </th>
-						<th>نوع الاجازة</th>
-						<th>من تاريخ</th>
-						<th>الى تاريخ</th>
-						<th>المدة</th>
+						<th>تاريخ تحرير التصريح </th>
+						<th>سبب الخروج</th>
+						<th>تاريخ التصريح</th>
+						<th>عودة</th>
+						<th>ساعة الخروج</th>
+						<th>ساعة العودة</th>
 						<?php
 							if($_SESSION['UserGroup']==2) { //top manager
 								 echo"<th>الرئيس المباشر</th>";
@@ -91,28 +92,28 @@
 						?>
 				    </tr>		
 				</thead>
-				<tbody id="pendingVacbody">
+				<tbody id="pendingPermitbody">
 					<?php
 					//check if the logged in manager or top manager or admin then 
 					//run the corresponding function 
 						if($_SESSION['UserGroup']==2) { //top manager
-							getPendingVacAsTopManager(); 	
+							getPendingPermitAsTopManager(); 	
 						}elseif($_SESSION['UserGroup']==1 ){//direct manager
-							getPendingVacAsManager(); 
+							getPendingPermitAsManager(); 
 						}
-						// elseif($_SESSION['UserGroup']==3 ){ //est72a2at
-						// 	getPendingVacAsAdmin(); 
-						// }  
-						// elseif( $_SESSION['UserGroup']==5){ //est72a2at and direct manager
-						// 	getPendingVacAsAdminandManager(); 
-						// }elseif( $_SESSION['UserGroup']==6){ //est72a2at and top manager
-						// 	getPendingVacAsAdminandTopManager(); 
-						// } 
+						elseif($_SESSION['UserGroup']==3 ){ //est72a2at
+							getPendingPermitAsAdmin(); 
+						}  
+						elseif( $_SESSION['UserGroup']==5){ //est72a2at and direct manager
+							getPendingPermitAsAdminandManager(); 
+						}elseif( $_SESSION['UserGroup']==6){ //est72a2at and top manager
+							getPendingPermitAsAdminandTopManager(); 
+						} 
 					?>
 				</tbody>
 			</table>
 			<div>
-				<input type="submit" name="update" value="إعتماد" id="vacationAgree" class="btn btn-success col-sm-2 col-sm-offset-5">
+				<input type="submit" name="updatePermit" value="إعتماد" id="permitAgree" class="btn btn-success col-sm-2 col-sm-offset-5">
 			</div>			
 		 </form>		
 	</div> 

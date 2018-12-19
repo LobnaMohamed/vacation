@@ -115,7 +115,9 @@ $(document).ready(function(){
  					$('#subManagment').val(data.subManagemnet); 
  					$('#day_n').val(data.day_night);
  					$('#Management').val(data.g_manag);
- 					$('#ManagementName').val(data.g_manag_name);  				
+					$('#ManagementName').val(data.g_manag_name);  
+					$('#job').val(data.job);  
+					 				
  				}
  			},"json");
  		}
@@ -123,6 +125,9 @@ $(document).ready(function(){
 	});
 
 	$( '#vacForm' ).each(function(){
+		this.reset();
+	});
+	$( '#permitForm' ).each(function(){
 		this.reset();
 	});
 

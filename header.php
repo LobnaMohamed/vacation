@@ -18,10 +18,8 @@
 </head>
 <body>
 	<nav class="navbar navbar-inverse fixed-top">
+
 		<div class="container-fluid">
-<!-- 			<div class="navbar-header ">
-			  <a class="navbar-brand" href="#">.Alexandria Minaral Oils Co</a>
-			</div> -->
 			<div class="navbar-header ">
 		  		<!-- <a class="navbar-brand" href="#">Computer Name: <?php  
 						if (!empty($_SERVER['HTTP_CLIENT_IP']))   //check ip from share internet
@@ -36,45 +34,89 @@
 					    {
 					      $ip=$_SERVER['REMOTE_ADDR'];
 					    }
-					    echo $ip;
-					  
-					   
+					    echo $ip;   
 		  		 ?></a> -->
-		  		<a class="navbar-brand" href="#">Computer Name: <?php echo gethostbyaddr($_SERVER['REMOTE_ADDR']); ?></a>
-		  		<br>
-		  		<?php if (isset($_SESSION['Username'])){ ?>
-			  		 	<a class="navbar-brand" href="#"><?php echo $_SESSION['UserFullName'] ;?></a>
-			  	<?php	} ?>
+				<span class="navbar-brand">Computer Name: <?php echo gethostbyaddr($_SERVER['REMOTE_ADDR']); ?>
+				<br>
+			    <?php if (isset($_SESSION['Username'])){ 
+						echo $_SESSION['UserFullName'] ;
+					  } 
+				?>
+			    </span>
 			</div>
 			
 			<div class="navbar-header navbar-right">
-			  <span class="navbar-brand">شركة الأسكندرية للزيوت المعدنية ( أموك )</span>
-			</div><br>
+			  <span class="navbar-brand">شركة الأسكندرية للزيوت المعدنية ( أموك )</span>  
+			</div>
+
 			<ul class="nav navbar-nav pull-right">
 				<?php
 					if (isset($_SESSION['Username']))
 					{
 				?>
-
-			  <li><a href="logout.php">خروج</a></li>
-			  <li><a href="myvacationstatus.php">اجازاتى</a></li>
-			  <li><a href="vacationmodel.php">عمل اجازة</a></li>
+				<div class="dropdown">
+					<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">إرســــال
+					<span class="caret"></span></button>
+					<ul class="dropdown-menu dropdown-menu-right">
+						<li><a href="vacationmodel.php">اجازة</a></li>
+						<li><a href="permitModel.php">تصريح</a></li>
+					</ul>
+				</div>
 			   <!-- emp or manager or top manager in adminstration -->
 				<?php if($_SESSION['UserGroup']==3  || $_SESSION['UserGroup']==5 || $_SESSION['UserGroup']==6){ ?>
-					  <li><a href="managements.php">الادارات العامة</a></li>
-						<li><a href="empdata.php">بيانات العاملين</a></li>
-						<li><a href="pending.php">الاجازات المطلوب تسجيلها</a></li>
-						<li><a href="confirmed.php">الاجازات المسجلة</a></li>
+					<div class="dropdown">
+						<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">بيانـــات
+						<span class="caret"></span></button>
+						<ul class="dropdown-menu dropdown-menu-right">
+							<li><a href="empdata.php">بيانات العاملين</a></li>
+							<li><a href="managements.php">الادارات العامة</a></li>
+						</ul>
+					</div>
+					<div class="dropdown">
+						<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">إعتمادات
+						<span class="caret"></span></button>
+						<ul class="dropdown-menu dropdown-menu-right">
+							<li class="dropdown-header">الاجازات</li>
+							<li><a href="pending.php">الاجازات المطلوب تسجيلها</a></li>
+							<li><a href="confirmed.php">الاجازات المسجلة</a></li>
+							<li class="dropdown-header">التصاريح</li>
+							<li><a href="pendingPermit.php">التصاريح المطلوب تسجيلها</a></li>
+							<li><a href="confirmedPermit.php">التصاريح المسجلة</a></li>
+							
+						</ul>
+					</div>
+					
 				<?php 
 				// direct manager or top manager
-				   }elseif($_SESSION['UserGroup']==1 || $_SESSION['UserGroup']==2){ ?>
-				   	<li><a href="confirmed.php">الاجازات المعتمدة</a></li>
-				   	<li><a href="pending.php">الاجازات المطلوب اعتمادها</a></li>
+					 }elseif($_SESSION['UserGroup']==1 || $_SESSION['UserGroup']==2){ ?>
+					<div class="dropdown">
+						<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">إعتمادات
+						<span class="caret"></span></button>
+						<ul class="dropdown-menu dropdown-menu-right">
+							<li class="dropdown-header">الاجازات</li>
+							<li><a href="pending.php">الاجازات المطلوب اعتمادها</a></li>
+							<li><a href="confirmed.php">الاجازات المعتمدة</a></li>
+							<li class="dropdown-header">التصاريح</li>
+							<li><a href="pendingPermit.php">التصاريح المطلوب اعتمادها</a></li>
+							<li><a href="confirmedPermit.php">التصاريح المعتمدة</a></li>	
+						</ul>
+					</div>
 				<?php 	   
-
-				   	}
-				}
-			 ?>
+					 }
+				?>
+					<div class="dropdown">
+						<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">سجـــلات
+						<span class="caret"></span></button>
+						<ul class="dropdown-menu dropdown-menu-right">
+							<li><a href="myvacationstatus.php">إجـــــازاتى</a></li>
+							<li><a href="mypermitstatus.php">التصــــاريح</a></li>
+						</ul>
+					</div>
+					
+					<a href="logout.php"  class="btn btn-primary dropdown-toggle">خــــروج</a>
+				<?php 
+					}
+			 	?>
 			</ul>
 		</div>
 	</nav>

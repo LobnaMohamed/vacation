@@ -79,7 +79,7 @@
 		</div>
 		<div class = "row form-group">
 			<div class="col-sm-6 col-sm-offset-3">
-				<input class ="btn btn-info form-control" type="Submit" value="ارسال" name="submitVac">
+				<input class ="btn btn-primary form-control" type="Submit" value="ارسال" name="submitVac">
 				<!-- <i class="fa fa-send fa-fw send-icon"></i>			 -->
 			</div>	
 		</div>

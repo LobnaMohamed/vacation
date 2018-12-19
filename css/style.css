@@ -60,19 +60,20 @@ text-align: right;
     margin: 0 auto;
 }
 .navbar-nav{
-    margin-bottom: 0;
+    /* margin-bottom: 0; */
     font-size: 21px;
 }
 .navbar-inverse {
     background-color: #a5a1a1;
     border-color: #940308;
-    font-size: 17px;
+    font-size: 14px;
 }
 .navbar-inverse .navbar-brand {
     color: #0a0707;
-    font-size:19px;
+    font-size:14px;
     margin-bottom: -15px;
-
+    padding: 0;
+    font-weight: bold;
 }
 .navbar-inverse .navbar-brand:hover, 
 .navbar-inverse .navbar-brand:focus {
@@ -92,14 +93,15 @@ text-align: right;
     padding-bottom: 3px;
     margin-bottom: 0px;
 }
+
 /*pending and confirmed tables*/
-#pendingVac,#confirmedVac{
+#pendingVac,#pendingPermit,#confirmedVac,#confirmedPermit,#myVacStatus,#myPermitStatus{
     font-size: 13px;
     font-weight: bold;
-}#pendingVac th ,#confirmedVac th,#confirmedVacReport th{
+}#pendingVac th ,#confirmedVac th,#pendingPermit th,#confirmedPermit th,#confirmedVacReport th,#myVacStatus th,#myPermitStatus th{
     font-size: 16px;
 }
-#pendingVac th ,#confirmedVac th,#empData th{
+#pendingVac th ,#pendingPermit th,#confirmedVac th,#confirmedPermit th,#empData th,#myVacStatus th,#myPermitStatus th{
     background-color: #999999;
 }
 #confirmedVacReport{
@@ -153,4 +155,35 @@ text-align: right;
     border: none;
     background: #DCDCDC;
     padding: inherit;
+}
+.dropdown {
+    display: inline;
+
+}
+.dropdown-menu-right {
+    TOP: AUTO;
+}
+
+.dropdown-menu > li {
+    font-size: 16px;
+    text-align: center;
+
+}
+.dropdown-menu > li > a:hover {
+    background-color: #685d5d;
+    font-weight: bold;
+    /* background-image: none; */
+}
+.dropdown-toggle {
+    font-weight: bold;
+    font-size: 16px;
+    margin-top: 1rem;
+    color: #000000;
+    background-color: #d4c8c896;
+    border:none;
+    /* padding-bottom: 2rem; */
+}
+.dropdown-header{
+    background-color: #d4c8c896;
+    font-weight: bold;
 }

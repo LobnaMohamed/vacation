@@ -12,11 +12,10 @@
 	<div class="container">
 	    <header class="row text-center">
 	    	<!-- <img class= "col-lg-2 logo" src="images/amoc2.png"> -->
-	  	    <h1 class="col-lg-12">الاجازات المسجلة</h1>  
+	  	    <h1 class="col-lg-12">التصاريح المسجلة</h1>  
 	    </header>
 	    <div class="table-responsive row">
-	    	<form class="navbar-form row" role="search" id="searchEmp" method="GET" action="adminreport.php">
-	    		
+	    	<form class="navbar-form row" role="search" id="searchEmp" method="GET" action="adminreport.php">	
 			    <div class="form-group add-on ">
 			    	<label for = "search">رقم القيد / الاسم :</label>
 					<input class="form-control" placeholder="ابحث.." name="search" id="search" type="text">
@@ -50,17 +49,18 @@
 
 			    </div> 
 		    </form>
-			<table id="confirmedVac" class="table table-striped table-bordered table-responsive">	
+			<table id="confirmedPermit" class="table table-striped table-bordered table-responsive">	
 				<thead>
 					<tr>
 						<th>رقم القيد</th>
 						<th>الاسم</th>
 						<th>الادارة</th>
-						<th>تاريخ تحرير الاجازة </th>
-						<th>نوع الاجازة</th>
-						<th>من تاريخ</th>
-						<th>الى تاريخ</th>
-						<th>المدة</th>
+						<th>تاريخ تحرير التصريح </th>
+						<th>سبب الخروج</th>
+						<th>تاريخ التصريح</th>
+						<th>عودة</th>
+						<th>ساعة الخروج</th>
+						<th>ساعة العودة</th>
 						<?php
 							if($_SESSION['UserGroup']==2){ //top manager
 								echo"
@@ -99,18 +99,18 @@
 
 				    </tr>		
 				</thead>
-				<tbody id="confirmedVacbody">
+				<tbody id="confirmedPermitbody">
 					<?php
 					//check if the logged in manager or top manager or admin then 
 					//run the corresponding function 
 						if($_SESSION['UserGroup']==2) {
-							getConfirmedVacAsTopManager(); 
+							getConfirmedPermitAsTopManager(); 
 						}elseif($_SESSION['UserGroup']==1){
-							getConfirmedVacAsManager(); 
+							getConfirmedPermitAsManager(); 
 						}
-						// elseif($_SESSION['UserGroup']==3 || $_SESSION['UserGroup']==5 || $_SESSION['UserGroup']==6){
-						// 	getConfirmedVacAsAdmin(); 
-						// } 
+						elseif($_SESSION['UserGroup']==3 || $_SESSION['UserGroup']==5 || $_SESSION['UserGroup']==6){
+							getConfirmedPermitAsAdmin(); 
+						} 
 					?>
 				</tbody>
 			</table>	

@@ -11,10 +11,14 @@
 	include 'functions.php';
 	if(isset($_POST['submitVac'])){
 		addVacation();
-		echo "<h1>تم ارسال الاجازة بنجاح !</h1>";
+		// echo "<h1>تم ارسال الاجازة بنجاح !</h1>";
 		header('Location: vacationmodel.php');//redirect
 	}
-
+	if(isset($_POST['submitPermit'])){
+		addPermit();
+		echo "<h1>تم ارسال التصريح بنجاح !</h1>";
+		header('Location: permitModel.php');//redirect
+	}
 ?>
 
 
