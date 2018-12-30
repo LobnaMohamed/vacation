@@ -446,7 +446,16 @@ $(document).ready(function(){
 				}
 				else if(currentURL == 'myvacationstatus.php'){
 				   $('#VacStatusbody').html(data);
-			   }
+			    }
+			   else if(currentURL == 'pendingPermit.php'){
+					$('#pendingPermitbody').html(data);
+				}
+				else if(currentURL == 'confirmedPermit.php'){
+					$('#confirmedPermitbody').html(data);
+				}
+				else if(currentURL == 'pendingAtTopmgr.php'){
+					$('#pendingVacAtTopmgrbody').html(data);
+				}
 			   
 		   },
 		   error: function(error) {

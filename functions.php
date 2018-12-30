@@ -924,6 +924,57 @@
 			echo "</tr>";
 		} 
 	}
+
+	//------------get pending vacations at top manager side as Admin------------ 
+	function getPendingAtTopmgrVacAsAdmin(){
+		$con = connect();
+		$sql= '';
+		$sql .="SELECT t.id,t.start_date,t.end_date,t.duration,d.emp_code,d.emp_name,c.case_desc,t.manager_id,t.top_manager_id,m.Management,vs.status as mgrAgreeStatus,
+				vs2.status as topAgreeStatus,IFNULL(d2.emp_name,'لا يوجد' )as MgrName,d3.emp_name as TopMgrName,
+				t.trans_date as date_created
+			FROM t_data d3, t_case c ,managements m , vac_status vs ,vac_status vs2,t_data d 			
+			RIGHT OUTER JOIN t_transe t ON d.ID = t.emp_id LEFT OUTER JOIN  t_data d2 ON t.manager_id=d2.ID
+			WHERE t.id_case=c.ID 
+			and t.topManager_agree = 3
+			and t.Mang_id=m.ID 
+			and t.Manager_agree=vs.ID
+			and t.topManager_agree=vs2.ID
+			and t.top_manager_id=d3.ID";
+
+		if(!empty($_GET['search'])){
+			$sql .= " and (d.emp_code between '".$_GET['search']."' and '".$_GET['searchTo'] ."')";	
+		}
+		if(!empty($_GET['dateTo']) && !empty($_GET['dateFrom']) ){
+			$sql .= " and (t.start_date between '".$_GET['dateFrom']."' and '".$_GET['dateTo'] ."')";
+		}
+		$sql .=" Order By  d.emp_code,t.start_date desc";
+		$stmt = $con->prepare($sql);
+		$stmt->execute();
+		$result = $stmt->fetchAll();
+		$count= $stmt->rowCount();
+		$vacStatus= "SELECT ID,status FROM vac_status ";
+		$stmt2 = $con->prepare($vacStatus);
+		$stmt2->execute();
+		$agreement = $stmt2->fetchAll();
+		
+		foreach($result as $row){
+			$index= $row['id'];
+			echo"<tr>";
+				echo"<td>".  $row['emp_code']. "</td>";
+				echo"<td>".  $row['emp_name']. "</td>";
+				echo"<td>".  $row['Management']. "</td>";
+				echo"<td>".  $row['date_created']. "</td>";
+				echo"<td>".  $row['case_desc']. "</td>";
+				echo"<td>".  $row['start_date']. "</td>";
+				echo"<td>".  $row['end_date']. "</td>";
+				echo"<td>".  $row['duration']. "</td>";
+				echo"<td>".  $row['MgrName']. "</td>";
+				echo"<td>".  $row['mgrAgreeStatus']. "</td>"; 
+				echo"<td>".  $row['TopMgrName']. "</td>";
+				echo"<td>".  $row['topAgreeStatus']. "</td>";
+			echo "</tr>";
+		} 
+	}
 	//------------reply to vacations function------------
 	function saveVacationAgree(){
 		//NEWWW

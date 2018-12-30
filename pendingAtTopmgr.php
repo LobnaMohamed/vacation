@@ -12,10 +12,11 @@
 	<div class="container">
 	    <header class="row text-center">
 	    	<!-- <img class= "col-lg-2 logo" src="images/amoc2.png"> -->
-	  	    <h1 class="col-lg-12">التصاريح المسجلة</h1>  
+	  	    <h1 class="col-lg-12">الاجازات المعلقة عند المدير</h1>  
 	    </header>
 	    <div class="table-responsive row">
-	    	<form class="navbar-form row" role="search" id="searchEmp" method="GET" >	
+	    	<form class="navbar-form row" role="search" id="searchEmp" method="GET" >
+	    		
 			    <div class="form-group add-on ">
 			    	<label for = "search">رقم القيد / الاسم :</label>
 					<input class="form-control" placeholder="ابحث.." name="search" id="search" type="text">
@@ -49,67 +50,35 @@
 
 			    </div> 
 		    </form>
-			<table id="confirmedPermit" class="table table-striped table-bordered table-responsive">	
+			<table id="pendingVacAtTopmgr" class="table table-striped table-bordered table-responsive">	
 				<thead>
 					<tr>
 						<th>رقم القيد</th>
 						<th>الاسم</th>
 						<th>الادارة</th>
-						<th>تاريخ تحرير التصريح </th>
-						<th>سبب الخروج</th>
-						<th>تاريخ التصريح</th>
-						<th>عودة</th>
-						<th>ساعة الخروج</th>
-						<th>ساعة العودة</th>
-						<?php
-							if($_SESSION['UserGroup']==2){ //top manager
+						<th>تاريخ تحرير الاجازة </th>
+						<th>نوع الاجازة</th>
+						<th>من تاريخ</th>
+						<th>الى تاريخ</th>
+						<th>المدة</th>
+						<?php 
+							if($_SESSION['UserGroup']==3 ||$_SESSION['UserGroup']==5 || $_SESSION['UserGroup']==6){ //admin
 								echo"
 									<th>الرئيس المباشر</th>
 									<th>إعتماد الرئيس المباشر</th>
 									<th>الرئيس الاعلى</th>
-									<th>إعتماد الرئيس الاعلى</th>
-									<th>اعتماد الاستحقاقت</th>";
-							}
-							elseif($_SESSION['UserGroup']==1){//direct manager
-								echo"
-									<th>إعتماد الرئيس المباشر</th>
-									<th>الرئيس الاعلى</th>
-									<th>إعتماد الرئيس الاعلى</th>
-									<th>اعتماد الاستحقاقت</th>";
-							} 
-							elseif($_SESSION['UserGroup']==3){ //admin
-								echo"
-									<th>الرئيس المباشر</th>
-									<th>إعتماد الرئيس المباشر</th>
-									<th>الرئيس الاعلى</th>
-									<th>إعتماد الرئيس الاعلى</th>
-									<th>تاريخ إعتماد الرئيس الاعلى</th>
-									<th>اعتماد الاستحقاقت</th>";
-							}
-							elseif($_SESSION['UserGroup']==5 || $_SESSION['UserGroup']==6){//adminmanager or admin top manager
-								echo"
-									<th>الرئيس المباشر</th>
-									<th>إعتماد الرئيس المباشر</th>
-									<th>الرئيس الاعلى</th>
-									<th>إعتماد الرئيس الاعلى</th>
-									<th>تاريخ إعتماد الرئيس الاعلى</th>
-									<th>اعتماد الاستحقاقت</th>";
+									<th>إعتماد الرئيس الاعلى</th>";
 							}
 						?>
 
 				    </tr>		
 				</thead>
-				<tbody id="confirmedPermitbody">
+				<tbody id="pendingVacAtTopmgrbody">
 					<?php
 					//check if the logged in manager or top manager or admin then 
 					//run the corresponding function 
-						if($_SESSION['UserGroup']==2) {
-							getConfirmedPermitAsTopManager(); 
-						}elseif($_SESSION['UserGroup']==1){
-							getConfirmedPermitAsManager(); 
-						}
-						elseif($_SESSION['UserGroup']==3 || $_SESSION['UserGroup']==5 || $_SESSION['UserGroup']==6){
-							getConfirmedPermitAsAdmin(); 
+						if($_SESSION['UserGroup']==3 || $_SESSION['UserGroup']==5 || $_SESSION['UserGroup']==6){
+							getPendingAtTopmgrVacAsAdmin(); 
 						} 
 					?>
 				</tbody>

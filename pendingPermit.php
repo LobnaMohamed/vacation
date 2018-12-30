@@ -21,7 +21,7 @@
 				<input class="form-control" placeholder="ابحث.." name="search" id="search" type="text">
 			</div>
 		</form> -->
-		<form class="navbar-form row" role="search" id="searchEmp" method="GET" action="adminreport_forpending.php">
+		<form class="navbar-form row" role="search" id="searchEmp" method="GET" >
 			<div class="form-group add-on ">
 				<label for = "search">رقم القيد / الاسم :</label>
 				<input class="form-control" placeholder=" ابحث رقم قيد" name="search" id="search" type="text"> 

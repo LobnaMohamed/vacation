@@ -79,6 +79,7 @@
 							<li class="dropdown-header">الاجازات</li>
 							<li><a href="pending.php">الاجازات المطلوب تسجيلها</a></li>
 							<li><a href="confirmed.php">الاجازات المسجلة</a></li>
+							<li><a href="pendingAtTopmgr.php">الاجازات المعلقة عند المدير</a></li>
 							<li class="dropdown-header">التصاريح</li>
 							<li><a href="pendingPermit.php">التصاريح المطلوب تسجيلها</a></li>
 							<li><a href="confirmedPermit.php">التصاريح المسجلة</a></li>
