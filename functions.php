@@ -994,23 +994,26 @@
 				// echo"top manager foreach";
 				// print_r($answer) ;
 				// echo $key;
-				$sql = "UPDATE t_transe 
-						SET topManager_agree =:Agree,
-							topManagerAgree_date = now() 
-						where ID= :key";
-				$stmt = $con->prepare($sql);
-			    $stmt->bindParam(':Agree', $answer, PDO::PARAM_INT);
-			    $stmt->bindParam(':key', $key, PDO::PARAM_INT);
-				//$stmt->execute(array($answer));
-				$stmt->execute();
-				//echo $sql;
-				if($stmt){
-				    echo 'Row inserted!<br>';
-				    //echo $answer;
+				if ($answer !=3){
+					$sql = "UPDATE t_transe 
+							SET topManager_agree =:Agree,
+								topManagerAgree_date = now() 
+							where ID= :key";
+					$stmt = $con->prepare($sql);
+					$stmt->bindParam(':Agree', $answer, PDO::PARAM_INT);
+					$stmt->bindParam(':key', $key, PDO::PARAM_INT);
+					//$stmt->execute(array($answer));
+					$stmt->execute();
+					//echo $sql;
+					if($stmt){
+						echo 'Row inserted!<br>';
+						//echo $answer;
+					}
+					elseif(!$stmt){
+						echo 'error!<br>';
+					}
 				}
-				elseif(!$stmt){
-					echo 'error!<br>';
-				}
+			
 			}
 		}
 		if(isset($Mgranswers)){
@@ -1021,20 +1024,23 @@
 				// echo"Mgr  foreach";
 				// print_r($answer) ;
 				// echo $key;
-				$sql = "UPDATE t_transe SET Manager_agree =:Agree where ID= :key";
-				$stmt = $con->prepare($sql);
-			    $stmt->bindParam(':Agree', $answer, PDO::PARAM_INT);
-			    $stmt->bindParam(':key', $key, PDO::PARAM_INT);
-				//$stmt->execute(array($answer));
-				$stmt->execute();
-				//echo $sql;
-				if($stmt){
-				    echo 'Row inserted!<br>';
-				    //echo $answer;
+				if ($answer !=3){
+					$sql = "UPDATE t_transe SET Manager_agree =:Agree where ID= :key";
+					$stmt = $con->prepare($sql);
+					$stmt->bindParam(':Agree', $answer, PDO::PARAM_INT);
+					$stmt->bindParam(':key', $key, PDO::PARAM_INT);
+					//$stmt->execute(array($answer));
+					$stmt->execute();
+					//echo $sql;
+					if($stmt){
+						echo 'Row inserted!<br>';
+						//echo $answer;
+					}
+					elseif(!$stmt){
+						echo 'error!<br>';
+					}
 				}
-				elseif(!$stmt){
-					echo 'error!<br>';
-				}
+				
 			}
 		}
 		if(isset($Adminanswers)){
@@ -1045,20 +1051,23 @@
 				// echo"admin foreach";
 				// print_r($answer) ;
 				// echo $key;
-				$sql = "UPDATE t_transe SET AdminConfirm =:Agree where ID= :key";
-				$stmt = $con->prepare($sql);
-			    $stmt->bindParam(':Agree', $answer, PDO::PARAM_INT);
-			    $stmt->bindParam(':key', $key, PDO::PARAM_INT);
-				//$stmt->execute(array($answer));
-				$stmt->execute();
-				//echo $sql;
-				if($stmt){
-				    //echo 'Row inserted!<br>';
-				    //echo $answer;
+				if($answer !=3){
+					$sql = "UPDATE t_transe SET AdminConfirm =:Agree where ID= :key";
+					$stmt = $con->prepare($sql);
+					$stmt->bindParam(':Agree', $answer, PDO::PARAM_INT);
+					$stmt->bindParam(':key', $key, PDO::PARAM_INT);
+					//$stmt->execute(array($answer));
+					$stmt->execute();
+					//echo $sql;
+					if($stmt){
+						//echo 'Row inserted!<br>';
+						//echo $answer;
+					}
+					elseif(!$stmt){
+						echo 'error!<br>';
+					}
 				}
-				elseif(!$stmt){
-					echo 'error!<br>';
-				}
+
 			}
 		}
 	}
