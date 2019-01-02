@@ -272,6 +272,17 @@
 			    echo "<option value=" .$row['ID'].">" . $row['job'] . "</option>";
 			}
 	}
+	//--------------get permit reasons function-----------------
+	function getPermitReason(){
+		$con = connect();
+		$sql= "SELECT ID,reason FROM  t_permit_reason" ;
+    	$stmt = $con->prepare($sql);
+		$stmt->execute();
+		$result = $stmt->fetchAll();
+	    	foreach($result as $row){
+			    echo "<option value=" .$row['ID'].">" . $row['reason'] . "</option>";
+			}
+	}
 	// --------------Add vacation function-----------------------
 	function addVacation(){
 		
@@ -1460,7 +1471,8 @@
 			$empName= isset($_POST['name'])? filter_var($_POST['name'],FILTER_SANITIZE_STRING) : '';
 			$empCode= isset($_POST['code'])? filter_var($_POST['code'],FILTER_SANITIZE_NUMBER_INT):'';
 			$management= isset($_POST['Management'])? filter_var($_POST['Management'],FILTER_SANITIZE_STRING):'';
-			$permitReason= isset($_POST['permitReason'])? filter_var($_POST['permitReason'],FILTER_SANITIZE_STRING):'';
+			$permitReason= isset($_POST['permitReason'])? filter_var($_POST['permitReason'],FILTER_SANITIZE__NUMBER_INT):'';
+			$permitReasonDetails= isset($_POST['permitReasonDetails'])? filter_var($_POST['permitReasonDetails'],FILTER_SANITIZE_STRING):'لا يوجد';
 			$permitDate= isset($_POST['permitDate'])? $_POST['permitDate'] :'';
 			$departTime= isset($_POST['departTime'])? $_POST['departTime'] :'';
 			$returnTime = isset($_POST['returnTime'])? $_POST['returnTime'] :'';
@@ -1495,7 +1507,7 @@
 				$con = connect();
 				$sql= "INSERT INTO t_permit_trans(emp_id,permitReason,permit_date,departureTime,returnTime,manager_id,
 								   top_manager_id,mang_id,returnCheck,Manager_agree,made_by_user,made_by_ip) 
-					   VALUES (".$empID.",'".$permitReason."','".$permitDate."','".$departTime."','".$returnTime."',".$manager.",
+					   VALUES (".$empID.",".$permitReason.",'".$permitDate."','".$departTime."','".$returnTime."',".$manager.",
 					  		 ".$topManager." ,".$management.",".$returnCheckbox.",".$manager_vacStatus.",'".$username."','".$userIP."')" ;
 					   echo $sql;
 		        $stmt = $con->prepare($sql);

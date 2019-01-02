@@ -554,5 +554,20 @@ $(document).ready(function(){
 		});		
 	});
 
-
+	//-------enable or disable detailed permit reason text according to permit reason choise-----
+	$('#permitReason').change(function() {
+		if( $(this).val() == 3) {
+			$('#permitReasonDetails').prop( "disabled", false );
+			$("label[for=permitReasonDetails]").css("color","black");
+		} else {       
+			$("label[for=permitReasonDetails]").css("color","grey");
+			$('#permitReasonDetails').prop( "disabled", true );
+		}
+	});
+	//-------enable or disable return time according to return check-------------------
+	$('#returnCheckbox').change(function(){
+		$("#returnTime").prop("disabled", !$(this).is(':checked'));
+		$("label[for=returnTime]").toggleClass("label-toggle",!$(this).is(':checked'));
+		
+	 });
 });

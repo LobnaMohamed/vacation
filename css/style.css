@@ -95,13 +95,17 @@ text-align: right;
 }
 
 /*pending and confirmed tables*/
-#pendingVac,#pendingPermit,#confirmedVac,#confirmedPermit,#myVacStatus,#myPermitStatus,#pendingVacAtTopmgr{
+#pendingVac,#pendingPermit,#confirmedVac,#confirmedPermit,
+#myVacStatus,#myPermitStatus,#pendingVacAtTopmgr{
     font-size: 13px;
     font-weight: bold;
-}#pendingVac th ,#confirmedVac th,#pendingPermit th,#confirmedPermit th,#confirmedVacReport th,#myVacStatus th,#myPermitStatus th{
+}
+#pendingVac th ,#confirmedVac th,#pendingPermit th,#confirmedPermit th,
+#confirmedVacReport th,#myVacStatus th,#myPermitStatus th{
     font-size: 16px;
 }
-#pendingVac th ,#pendingPermit th,#confirmedVac th,#confirmedPermit th,#empData th,#myVacStatus th,#myPermitStatus th,#pendingVacAtTopmgr th{
+#pendingVac th ,#pendingPermit th,#confirmedVac th,#confirmedPermit th,
+#empData th,#myVacStatus th,#myPermitStatus th,#pendingVacAtTopmgr th{
     background-color: #999999;
 }
 #confirmedVacReport{
@@ -189,4 +193,7 @@ text-align: right;
 .dropdown-header{
     background-color: #d4c8c896;
     font-weight: bold;
+}
+.label-toggle{
+    color:gray;
 }

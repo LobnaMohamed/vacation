@@ -57,14 +57,14 @@
 
 		</div>
 		<div class="row form-group">
-			<div class="col-sm-1">
+			<!-- <div class="col-sm-1">
 			
-			</div>	
-			<div class="col-sm-3">
+			</div>	 -->
+			<div class="col-sm-2">
 				<label for="returnTime" >ساعة العودة</label>
 				<input type="time" class="form-control" id="returnTime" name="returnTime" value="11:30">
 			</div>
-			<div class="col-sm-3">
+			<div class="col-sm-2">
 				<label for="departTime" >ساعة الخروج</label>
 				<input type="time" class="form-control" id="departTime" name="departTime" value="11:30">
 			</div>
@@ -73,13 +73,20 @@
 				<label for="returnCheckbox" >بعودة</label>
 				<input type="checkbox" class="form-control" id="returnCheckbox" name="returnCheckbox" value ="1" checked  >
 			</div>
-			<div class="col-sm-3">
-				<label for="permitReason" >سبب الخروج بالتفصيل</label>
-	    		<input type="text" class="form-control" id="permitReason" name="permitReason" placeholder="سبب الخروج بالتفصيل.." required tabindex="6">
-			</div>
-			<div class="col-sm-1">
-				
-			</div>				
+
+			<div class="col-sm-5">
+				<label for="permitReasonDetails" >سبب الخروج بالتفصيل</label>
+				<textarea type="text" class="form-control" id="permitReasonDetails" name="permitReasonDetails" 
+				placeholder="سبب الخروج بالتفصيل.."  tabindex="7">
+				</textarea>
+			</div>	
+			<div class="col-sm-2">
+				<label for="permitReason" >سبب الخروج </label>
+				<select class="form-control" id="permitReason" name="permitReason" tabindex="6" required>
+			    	<option selected disabled hidden style='display: none' value=''></option>
+		   		    <?php  	getPermitReason();   ?>
+				</select>
+			</div>			
 		</div>
 		<div class = "row form-group">
 			<div class="col-sm-6 col-sm-offset-3">
